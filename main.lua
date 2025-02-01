@@ -108,21 +108,9 @@ SMODS.Joker {
                 not G.jokers.cards[my_pos + 1].getting_sliced then
                 local sliced_card = G.jokers.cards[my_pos + 1]
                 sliced_card.getting_sliced = true
-                G.GAME.joker_buffer = G.GAME.joker_buffer - 1
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        G.GAME.joker_buffer = 0
-                        card:juice_up(0.8, 0.8)
-                        sliced_card:start_dissolve({G.C.MONEY}, nil, 1.6)
-                        play_sound('slice1', 0.96 + math.random() * 0.08)
-                        return true
-                    end
-                }))
 
-                return {
-                    dollars = sliced_card.sell_cost * card.ability.extra.scale,
-                    card = card,
-                }
+                sliced_card.sell_cost = sliced_card.sell_cost * 3
+                sliced_card:sell_card()
             end
         end
     end
