@@ -12,9 +12,9 @@ return {
             j_Bakery_Auctioneer = {
                 name = 'Auctioneer',
                 text = {
-                    "Sells {C:attention}joker{} to the right",
-                    "for {C:attention}#1#x{} its {C:attention}sell value{}",
-                    "when {C:attention}blind{} is selected"
+                    "When {C:attention}blind{} is selected",
+                    "{C:money}sells{} Joker to the right",
+                    "for {C:attention}#1#x{} its sell value",
                 }
             }
         },
