@@ -40,7 +40,7 @@ SMODS.Joker {
                 return {
                     message = '+' .. (card.ability.extra.mult_gain),
                     colour = G.C.RED,
-                    card - card
+                    card = card
                 }
             end
         end
@@ -52,7 +52,7 @@ SMODS.Joker {
                     type = 'variable',
                     key = 'a_mult',
                     vars = {card.ability.extra.mult},
-                    card - card
+                    card = card
                 }
             }
         end
@@ -65,7 +65,7 @@ SMODS.Joker {
                 return {
                     message = 'Reset',
                     colour = G.C.RED,
-                    card - card
+                    card = card
                 }
             end
         end
