@@ -39,7 +39,7 @@ return {
             },
             b_Bakery_House = {
                 name = "House Deck",
-                text = {"Each card has a {C:green}#1# in #2#{} chance", "to change rank and suit",
+                text = {"Each played card has a", "{C:green}#1# in #2#{} chance", "to change rank and suit",
                         "after a hand is scored"},
                 unlock = {"Win a run with", "{C:attention}#1#{}", "on any difficulty"}
             }

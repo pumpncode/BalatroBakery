@@ -319,5 +319,10 @@ function Blind:defeat(silent)
     raw_Blind_defeat(self, silent)
     Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
 end
+local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
+G.FUNCS.load_profile = function (...)
+    Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
+    raw_G_FUNCS_load_profile(...)
+end
 
-sendInfoMessage("Blind:defeat() patched. Reason: Unlock conditions", "Bakery")
+sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
