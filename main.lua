@@ -399,7 +399,6 @@ SMODS.Back {
     name = "House",
     config = {
         extra = {
-            odds_top = 1,
             odds_bottom = 4
         }
     },
@@ -429,7 +428,7 @@ SMODS.Back {
     end,
     loc_vars = function(self, info_queue, back)
         return {
-            vars = {self.config.extra.odds_top, self.config.extra.odds_bottom}
+            vars = {G.GAME and G.GAME.probabilities.normal or 1, self.config.extra.odds_bottom}
         }
     end,
     calculate = function(self, back, args)
@@ -438,7 +437,7 @@ SMODS.Back {
 
             for i = 1, #G.play.cards do
                 local choice = pseudorandom(pseudoseed("HouseDeck"), 0, self.config.extra.odds_bottom)
-                if choice <= self.config.extra.odds_top then
+                if choice <= (G.GAME and G.GAME.probabilities.normal or 1) then
                     table.insert(anim, G.play.cards[i])
                 end
             end
