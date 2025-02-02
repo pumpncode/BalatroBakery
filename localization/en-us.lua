@@ -13,8 +13,7 @@ return {
             },
             j_Bakery_Don = {
                 name = 'Don',
-                text = {"{X:mult,C:white}x#1#{} Mult",
-                        "Lose {C:money}$#2#{} per played hand"}
+                text = {"{X:mult,C:white}x#1#{} Mult", "Lose {C:money}$#2#{} per played hand"}
             }
         },
         Tag = {
@@ -36,6 +35,10 @@ return {
             b_Bakery_Violet = {
                 name = "Violet Deck",
                 text = {"Gives {X:mult,C:white}x#1#{} Mult"}
+            },
+            b_Bakery_House = {
+                name = "House Deck",
+                text = {"Each card has a {C:green}#1# in #2#{} chance", "to change rank and suit", "after a hand is scored"}
             }
         }
     }

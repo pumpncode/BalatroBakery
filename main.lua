@@ -376,3 +376,93 @@ SMODS.Back {
         end
     end
 }
+
+SMODS.Back {
+    key = "House",
+    name = "House",
+    config = {
+        extra = {
+            odds_top = 1,
+            odds_bottom = 4
+        }
+    },
+    atlas = "BakeryBack",
+    pos = {
+        x = 1,
+        y = 0
+    },
+    unlocked = true,
+    discovered = false,
+    loc_vars = function(self, info_queue, back)
+        return {
+            vars = {self.config.extra.odds_top, self.config.extra.odds_bottom}
+        }
+    end,
+    calculate = function(self, back, args)
+        if args.context == 'final_scoring_step' then
+            local anim = {}
+
+            for i = 1, #G.play.cards do
+                local choice = pseudorandom(pseudoseed("HouseDeck"), 0, self.config.extra.odds_bottom)
+                if choice <= self.config.extra.odds_top then
+                    table.insert(anim, G.play.cards[i])
+                end
+            end
+
+            if #anim == 0 then
+                return
+            end
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                func = function()
+                    play_sound('tarot1')
+                    return true
+                end
+            }))
+            for i = 1, #anim do
+                local percent = 1.15 - (i - 0.999) / (#anim - 0.998) * 0.3
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        anim[i]:flip();
+                        play_sound('card1', percent);
+                        anim[i]:juice_up(0.3, 0.3);
+                        return true
+                    end
+                }))
+            end
+
+            delay(0.2)
+
+            for i = 1, #anim do
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.1,
+                    func = function()
+                        local card = anim[i]
+                        local rank = pseudorandom_element(SMODS.Ranks, pseudoseed("HouseDeck")).card_key
+                        local suit = pseudorandom_element(SMODS.Suits, pseudoseed("HouseDeck")).card_key
+                        card:set_base(G.P_CARDS[suit .. "_" .. rank])
+                        return true
+                    end
+                }))
+                local percent = 0.85 + (i - 0.999) / (#anim - 0.998) * 0.3
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        anim[i]:flip();
+                        play_sound('tarot2', percent, 0.6);
+                        anim[i]:juice_up(0.3, 0.3);
+                        return true
+                    end
+                }))
+            end
+
+            delay(0.7)
+        end
+    end
+}
