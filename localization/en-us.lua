@@ -24,7 +24,7 @@ return {
             },
             tag_Bakery_PolyTag = {
                 name = "Poly Tag",
-                text = {"Gives {X:mult,C:white}x#1#{} mult when scored", "Lasts {C:attention}1 round{}"}
+                text = {"Gives {X:mult,C:white}x#1#{} mult when scored", "Lasts {C:attention}1{} round"}
             }
         }
     }
