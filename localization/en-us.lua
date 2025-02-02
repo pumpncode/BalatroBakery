@@ -18,5 +18,14 @@ return {
                 }
             }
         },
+        Tag = {
+            tag_Bakery_Retrigger = {
+                name = 'Retrigger Tag',
+                text = {
+                    "Shop has a free",
+                    "{C:dark_edition}Retrigger Joker",
+                },
+            }
+        }
     },
 }

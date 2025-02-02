@@ -1,8 +1,82 @@
+assert(SMODS.load_file('util.lua'))()
+
 SMODS.Atlas {
     key = "Bakery",
     path = "Bakery.png",
     px = 71,
     py = 95
+}
+
+SMODS.Atlas {
+    key = "BakeryTags",
+    path = "BakeryTags.png",
+    px = 34,
+    py = 34
+}
+
+local Bakery_retrigger_jokers = Bakery_API.sized_table {
+    j_mime = true,
+    j_dusk = true,
+    j_hack = true,
+    j_selzer = true,
+    j_sock_and_buskin = true,
+    j_hanging_chad = true
+}
+
+SMODS.Tag {
+    key = "Retrigger",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 0,
+        y = 0
+    },
+    min_ante = 0,
+    config = {
+        type = 'store_joker_create',
+        extra = {}
+    },
+    loc_vars = function(self, info_queue, card)
+        for k in pairs(Bakery_retrigger_jokers) do
+            if G.P_CENTERS[k] ~= nil then
+                info_queue[#info_queue + 1] = G.P_CENTERS[k]
+            end
+        end
+    end,
+    apply = function(self, tag, context) -- 5P1A1QWY
+        if not tag.triggered and tag.config.type == context.type then
+            tag.triggered = true
+
+            local in_posession = {0}
+            for k, v in ipairs(G.jokers.cards) do
+                if Bakery_retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
+                    in_posession[1] = in_posession[1] + 1
+                    in_posession[v.config.center.key] = true
+                end
+            end
+
+            if Bakery_retrigger_jokers.Length > in_posession[1] then
+                local j, k = pseudorandom_element(Bakery_retrigger_jokers, pseudoseed('Retrigger Tag'))
+                local card = create_card('Joker', context.area, nil, 2, nil, nil, k, 'Retrigger Tag')
+                create_shop_card_ui(card, 'Joker', context.area)
+                -- local card = SMODS.create_card {
+                --     set = 'Joker',
+                --     area = context.area,
+                --     key = k
+                -- }
+                -- create_shop_card_ui(card, 'Joker', context.area)
+                card.states.visible = false
+                tag:yep('+', G.C.RED, function()
+                    card:start_materialize()
+                    card.ability.couponed = true
+                    card:set_cost()
+                    return true
+                end)
+                return card
+            else
+                tag:nope()
+            end
+        end
+    end
 }
 
 SMODS.Joker {
