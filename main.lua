@@ -14,6 +14,13 @@ SMODS.Atlas {
     py = 34
 }
 
+SMODS.Atlas {
+    key = "BakeryBack",
+    path = "BakeryBack.png",
+    px = 71,
+    py = 95
+}
+
 Bakery_API.retrigger_jokers = Bakery_API.sized_table {
     j_mime = true,
     j_dusk = true,
@@ -304,6 +311,68 @@ SMODS.Joker {
                 x_mult = card.ability.extra.x_mult,
                 dollars = -card.ability.extra.cost
             }
+        end
+    end
+}
+
+SMODS.Back {
+    key = "Violet",
+    name = "Violet",
+    config = {
+        extra = {
+            x_mult = 2
+        }
+    },
+    atlas = "BakeryBack",
+    pos = {
+        x = 0,
+        y = 0
+    },
+    unlocked = true,
+    discovered = false,
+    loc_vars = function(self, info_queue, back)
+        return {
+            vars = {self.config.extra.x_mult}
+        }
+    end,
+    calculate = function(self, back, args)
+        if args.context == 'final_scoring_step' then
+            args.mult = args.mult * self.config.extra.x_mult
+
+            local skip = Talisman and Talisman.config_file and Talisman.config_file.disable_anims
+
+            update_hand_text({
+                delay = 0
+            }, {
+                mult = args.mult
+            })
+            if not skip then
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'before',
+                    delay = 0.8125,
+                    func = function()
+                        attention_text {
+                            text = localize {
+                                type = 'variable',
+                                key = 'a_xmult',
+                                vars = {self.config.extra.x_mult}
+                            },
+                            scale = 1.4,
+                            hold = 2,
+                            offset = {
+                                x = 0,
+                                y = -2.7
+                            },
+                            major = G.play
+                        }
+                        play_sound('multhit2', 0.845 + 0.04 * math.random(), 0.7)
+                        G.ROOM.jiggle = G.ROOM.jiggle + 0.7
+                        return true
+                    end
+                })
+            end
+
+            return args.chips, args.mult
         end
     end
 }

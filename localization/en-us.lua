@@ -31,6 +31,12 @@ return {
                 name = "Poly Tag",
                 text = {"Gives {X:mult,C:white}x#1#{} Mult when scored", "Lasts {C:attention}1{} round"}
             }
+        },
+        Back = {
+            b_Bakery_Violet = {
+                name = "Violet Deck",
+                text = {"Gives {X:mult,C:white}x#1#{} Mult"}
+            }
         }
     }
 }
