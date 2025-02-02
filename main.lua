@@ -14,7 +14,7 @@ SMODS.Atlas {
     py = 34
 }
 
-local Bakery_retrigger_jokers = Bakery_API.sized_table {
+Bakery_API.retrigger_jokers = Bakery_API.sized_table {
     j_mime = true,
     j_dusk = true,
     j_hack = true,
@@ -35,7 +35,7 @@ SMODS.Tag {
         type = 'store_joker_create'
     },
     loc_vars = function(self, info_queue, card)
-        for k in pairs(Bakery_retrigger_jokers) do
+        for k in pairs(Bakery_API.retrigger_jokers) do
             if G.P_CENTERS[k] ~= nil then
                 info_queue[#info_queue + 1] = G.P_CENTERS[k]
             end
@@ -47,22 +47,16 @@ SMODS.Tag {
 
             local in_posession = {0}
             for k, v in ipairs(G.jokers.cards) do
-                if Bakery_retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
+                if Bakery_API.retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
                     in_posession[1] = in_posession[1] + 1
                     in_posession[v.config.center.key] = true
                 end
             end
 
-            if Bakery_retrigger_jokers.Length > in_posession[1] then
-                local j, k = pseudorandom_element(Bakery_retrigger_jokers, pseudoseed('Retrigger Tag'))
+            if Bakery_API.retrigger_jokers.Length > in_posession[1] then
+                local j, k = pseudorandom_element(Bakery_API.retrigger_jokers, pseudoseed('Retrigger Tag'))
                 local card = create_card('Joker', context.area, nil, 2, nil, nil, k, 'Retrigger Tag')
                 create_shop_card_ui(card, 'Joker', context.area)
-                -- local card = SMODS.create_card {
-                --     set = 'Joker',
-                --     area = context.area,
-                --     key = k
-                -- }
-                -- create_shop_card_ui(card, 'Joker', context.area)
                 card.states.visible = false
                 tag:yep('+', G.C.RED, function()
                     card:start_materialize()
