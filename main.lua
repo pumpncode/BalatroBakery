@@ -149,7 +149,7 @@ SMODS.Tag {
             tag.triggered = true
             tag:yep('X', G.C.RED, function()
                 return true
-            end) -- 29T2NAKF
+            end)
         end
     end,
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
