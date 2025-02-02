@@ -1,7 +1,5 @@
 Bakery_API = {}
 
-_RELEASE_MODE = false
-
 -- Polyfill __pairs and __ipairs metatables
 local raw_pairs = pairs
 pairs = function(t)

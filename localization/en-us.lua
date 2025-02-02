@@ -10,6 +10,11 @@ return {
                 name = 'Auctioneer',
                 text = {"When {C:attention}blind{} is selected", "{C:money}sells{} Joker to the right",
                         "for {C:attention}#1#x{} its sell value"}
+            },
+            j_Bakery_Don = {
+                name = 'Don',
+                text = {"{X:mult,C:white}x#1#{} Mult",
+                        "Lose {C:money}$#2#{} per played hand"}
             }
         },
         Tag = {
@@ -19,12 +24,12 @@ return {
             },
             tag_Bakery_ChocolateTag = {
                 name = "Chocolate Tag",
-                text = {"Gives {C:chips}+#1# chips{} and {C:mult}+#2# mult{} when scored",
-                        "{C:chips}-#3# chips{} and {C:mult}-#4# mult{0} for every hand played"}
+                text = {"Gives {C:chips}+#1# Chips{} and {C:mult}+#2# Mult{} when scored",
+                        "{C:chips}-#3# Chips{} and {C:mult}-#4# Mult{0} for every hand played"}
             },
             tag_Bakery_PolyTag = {
                 name = "Poly Tag",
-                text = {"Gives {X:mult,C:white}x#1#{} mult when scored", "Lasts {C:attention}1{} round"}
+                text = {"Gives {X:mult,C:white}x#1#{} Mult when scored", "Lasts {C:attention}1{} round"}
             }
         }
     }

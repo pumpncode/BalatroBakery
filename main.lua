@@ -273,3 +273,37 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = "Don",
+    name = "Don",
+    atlas = 'Bakery',
+    pos = {
+        x = 2,
+        y = 0
+    },
+    rarity = 3,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            x_mult = 3,
+            cost = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.x_mult, card.ability.extra.cost}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.x_mult,
+                dollars = -card.ability.extra.cost
+            }
+        end
+    end
+}
