@@ -24,16 +24,15 @@ local Bakery_retrigger_jokers = Bakery_API.sized_table {
 }
 
 SMODS.Tag {
-    key = "Retrigger",
+    key = "RetriggerTag",
     atlas = 'BakeryTags',
     pos = {
         x = 0,
         y = 0
     },
-    min_ante = 0,
+    min_ante = 4,
     config = {
-        type = 'store_joker_create',
-        extra = {}
+        type = 'store_joker_create'
     },
     loc_vars = function(self, info_queue, card)
         for k in pairs(Bakery_retrigger_jokers) do
@@ -42,7 +41,7 @@ SMODS.Tag {
             end
         end
     end,
-    apply = function(self, tag, context) -- 5P1A1QWY
+    apply = function(self, tag, context)
         if not tag.triggered and tag.config.type == context.type then
             tag.triggered = true
 
@@ -75,6 +74,50 @@ SMODS.Tag {
             else
                 tag:nope()
             end
+        end
+    end
+}
+
+SMODS.Tag {
+    key = "ChocolateTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 1,
+        y = 0
+    },
+    min_ante = 0,
+    config = {
+        type = 'play_hand_early',
+        chips = 25,
+        mult = 5,
+        d_chips = 5,
+        d_mult = 1
+    },
+    loc_vars = function(self, info_queue, tag)
+        tag.ability.chips = tag.ability.chips or self.config.chips
+        tag.ability.mult = tag.ability.mult or self.config.mult
+        return {
+            vars = {tag.ability.chips, tag.ability.mult, self.config.d_chips, self.config.d_mult}
+        }
+    end, -- V92LE2U4
+    apply = function(self, tag, context)
+        if not tag.triggered and self.config.type == context.type then
+            tag.ability.chips = tag.ability.chips or self.config.chips
+            tag.ability.mult = tag.ability.mult or self.config.mult
+            local ret = {
+                chips = tag.ability.chips,
+                mult = tag.ability.mult
+            }
+            tag.ability.chips = math.max(tag.ability.chips - self.config.d_chips, 0)
+            tag.ability.mult = math.max(tag.ability.mult - self.config.d_mult, 0)
+            if tag.ability.chips == 0 and tag.ability.mult == 0 then
+                ret.after = function()
+                    tag:yep('X', G.C.RED, function()
+                        return true
+                    end)
+                end
+            end
+            return ret
         end
     end
 }
