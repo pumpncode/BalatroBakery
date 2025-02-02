@@ -34,11 +34,14 @@ return {
         Back = {
             b_Bakery_Violet = {
                 name = "Violet Deck",
-                text = {"Gives {X:mult,C:white}x#1#{} Mult"}
+                text = {"Gives {X:mult,C:white}x#1#{} Mult"},
+                unlock = {"Defeat {C:purple}#1#"}
             },
             b_Bakery_House = {
                 name = "House Deck",
-                text = {"Each card has a {C:green}#1# in #2#{} chance", "to change rank and suit", "after a hand is scored"}
+                text = {"Each card has a {C:green}#1# in #2#{} chance", "to change rank and suit",
+                        "after a hand is scored"},
+                unlock = {"Win a run with", "{C:attention}#1#{}", "on any difficulty"}
             }
         }
     }

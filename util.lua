@@ -21,6 +21,38 @@ end
 
 sendInfoMessage("pairs() and ipairs() patched. Reason: Convenience", "Bakery")
 
+--- Uses metatables to add a `Length` key to the table which reports the number of keys contained within.
+---@param table table @The table to modify.
+function Bakery_API.sized_table(table, default_value)
+    local count = 0
+    for _ in pairs(table) do
+        count = count + 1
+    end
+    return setmetatable({}, {
+        __index = function(_, k)
+            if k == "Length" then
+                return count
+            end
+            return table[k] or default_value
+        end,
+        __newindex = function(_, k, v)
+            if table[k] == nil and v ~= nil then
+                count = count + 1
+            end
+            if table[k] ~= nil and v == nil then
+                count = count - 1
+            end
+            table[k] = v
+        end,
+        __pairs = function(_)
+            return pairs(table)
+        end,
+        __ipairs = function(_)
+            return pairs(table)
+        end
+    })
+end
+
 -- Polyfill a tag trigger when scoring
 -- This is a bit of a hack (it retriggers 2s, 3s, 4s, and 5s), but it should work.
 local raw_modify_hand = Blind.modify_hand
@@ -280,34 +312,12 @@ end
 
 sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
 
---- Uses metatables to add a `Length` key to the table which reports the number of keys contained within.
----@param table table @The table to modify.
-function Bakery_API.sized_table(table)
-    local count = 0
-    for _ in pairs(table) do
-        count = count + 1
-    end
-    return setmetatable({}, {
-        __index = function(_, k)
-            if k == "Length" then
-                return count
-            end
-            return table[k]
-        end,
-        __newindex = function(_, k, v)
-            if table[k] == nil and v ~= nil then
-                count = count + 1
-            end
-            if table[k] ~= nil and v == nil then
-                count = count - 1
-            end
-            table[k] = v
-        end,
-        __pairs = function(_)
-            return pairs(table)
-        end,
-        __ipairs = function(_)
-            return pairs(table)
-        end
-    })
+Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
+
+local raw_Blind_defeat = Blind.defeat
+function Blind:defeat(silent)
+    raw_Blind_defeat(self, silent)
+    Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
 end
+
+sendInfoMessage("Blind:defeat() patched. Reason: Unlock conditions", "Bakery")

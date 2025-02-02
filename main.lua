@@ -328,8 +328,25 @@ SMODS.Back {
         x = 0,
         y = 0
     },
-    unlocked = true,
+    unlocked = false,
     discovered = false,
+    check_for_unlock = function(self, args)
+        return Bakery_API.defeated_blinds['bl_final_vessel'] > 0
+    end,
+    locked_loc_vars = function(self, args)
+        if G.P_BLINDS['bl_final_vessel'].discovered then
+            return {
+                vars = {localize {
+                    type = 'name_text',
+                    key = 'bl_final_vessel',
+                    set = "Blind"
+                }}
+            }
+        end
+        return {
+            vars = {localize('k_unknown')}
+        }
+    end,
     loc_vars = function(self, info_queue, back)
         return {
             vars = {self.config.extra.x_mult}
@@ -391,8 +408,25 @@ SMODS.Back {
         x = 1,
         y = 0
     },
-    unlocked = true,
+    unlocked = false,
     discovered = false,
+    check_for_unlock = function(self, args)
+        return get_deck_win_stake('b_erratic') > 0
+    end,
+    locked_loc_vars = function(self, back)
+        if G.P_BLINDS['bl_final_vessel'].discovered then
+            return {
+                vars = {localize {
+                    type = 'name_text',
+                    key = 'b_erratic',
+                    set = "Back"
+                }}
+            }
+        end
+        return {
+            vars = {localize('k_unknown')}
+        }
+    end,
     loc_vars = function(self, info_queue, back)
         return {
             vars = {self.config.extra.odds_top, self.config.extra.odds_bottom}
