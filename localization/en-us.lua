@@ -21,6 +21,10 @@ return {
                 name = "Chocolate Tag",
                 text = {"Gives {C:chips}+#1# chips{} and {C:mult}+#2# mult{} when scored",
                         "{C:chips}-#3# chips{} and {C:mult}-#4# mult{0} for every hand played"}
+            },
+            tag_Bakery_PolyTag = {
+                name = "Poly Tag",
+                text = {"Gives {X:mult,C:white}x#1#{} mult when scored", "Lasts {C:attention}1 round{}"}
             }
         }
     }

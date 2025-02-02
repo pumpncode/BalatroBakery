@@ -99,7 +99,7 @@ SMODS.Tag {
         return {
             vars = {tag.ability.chips, tag.ability.mult, self.config.d_chips, self.config.d_mult}
         }
-    end, -- V92LE2U4
+    end,
     apply = function(self, tag, context)
         if not tag.triggered and self.config.type == context.type then
             tag.ability.chips = tag.ability.chips or self.config.chips
@@ -118,6 +118,53 @@ SMODS.Tag {
                 end
             end
             return ret
+        end
+    end
+}
+
+SMODS.Tag {
+    key = "PolyTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 2,
+        y = 0
+    },
+    min_ante = 0,
+    config = {
+        type = 'play_hand_late',
+        x_mult = 3
+    },
+    loc_vars = function(self, info_queue, tag)
+        return {
+            vars = {self.config.x_mult}
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered and self.config.type == context.type then
+            return {
+                x_mult = self.config.x_mult
+            }
+        end
+        if not tag.triggered and context.type == 'eval' then
+            tag.triggered = true
+            tag:yep('X', G.C.RED, function()
+                return true
+            end) -- 29T2NAKF
+        end
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        SMODS.Tag.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+
+        if card then
+            -- card.tag_sprite:define_draw_steps({{
+            --     shader = 'dissolve',
+            --     shadow_height = 0.05
+            -- }, {
+            --     shader = 'dissolve'
+            -- }, {
+            --     shader = 'polychrome'
+            -- }})
+            card.tag_sprite:draw_shader('polychrome', nil, nil)
         end
     end
 }
