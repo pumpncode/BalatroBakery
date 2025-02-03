@@ -42,6 +42,11 @@ return {
                 text = {"Each played card has a", "{C:green}#1# in #2#{} chance", "to change rank and suit",
                         "after a hand is scored"},
                 unlock = {"Win a run with", "{C:attention}#1#{}", "on any difficulty"}
+            },
+            b_Bakery_Credit = {
+                name = "Credit Deck",
+                text = {"Start with extra {C:money}$#1#{}", "Earn {C:red}no{} {C:money}money{}", "from any source"},
+                unlock = {"Win a run with", "{C:attention}#1#{}", "on at least", "{V:1}#2#{} difficulty"}
             }
         }
     }

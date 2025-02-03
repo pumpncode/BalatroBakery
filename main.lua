@@ -413,7 +413,7 @@ SMODS.Back {
         return get_deck_win_stake('b_erratic') > 0
     end,
     locked_loc_vars = function(self, back)
-        if G.P_BLINDS['bl_final_vessel'].discovered then
+        if G.P_CENTERS['b_erratic'].discovered then
             return {
                 vars = {localize {
                     type = 'name_text',
@@ -496,6 +496,78 @@ SMODS.Back {
             end
 
             delay(0.7)
+        end
+    end
+}
+
+SMODS.Back {
+    key = "Credit",
+    name = "Credit",
+    config = {
+        dollars = 200,
+        no_interest = true
+    },
+    atlas = "Joker",
+    prefix_config = {
+        atlas = false
+    },
+    pos = {
+        x = 5,
+        y = 1
+    },
+    unlocked = false,
+    discovered = false,
+    check_for_unlock = function(self, args)
+        return get_deck_win_stake('b_yellow') > 3
+    end,
+    locked_loc_vars = function(self, back)
+        if G.P_CENTERS['b_yellow'].discovered then
+            return {
+                vars = {
+                    localize {
+                        type = 'name_text',
+                        key = 'b_yellow',
+                        set = "Back"
+                    },
+                    localize {
+                        type = 'name_text',
+                        set = 'Stake',
+                        key = 'stake_black'
+                    },
+                    colours = {G.C.BLACK}
+                }
+            }
+        end
+        return {
+            vars = {
+                localize('k_unknown'),
+                localize {
+                    type = 'name_text',
+                    set = 'Stake',
+                    key = 'stake_black'
+                },
+                colours = {G.C.BLACK}
+            }
+        }
+    end,
+    loc_vars = function(self, info_queue, back)
+        return {
+            vars = {self.config.dollars}
+        }
+    end,
+    apply = function(self, back)
+        G.GAME.modifiers.no_blind_reward = {
+            Small = true,
+            Big = true,
+            Boss = true
+        }
+        G.GAME.modifiers.no_extra_hand_money = true
+        local banned = {'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket', 'j_reserved_parking',
+                        'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket', 'j_rough_gem', 'j_satellite',
+                        'j_Bakery_Auctioneer', 'v_seed_money', 'v_money_tree', 'c_hermit', 'c_temperance',
+                        'tag_investment', 'tag_skip', 'tag_economy'}
+        for _, k in ipairs(banned) do
+            G.GAME.banned_keys[k] = true
         end
     end
 }

@@ -25,23 +25,30 @@ sendInfoMessage("pairs() and ipairs() patched. Reason: Convenience", "Bakery")
 ---@param table table @The table to modify.
 function Bakery_API.sized_table(table, default_value)
     local count = 0
-    for _ in pairs(table) do
+    local keys = {}
+    for k in pairs(table) do
         count = count + 1
+        keys[k] = true
     end
     return setmetatable({}, {
         __index = function(_, k)
             if k == "Length" then
                 return count
             end
-            return table[k] or default_value
+            if keys[k] then
+                return table[k]
+            else
+                return default_value
+            end
         end,
         __newindex = function(_, k, v)
             if table[k] == nil and v ~= nil then
                 count = count + 1
             end
-            if table[k] ~= nil and v == nil then
+            if keys[k] and v == nil then
                 count = count - 1
             end
+            keys[k] = true
             table[k] = v
         end,
         __pairs = function(_)
@@ -320,9 +327,57 @@ function Blind:defeat(silent)
     Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
 end
 local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
-G.FUNCS.load_profile = function (...)
+G.FUNCS.load_profile = function(...)
     Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
     raw_G_FUNCS_load_profile(...)
 end
 
 sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
+
+Bakery_API.no_money_decks = Bakery_API.sized_table {
+    b_Bakery_Credit = true
+}
+
+local raw_ease_dollars = ease_dollars
+function ease_dollars(mod, instant)
+    if mod <= 0 or not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] then
+        return raw_ease_dollars(mod, instant)
+    end
+
+    local function _mod()
+        local dollar_UI = G.HUD:get_UIE_by_ID('dollar_text_UI')
+        attention_text({
+            text = localize('k_nope_ex'),
+            scale = 0.8,
+            hold = 0.7,
+            cover = dollar_UI.parent,
+            cover_colour = G.C.RED,
+            align = 'cm',
+            silent = true
+        })
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.06 * G.SETTINGS.GAMESPEED,
+            blockable = false,
+            blocking = false,
+            func = function()
+                play_sound('tarot2', 0.76, 0.4);
+                return true
+            end
+        }))
+        play_sound('tarot2', 1, 0.4)
+    end
+    if instant then
+        _mod()
+    else
+        G.E_MANAGER:add_event(Event({
+            trigger = 'immediate',
+            func = function()
+                _mod()
+                return true
+            end
+        }))
+    end
+end
+
+sendInfoMessage("ease_dollars() patched. Reason: Credit Deck", "Bakery")
