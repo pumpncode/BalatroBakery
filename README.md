@@ -6,7 +6,7 @@ Current contents:
 
 - 3 Jokers
 - 3 Tags
-- 2 Decks
+- 3 Decks
 - Miscellaneous modding API features
 
 ## Installation
