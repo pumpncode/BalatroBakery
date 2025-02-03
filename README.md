@@ -7,7 +7,7 @@ Current contents:
 - 3 Jokers
 - 3 Tags
 - 3 Decks
-- 3 Deck Sleeves
+- 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 1 Blind
 - Miscellaneous modding API features
 
