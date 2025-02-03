@@ -49,6 +49,29 @@ return {
                 unlock = {"Win a run with", "{C:attention}#1#{}", "on at least", "{V:1}#2#{} difficulty"}
             }
         },
+        Sleeve = {
+            sleeve_Bakery_Violet = {
+                name = "Violet Sleeve",
+                text = {"Gives {X:mult,C:white}x#1#{} Mult"}
+            },
+            sleeve_Bakery_House = {
+                name = "House Sleeve",
+                text = {"Each played card has a", "{C:green}#1# in #2#{} chance", "to change rank and suit",
+                        "after a hand is scored"}
+            },
+            sleeve_Bakery_House_alt = {
+                name = "House Sleeve",
+                text = {"Cards are {C:green}twice{} as", "likely to change and", "can gain modifications"}
+            },
+            sleeve_Bakery_Credit = {
+                name = "Credit Sleeve",
+                text = {"Start with extra {C:money}$#1#{}", "Earn {C:red}no money{}", "from any source"}
+            },
+            sleeve_Bakery_Credit_alt = {
+                name = "Credit Sleeve",
+                text = {"Start with extra {C:money}$#1#{}", "Lose {C:red}$1{} per card played"}
+            }
+        },
         Blind = {
             bl_Bakery_Aleph = {
                 name = "The Leader",

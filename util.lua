@@ -72,24 +72,30 @@ function Blind:modify_hand(cards, poker_hands, text, mult, hand_chips)
     last_mult = mod_mult(mult)
     last_chips = mod_chips(chips)
     last_mod = mod
-    for i = 1, #G.GAME.tags do
-        local ret = G.GAME.tags[i]:apply_to_run({
-            type = 'play_hand_early'
-        })
-        if ret then
-            mult = mod_mult(mult + (ret.mult or 0))
-            mult = mod_mult(mult * (ret.x_mult or 1))
-            chips = mod_chips(chips + (ret.chips or 0))
-            table.insert(animations, {
-                d_mult = ret.mult,
-                x_mult = ret.x_mult,
-                mult = mult,
-                d_chips = ret.chips,
-                chips = chips,
-                card = ret.card or G.GAME.tags[i],
-                after = ret.after
-            })
+
+    local function apply(ret, default_card)
+        if not ret then
+            return
         end
+        mult = mod_mult(mult + (ret.mult or 0))
+        mult = mod_mult(mult * (ret.x_mult or 1))
+        chips = mod_chips(chips + (ret.chips or 0))
+        table.insert(animations, {
+            d_mult = ret.mult,
+            x_mult = ret.x_mult,
+            mult = mult,
+            d_chips = ret.chips,
+            chips = chips,
+            dollars = ret.dollars,
+            card = ret.card or default_card,
+            after = ret.after
+        })
+    end
+
+    for i = 1, #G.GAME.tags do
+        apply(G.GAME.tags[i]:apply_to_run({
+            type = 'play_hand_early'
+        }), G.GAME.tags[i])
     end
     return mult, chips, mod or (#animations > 0)
 end
@@ -187,6 +193,31 @@ local function run_animation(anim)
                         major = anim.card.HUD_tag
                     }
                     play_sound('multhit2', 0.845 + 0.04 * math.random(), 0.7)
+                    anim.card:juice_up(0.6, 0.1)
+                    G.ROOM.jiggle = G.ROOM.jiggle + 0.7
+                    return true
+                end
+            }))
+        end
+    end
+    if anim.dollars and anim.dollars ~= 0 then
+        if not skip then
+            juice_card(anim.card)
+        end
+        ease_dollars(anim.dollars)
+        if not skip then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.8125,
+                func = function()
+                    attention_text {
+                        text = (amt < -0.01 and '-' or '') .. localize("$") .. tostring(math.abs(amt)),
+                        scale = 1,
+                        hold = 0.6125,
+                        backdrop_colour = amt < -0.01 and G.C.RED or G.C.MONEY,
+                        major = anim.card.HUD_tag
+                    }
+                    play_sound('coin3', 0.845 + 0.04 * math.random(), 0.7)
                     anim.card:juice_up(0.6, 0.1)
                     G.ROOM.jiggle = G.ROOM.jiggle + 0.7
                     return true
@@ -335,12 +366,14 @@ end
 sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
 
 Bakery_API.no_money_decks = Bakery_API.sized_table {
-    b_Bakery_Credit = true
+    b_Bakery_Credit = true,
+    sleeve_Bakery_Credit = true
 }
 
 local raw_ease_dollars = ease_dollars
 function ease_dollars(mod, instant)
-    if mod <= 0 or not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] then
+    if mod <= 0 or (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
+        not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
         return raw_ease_dollars(mod, instant)
     end
 
@@ -381,3 +414,17 @@ function ease_dollars(mod, instant)
 end
 
 sendInfoMessage("ease_dollars() patched. Reason: Credit Deck", "Bakery")
+
+local raw_Blind_press_play = Blind.press_play
+function Blind:press_play()
+    raw_Blind_press_play(self)
+
+    local sleeve = CardSleeves and CardSleeves.Sleeve:get_obj(G.GAME.selected_sleeve or "sleeve_casl_none")
+    if sleeve and type(sleeve.calculate) == "function" then
+        sleeve:calculate(sleeve, {
+            context = 'Bakery_after_press_play'
+        })
+    end
+end
+
+sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve", "Bakery")
