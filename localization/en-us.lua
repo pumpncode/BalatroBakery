@@ -48,6 +48,12 @@ return {
                 text = {"Start with extra {C:money}$#1#{}", "Earn {C:red}no money{}", "from any source"},
                 unlock = {"Win a run with", "{C:attention}#1#{}", "on at least", "{V:1}#2#{} difficulty"}
             }
+        },
+        Blind = {
+            bl_Bakery_Aleph = {
+                name = "The Leader",
+                text = {"-1 Hand", "-1 Discard"}
+            }
         }
     }
 }
