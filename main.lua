@@ -624,8 +624,8 @@ local b_house = SMODS.Back {
 -- Neither is Midas Mask, since it can feed Vampire or Driver's License.
 Bakery_API.econ_only_items = {'j_delayed_grat', 'j_business', 'j_faceless', 'j_cloud_9', 'j_rocket',
                               'j_reserved_parking', 'j_mail', 'j_to_the_moon', 'j_golden', 'j_ticket', 'j_rough_gem',
-                              'j_satellite', 'j_Bakery_Auctioneer', 'v_seed_money', 'v_money_tree', 'c_hermit',
-                              'c_temperance', 'tag_investment', 'tag_skip', 'tag_economy'}
+                              'j_satellite', 'j_todo_list', 'j_Bakery_Auctioneer', 'v_seed_money', 'v_money_tree',
+                              'c_hermit', 'c_temperance', 'tag_investment', 'tag_skip', 'tag_economy'}
 
 local b_credit = SMODS.Back {
     key = "Credit",
