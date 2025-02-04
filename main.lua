@@ -335,7 +335,7 @@ SMODS.Joker {
     key = "Werewolf",
     name = "Werewolf",
     atlas = 'Bakery',
-    rarity = 1, -- TODO: set to 3
+    rarity = 3,
     cost = 5,
     blueprint_compat = true,
     eternal_compat = true,
