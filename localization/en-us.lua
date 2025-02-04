@@ -14,6 +14,16 @@ return {
             j_Bakery_Don = {
                 name = 'Don',
                 text = {"{X:mult,C:white}x#1#{} Mult", "Lose {C:money}$#2#{} per played hand"}
+            },
+            j_Bakery_Werewolf = {
+                name = 'Werewolf (Day)',
+                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker at end of round",
+                        "if {C:attention}no discards{} were used"}
+            },
+            j_Bakery_Werewolf_Back = {
+                name = 'Werewolf (Night)',
+                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker at end of round",
+                        "if {C:attention}2 or more discards{} were used"}
             }
         },
         Tag = {

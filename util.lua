@@ -428,3 +428,64 @@ function Blind:press_play()
 end
 
 sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve", "Bakery")
+
+Bakery_API.double_sided_jokers = Bakery_API.sized_table {
+    j_Bakery_Werewolf = true
+}
+
+function Bakery_API.flip_double_sided(card)
+    G.E_MANAGER:add_event(Event{
+        trigger = 'before',
+        delay = 0.2,
+        func = function()
+            play_sound('tarot1')
+            play_sound('card1')
+            card.pinch.x = true
+            card.flipping = nil
+            return true
+        end
+    })
+    G.E_MANAGER:add_event(Event{
+        trigger='immediate',
+        func = function()
+            if card.VT.w <= 0 then
+                card.pinch.x = false
+                card.ability.extra.flipped = not card.ability.extra.flipped
+                return true
+            end
+            return false
+        end
+    })
+    G.E_MANAGER:add_event(Event{
+        trigger='immediate',
+        blocking = false,
+        func = function()
+            if card.VT.w >= card.T.w then
+                play_sound('tarot2')
+                card:juice_up(0.3, 0.3)
+                return true
+            end
+            return false
+        end
+    })
+end
+
+local raw_Card_draw = Card.draw
+function Card:draw(layer)
+    if self.config.center and Bakery_API.double_sided_jokers[self.config.center.key] then
+        local sprite_facing = self.sprite_facing
+        self.sprite_facing = "front"
+        self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or
+                                                (self.ability.extra.flipped ~= (sprite_facing == "front") and
+                                                    self.ability.extra.front_pos or self.ability.extra.back_pos) or {
+            x = 0.5,
+            y = 0
+        })
+        raw_Card_draw(self, layer)
+        self.sprite_facing = sprite_facing
+        return
+    end
+    raw_Card_draw(self, layer)
+end
+
+sendInfoMessage("Card:draw() patched. Reason: Werewolf rendering", "Bakery")

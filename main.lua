@@ -331,6 +331,74 @@ SMODS.Joker {
     end
 }
 
+SMODS.Joker {
+    key = "Werewolf",
+    name = "Werewolf",
+    atlas = 'Bakery',
+    rarity = 1, -- TODO: set to 3
+    cost = 5,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            front = 2,
+            back = 3,
+            flipped = false,
+            discards = 0,
+            front_pos = {
+                x = 3,
+                y = 0
+            },
+            back_pos = {
+                x = 4,
+                y = 0
+            }
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {self.key == "j_Bakery_Werewolf_Back" and card.ability.extra.back or card.ability.extra.front}
+        }
+    end,
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local key = self.key
+        if card and card.ability.extra.flipped then
+            self.key = "j_Bakery_Werewolf_Back"
+        end
+        SMODS.Joker.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        info_queue[#info_queue + 1] = {
+            generate_ui = function(_self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                if not card or not card.ability.extra.flipped then
+                    self.key = "j_Bakery_Werewolf_Back"
+                end
+                SMODS.Joker.generate_ui(self, _info_queue, _card, _desc_nodes, _specific_vars, _full_UI_table)
+                self.key = key
+            end
+        }
+        self.key = key
+    end,
+    calculate = function(self, card, context)
+        if context.pre_discard and not context.blueprint and not context.retrigger_joker then
+            card.ability.extra.discards = card.ability.extra.discards + 1
+        end
+
+        if context.joker_main then
+            return {
+                x_mult = card.ability.extra.flipped and card.ability.extra.back or card.ability.extra.front
+            }
+        end
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            if (card.ability.extra.flipped and card.ability.extra.discards >= 2) or
+                (not card.ability.extra.flipped and card.ability.extra.discards == 0) then
+                Bakery_API.flip_double_sided(card)
+            end
+            card.ability.extra.discards = 0
+        end
+    end
+}
+
 local b_violet = SMODS.Back {
     key = "Violet",
     name = "Violet",
@@ -411,7 +479,8 @@ local b_violet = SMODS.Back {
 }
 
 local function is_double_house()
-    return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
+    return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and
+               ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
                'b_Bakery_House'
 end
 local b_house = SMODS.Back {
