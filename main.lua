@@ -410,6 +410,10 @@ local b_violet = SMODS.Back {
     end
 }
 
+local function is_double_house()
+    return G.GAME.selected_sleeve == 'sleeve_Bakery_House' and ((G.GAME.selected_back_key and G.GAME.selected_back_key.key) or G.GAME.selected_back.key) ==
+               'b_Bakery_House'
+end
 local b_house = SMODS.Back {
     key = "House",
     name = "House",
@@ -444,17 +448,15 @@ local b_house = SMODS.Back {
     end,
     loc_vars = function(self)
         return {
-            vars = {(G.GAME and G.GAME.probabilities.normal or 1) *
-                (G.GAME.selected_sleeve == 'sleeve_Bakery_House' and G.GAME.selected_back_key == 'b_Bakery_House' and 2 or
-                    1), self.config.extra.odds_bottom}
+            vars = {(G.GAME and G.GAME.probabilities.normal or 1) * (is_double_house() and 2 or 1),
+                    self.config.extra.odds_bottom}
         }
     end,
     calculate = function(self, back, args)
         if args.context == 'final_scoring_step' then
             local anim = {}
 
-            local double = G.GAME.selected_sleeve == 'sleeve_Bakery_House' and G.GAME.selected_back_key ==
-                               'b_Bakery_House'
+            local double = is_double_house()
 
             for i = 1, #G.play.cards do
                 local choice = pseudorandom(pseudoseed("HouseDeck"), 0, self.config.extra.odds_bottom)
