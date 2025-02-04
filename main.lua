@@ -37,6 +37,7 @@ SMODS.Atlas {
     py = 95
 }
 
+-- Jokers that can be spawned by a Retrigger Tag
 Bakery_API.retrigger_jokers = Bakery_API.sized_table {
     j_mime = true,
     j_dusk = true,

@@ -350,6 +350,7 @@ end
 
 sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
 
+-- Maps the keys of Blinds to how many times they've been defeated this session.
 Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
 
 local raw_Blind_defeat = Blind.defeat
@@ -365,6 +366,7 @@ end
 
 sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
 
+-- Any deck or card sleeve whose key is true in this table will receive no money from any source.
 Bakery_API.no_money_decks = Bakery_API.sized_table {
     b_Bakery_Credit = true,
     sleeve_Bakery_Credit = true
@@ -429,10 +431,15 @@ end
 
 sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve", "Bakery")
 
+-- Any card whose center's key is true in this table will be rendered double sided.
+-- The front sprite of the card should be specified in `config.extra.front_pos`, and the back in `config.extra.back_pos`.
+-- `config.extra.flipped` will be indicate whether the card has been flipped with `Bakery_API.flip_double_sided(card)`.
+-- `config.extra.flipped` does NOT include effects like Amber Acorn.
 Bakery_API.double_sided_jokers = Bakery_API.sized_table {
     j_Bakery_Werewolf = true
 }
 
+-- Flips a double-sided card.
 function Bakery_API.flip_double_sided(card)
     G.E_MANAGER:add_event(Event{
         trigger = 'before',
