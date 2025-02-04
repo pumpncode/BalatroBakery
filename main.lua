@@ -149,7 +149,7 @@ SMODS.Tag {
     min_ante = 0,
     config = {
         type = 'play_hand_late',
-        x_mult = 3
+        x_mult = 1.5
     },
     loc_vars = function(self, info_queue, tag)
         return {
