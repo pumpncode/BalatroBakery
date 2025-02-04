@@ -2,6 +2,8 @@
 
 A mod for [Balatro](https://www.playbalatro.com/) that adds various miscellaneous things, created by BakersDozenBagels.
 
+Additions are generally meant to be well-balanced with vanilla, although the decks are a bit wackier.
+
 Current contents:
 
 - 3 Jokers
