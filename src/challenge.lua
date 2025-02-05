@@ -6,3 +6,24 @@ SMODS.Challenge {
         }}
     }
 }
+
+SMODS.Challenge {
+    key = 'Vagabond',
+    rules = {
+        custom = {{
+            id = 'Bakery_Vagabond',
+            value = 10
+        }}
+    },
+    restrictions = {
+        banned_cards = {{
+            id = 'v_seed_money'
+        }, {
+            id = 'v_money_tree'
+        }, {
+            id = 'j_to_the_moon'
+        }, {
+            id = 'j_credit_card'
+        }}
+    }
+}

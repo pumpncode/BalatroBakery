@@ -483,6 +483,10 @@ Bakery_API.no_money_decks = no_money_decks_write
 
 local raw_ease_dollars = ease_dollars
 function ease_dollars(mod, instant)
+    if G.GAME.modifiers.Bakery_Vagabond then
+        mod = math.min(G.GAME.modifiers.Bakery_Vagabond - G.GAME.dollars, mod)
+    end
+
     if mod <= 0 or (not no_money_decks_read[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
         not no_money_decks_read[G.GAME.selected_sleeve]) then
         return raw_ease_dollars(mod, instant)
@@ -524,7 +528,7 @@ function ease_dollars(mod, instant)
     end
 end
 
-sendInfoMessage("ease_dollars() patched. Reason: Credit Deck", "Bakery")
+sendInfoMessage("ease_dollars() patched. Reason: Credit Deck, Vagabond Challenge", "Bakery")
 
 local raw_Blind_press_play = Blind.press_play
 function Blind:press_play()
@@ -623,7 +627,7 @@ sendInfoMessage("G.FUNCS.evaluate_round() patched. Reason: Spinner Animation", "
 local last_chips = 0
 local raw_mod_mult = mod_mult
 function mod_mult(m)
-    if G.GAME.modifiers['Bakery_Balanced'] then
+    if G.GAME.modifiers.Bakery_Balanceds then
         return math.min(raw_mod_mult(m), math.max(last_chips, 0))
     end
     return raw_mod_mult(m)
@@ -640,4 +644,4 @@ function G.FUNCS.evaluate_play(...)
     last_chips = 0
 end
 
-sendInfoMessage("mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced", "Bakery")
+sendInfoMessage("mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced Challenge", "Bakery")
