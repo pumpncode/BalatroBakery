@@ -11,6 +11,7 @@ Current contents:
 - 3 Decks
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 1 Blind
+- 1 Challenge
 - Miscellaneous modding API features
 
 ## Installation

@@ -619,3 +619,25 @@ function G.FUNCS.evaluate_round()
 end
 
 sendInfoMessage("G.FUNCS.evaluate_round() patched. Reason: Spinner Animation", "Bakery")
+
+local last_chips = 0
+local raw_mod_mult = mod_mult
+function mod_mult(m)
+    if G.GAME.modifiers['Bakery_Balanced'] then
+        return math.min(raw_mod_mult(m), math.max(last_chips, 0))
+    end
+    return raw_mod_mult(m)
+end
+local raw_mod_chips = mod_chips
+function mod_chips(m)
+    local ret = raw_mod_chips(m)
+    last_chips = ret
+    return ret
+end
+local raw_G_FUNCS_evaluate_play = G.FUNCS.evaluate_play
+function G.FUNCS.evaluate_play(...)
+    raw_G_FUNCS_evaluate_play(...)
+    last_chips = 0
+end
+
+sendInfoMessage("mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced", "Bakery")

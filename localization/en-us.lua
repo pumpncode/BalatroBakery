@@ -93,5 +93,13 @@ return {
                 text = {"-1 Hand", "-1 Discard"}
             }
         }
+    },
+    misc = {
+        challenge_names = {
+            c_Bakery_Balanced = "Balanced"
+        },
+        v_text = {
+            ch_c_Bakery_Balanced = {"{C:mult}Mult{} cannot exceed {C:chips}Chips{}"}
+        }
     }
 }
