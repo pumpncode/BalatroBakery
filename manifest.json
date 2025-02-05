@@ -4,12 +4,12 @@
 	"author": ["BakersDozenBagels"],
 	"description": "Some miscellaneous additions.",
 	"prefix": "Bakery",
-	"main_file": "main.lua",
+	"main_file": "src/main.lua",
 	"priority": 0,
 	"badge_colour": "EDD198",
 	"badge_text_colour": "362708",
 	"display_name": "Bakery",
-	"version": "0.1.2~1",
+	"version": "0.1.2~2",
 	"dependencies": [
 		"Steamodded (>=1.*)",
 		"Lovely (>=0.6)"
