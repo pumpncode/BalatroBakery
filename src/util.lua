@@ -21,33 +21,57 @@ end
 
 sendInfoMessage("pairs() and ipairs() patched. Reason: Convenience", "Bakery")
 
---- Uses metatables to add a `Length` key to the table which reports the number of keys contained within.
+--- Adds a `Length` key to the table which reports the number of other keys contained within.
 ---@param table table @The table to modify.
-function Bakery_API.sized_table(table, default_value)
+---@param key string @The key to use. Defaults to `Length`
+function Bakery_API.sized_table(table, key, ...)
+    key = key or "Length"
     local count = 0
-    local keys = {}
     for k in pairs(table) do
         count = count + 1
-        keys[k] = true
     end
     return setmetatable({}, {
         __index = function(_, k)
-            if k == "Length" then
+            if k == key then
                 return count
             end
-            if keys[k] then
-                return table[k]
-            else
-                return default_value
-            end
+            return table[k]
         end,
         __newindex = function(_, k, v)
             if table[k] == nil and v ~= nil then
                 count = count + 1
             end
-            if keys[k] and v == nil then
+            if table[k] ~= nil and v == nil then
                 count = count - 1
             end
+            table[k] = v
+        end,
+        __pairs = function(_)
+            return pairs(table)
+        end,
+        __ipairs = function(_)
+            return ipairs(table)
+        end
+    }), ...
+end
+
+--- Set a default value when fetching missing keys.
+---@param table table @The table to modify.
+---@param value string @The value to use.
+function Bakery_API.default_table(table, value, ...)
+    local count = 0
+    local keys = {}
+    for k in pairs(table) do
+        keys[k] = true
+    end
+    return setmetatable({}, {
+        __index = function(_, k)
+            if not keys[k] then
+                return value
+            end
+            return table[k]
+        end,
+        __newindex = function(_, k, v)
             keys[k] = true
             table[k] = v
         end,
@@ -55,9 +79,90 @@ function Bakery_API.sized_table(table, default_value)
             return pairs(table)
         end,
         __ipairs = function(_)
+            return ipairs(table)
+        end
+    }), ...
+end
+
+--- Set a default value used to replace any falsy values.
+---@param table table @The table to modify.
+---@param value string @The value to use.
+function Bakery_API.aggressive_default_table(table, value, ...)
+    local count = 0
+    return setmetatable({}, {
+        __index = function(_, k)
+            local v = table[k]
+            return v or value
+        end,
+        __newindex = function(_, k, v)
+            table[k] = v
+        end,
+        __pairs = function(_)
             return pairs(table)
+        end,
+        __ipairs = function(_)
+            return ipairs(table)
+        end
+    }), ...
+end
+
+--- Creates a `Reset` function, which when called resets the table to {}.
+---@param table table @The table to modify.
+---@return table, function
+function Bakery_API.reset_table(table, ...)
+    key = key or 'Reset'
+    local function reset()
+        table = {}
+    end
+    return setmetatable({}, {
+        __index = function(_, k)
+            return table[k]
+        end,
+        __newindex = function(_, k, v)
+            table[k] = v
+        end,
+        __pairs = function(_)
+            return pairs(table)
+        end,
+        __ipairs = function(_)
+            return ipairs(table)
+        end
+    }), reset, ...
+end
+
+--- Splits a table into a "read" half and a "write" half.
+---@param table table @The table to modify.
+---@return table, table @The read half, followed by the write half.
+function Bakery_API.read_write_table(table, ...)
+    local read = setmetatable({}, {
+        __index = function(_, k)
+            return table[k]
+        end,
+        __newindex = function(_, k, v)
+            error("Attempt to write to a read-only table", 2)
+        end,
+        __pairs = function(_)
+            return pairs(table)
+        end,
+        __ipairs = function(_)
+            return ipairs(table)
         end
     })
+    local write = setmetatable({}, {
+        __index = function(_, k)
+            error("Attempt to read from a write-only table", 2)
+        end,
+        __newindex = function(_, k, v)
+            table[k] = v
+        end,
+        __pairs = function(_)
+            error("Attempt to read from a write-only table", 2)
+        end,
+        __ipairs = function(_)
+            error("Attempt to read from a write-only table", 2)
+        end
+    })
+    return read, write, ...
 end
 
 -- Polyfill a tag trigger when scoring
@@ -94,7 +199,7 @@ function Blind:modify_hand(cards, poker_hands, text, mult, hand_chips)
 
     for i = 1, #G.GAME.tags do
         apply(G.GAME.tags[i]:apply_to_run({
-            type = 'play_hand_early'
+            type = 'Bakery_play_hand_early'
         }), G.GAME.tags[i])
     end
     return mult, chips, mod or (#animations > 0)
@@ -250,7 +355,7 @@ function Back:trigger_effect(args)
     if args.context == 'final_scoring_step' then
         for i = 1, #G.GAME.tags do
             local ret = G.GAME.tags[i]:apply_to_run({
-                type = 'play_hand_late'
+                type = 'Bakery_play_hand_late'
             })
             if ret ~= nil then
                 args.chips = mod_chips(args.chips + (ret.chips or 0))
@@ -351,31 +456,35 @@ end
 sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
 
 -- Maps the keys of Blinds to how many times they've been defeated this session.
-Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
+local defeated_blinds_read, defeated_blinds_reset = Bakery_API.reset_table {}
+local defeated_blinds_read, defeated_blinds_write = Bakery_API.read_write_table(
+    Bakery_API.aggressive_default_table(defeated_blinds_read, 0))
+Bakery_API.defeated_blinds = defeated_blinds_read
 
 local raw_Blind_defeat = Blind.defeat
 function Blind:defeat(silent)
     raw_Blind_defeat(self, silent)
-    Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
+    defeated_blinds_write[self.config.blind.key] = defeated_blinds_read[self.config.blind.key] + 1
 end
 local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
 G.FUNCS.load_profile = function(...)
-    Bakery_API.defeated_blinds = Bakery_API.sized_table({}, 0)
+    defeated_blinds_reset()
     raw_G_FUNCS_load_profile(...)
 end
 
 sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
 
 -- Any deck or card sleeve whose key is true in this table will receive no money from any source.
-Bakery_API.no_money_decks = Bakery_API.sized_table {
+local no_money_decks_read, no_money_decks_write = Bakery_API.read_write_table {
     b_Bakery_Credit = true,
     sleeve_Bakery_Credit = true
 }
+Bakery_API.no_money_decks = no_money_decks_write
 
 local raw_ease_dollars = ease_dollars
 function ease_dollars(mod, instant)
-    if mod <= 0 or (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
-        not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
+    if mod <= 0 or (not no_money_decks_read[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
+        not no_money_decks_read[G.GAME.selected_sleeve]) then
         return raw_ease_dollars(mod, instant)
     end
 
@@ -435,13 +544,14 @@ sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve
 -- The front sprite of the card should be specified in `config.extra.front_pos`, and the back in `config.extra.back_pos`.
 -- `config.extra.flipped` will be indicate whether the card has been flipped with `Bakery_API.flip_double_sided(card)`.
 -- `config.extra.flipped` does NOT include effects like Amber Acorn.
-Bakery_API.double_sided_jokers = Bakery_API.sized_table {
+local double_sided_jokers_read, double_sided_jokers_write = Bakery_API.read_write_table {
     j_Bakery_Werewolf = true
 }
+Bakery_API.double_sided_jokers = double_sided_jokers_write
 
 -- Flips a double-sided card.
 function Bakery_API.flip_double_sided(card)
-    G.E_MANAGER:add_event(Event{
+    G.E_MANAGER:add_event(Event {
         trigger = 'before',
         delay = 0.2,
         func = function()
@@ -452,8 +562,8 @@ function Bakery_API.flip_double_sided(card)
             return true
         end
     })
-    G.E_MANAGER:add_event(Event{
-        trigger='immediate',
+    G.E_MANAGER:add_event(Event {
+        trigger = 'immediate',
         func = function()
             if card.VT.w <= 0 then
                 card.pinch.x = false
@@ -463,8 +573,8 @@ function Bakery_API.flip_double_sided(card)
             return false
         end
     })
-    G.E_MANAGER:add_event(Event{
-        trigger='immediate',
+    G.E_MANAGER:add_event(Event {
+        trigger = 'immediate',
         blocking = false,
         func = function()
             if card.VT.w >= card.T.w then
@@ -479,7 +589,7 @@ end
 
 local raw_Card_draw = Card.draw
 function Card:draw(layer)
-    if self.config.center and Bakery_API.double_sided_jokers[self.config.center.key] then
+    if self.config.center and double_sided_jokers_read[self.config.center.key] then
         local sprite_facing = self.sprite_facing
         self.sprite_facing = "front"
         self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or

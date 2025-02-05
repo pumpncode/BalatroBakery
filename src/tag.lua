@@ -6,14 +6,15 @@ SMODS.Atlas {
 }
 
 -- Jokers that can be spawned by a Retrigger Tag
-Bakery_API.retrigger_jokers = Bakery_API.sized_table {
+local retrigger_jokers_read, write_retrigger_jokers = Bakery_API.read_write_table(Bakery_API.sized_table {
     j_mime = true,
     j_dusk = true,
     j_hack = true,
     j_selzer = true,
     j_sock_and_buskin = true,
     j_hanging_chad = true
-}
+})
+Bakery_API.retrigger_jokers = write_retrigger_jokers
 
 SMODS.Tag {
     key = "RetriggerTag",
@@ -27,7 +28,7 @@ SMODS.Tag {
         type = 'store_joker_create'
     },
     loc_vars = function(self, info_queue, card)
-        for k in pairs(Bakery_API.retrigger_jokers) do
+        for k in pairs(retrigger_jokers_read) do
             if G.P_CENTERS[k] ~= nil then
                 info_queue[#info_queue + 1] = G.P_CENTERS[k]
             end
@@ -39,14 +40,14 @@ SMODS.Tag {
 
             local in_posession = {0}
             for k, v in ipairs(G.jokers.cards) do
-                if Bakery_API.retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
+                if retrigger_jokers_read[v.config.center.rarity] and not in_posession[v.config.center.key] then
                     in_posession[1] = in_posession[1] + 1
                     in_posession[v.config.center.key] = true
                 end
             end
 
-            if Bakery_API.retrigger_jokers.Length > in_posession[1] then
-                local j, k = pseudorandom_element(Bakery_API.retrigger_jokers, pseudoseed('Retrigger Tag'))
+            if retrigger_jokers_read.Length > in_posession[1] then
+                local j, k = pseudorandom_element(retrigger_jokers_read, pseudoseed('Retrigger Tag'))
                 local card = create_card('Joker', context.area, nil, 2, nil, nil, k, 'Retrigger Tag')
                 create_shop_card_ui(card, 'Joker', context.area)
                 card.states.visible = false
@@ -73,7 +74,7 @@ SMODS.Tag {
     },
     min_ante = 0,
     config = {
-        type = 'play_hand_early',
+        type = 'Bakery_play_hand_early',
         chips = 25,
         mult = 5,
         d_chips = 5,
@@ -117,7 +118,7 @@ SMODS.Tag {
     },
     min_ante = 0,
     config = {
-        type = 'play_hand_late',
+        type = 'Bakery_play_hand_late',
         x_mult = 1.5
     },
     loc_vars = function(self, info_queue, tag)
