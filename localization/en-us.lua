@@ -17,13 +17,13 @@ return {
             },
             j_Bakery_Werewolf = {
                 name = 'Werewolf (Day)',
-                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker at end of round",
+                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
                         "if {C:attention}no discards{} were used"}
             },
             j_Bakery_Werewolf_Back = {
                 name = 'Werewolf (Night)',
-                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker at end of round",
-                        "if {C:attention}2 or more discards{} were used"}
+                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
+                        "if {C:attention}2 or more", "{C:attention}discards{} were used"}
             }
         },
         Tag = {
