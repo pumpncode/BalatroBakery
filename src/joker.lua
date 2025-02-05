@@ -176,6 +176,11 @@ SMODS.Joker {
         }
     },
     loc_vars = function(self, info_queue, card)
+        if not self or not card or not card.ability or not card.ability.extra then
+            return {
+                vars = {}
+            }
+        end
         return {
             vars = {self.key == "j_Bakery_Werewolf_Back" and card.ability.extra.back or card.ability.extra.front}
         }
