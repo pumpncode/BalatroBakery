@@ -256,19 +256,21 @@ local j_spinner = SMODS.Joker {
         if context.joker_main then
             return card.ability.extra.effect[card.ability.extra.rotation % 4]
         end
+
+        if context.Bakery_after_eval then
+            G.E_MANAGER:add_event(Event {
+                trigger = 'before',
+                delay = 0.2,
+                func = function()
+                    play_sound('tarot1')
+                    card:juice_up(0.3, 0.3)
+                    card.ability.extra.rotation = card.ability.extra.rotation + 1
+                    return true
+                end
+            })
+        end
     end,
     calc_dollar_bonus = function(self, card)
-        G.E_MANAGER:add_event(Event {
-            trigger = 'before',
-            delay = 0.2,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.3)
-                card.ability.extra.rotation = card.ability.extra.rotation + 1
-                return true
-            end
-        })
-        
         local dollars = card.ability.extra.dollars[card.ability.extra.rotation % 4 + 1]
         if dollars > 0 then
             return dollars

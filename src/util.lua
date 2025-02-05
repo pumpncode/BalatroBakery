@@ -606,3 +606,16 @@ function Card:draw(layer)
 end
 
 sendInfoMessage("Card:draw() patched. Reason: Werewolf rendering", "Bakery")
+
+local raw_G_FUNCS_evaluate_round = G.FUNCS.evaluate_round
+function G.FUNCS.evaluate_round()
+    raw_G_FUNCS_evaluate_round()
+
+    for i = 1, #G.jokers.cards do
+        G.jokers.cards[i]:calculate_joker({
+            Bakery_after_eval = true
+        })
+    end
+end
+
+sendInfoMessage("G.FUNCS.evaluate_round() patched. Reason: Spinner Animation", "Bakery")
