@@ -217,3 +217,87 @@ SMODS.Joker {
         end
     end
 }
+
+local j_spinner = SMODS.Joker {
+    key = "Spinner",
+    name = "Spinner",
+    atlas = 'Bakery',
+    pos = {
+        x = 5,
+        y = 0
+    },
+    pixel_size = {
+        w = 71,
+        h = 71
+    },
+    rarity = 1,
+    cost = 5,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            effect = {
+                [0] = {
+                    mult = 20
+                },
+                [1] = {
+                    chips = 50
+                },
+                [2] = {
+                    x_mult = 2
+                },
+                [3] = {}
+            },
+            dollars = {0, 0, 0, 5}
+        }
+    },
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return card.ability.extra.effect[card.ability.extra.rotation % 4]
+        end
+    end,
+    calc_dollar_bonus = function(self, card)
+        G.E_MANAGER:add_event(Event {
+            trigger = 'before',
+            delay = 0.2,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.3)
+                card.ability.extra.rotation = card.ability.extra.rotation + 1
+                return true
+            end
+        })
+        
+        local dollars = card.ability.extra.dollars[card.ability.extra.rotation % 4 + 1]
+        if dollars > 0 then
+            return dollars
+        end
+    end,
+    set_ability = function(self, joker)
+        joker.ability.extra.rotation = joker.ability.extra.rotation or pseudorandom(pseudoseed("Spinner"), 0, 3)
+    end
+}
+
+local raw_Card_set_sprites = Card.set_sprites
+function Card:set_sprites(center, front)
+    raw_Card_set_sprites(self, center, front)
+    if center == j_spinner and center.unlocked and center.discovered then
+        self.children.center.role.r_bond = 'Weak'
+        self.children.center.role.role_type = 'Major'
+        local t = self.T
+        self.children.center.T = setmetatable({}, {
+            __index = function(_, k)
+                if k == "r" then
+                    return math.rad((self.ability and self.ability.extra.rotation or 0) * 90)
+                end
+                return t[k]
+            end,
+            __newindex = function(_, k, v)
+                t[k] = v
+            end
+        })
+    end
+end
+
+sendInfoMessage("Card:set_sprites() patched. Reason: Spinner Loading", "Bakery")

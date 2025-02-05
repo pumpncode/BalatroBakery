@@ -24,6 +24,11 @@ return {
                 name = 'Werewolf (Night)',
                 text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
                         "if {C:attention}2 or more", "{C:attention}discards{} were used"}
+            },
+            j_Bakery_Spinner = {
+                name = "Spinner",
+                text = {"Gives the {C:attention}bottom{} bonus", "Rotates {C:attention}clockwise",
+                        "at end of {C:attention}round"}
             }
         },
         Tag = {
