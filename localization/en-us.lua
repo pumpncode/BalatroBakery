@@ -45,6 +45,11 @@ return {
                 name = "1 of Spades",
                 text = {"Gives {C:mult}Mult{} and {C:chips}Chips", "of {C:attention}High Card"},
                 unlock = {"Get {C:attention}High Card", "to level {C:attention}#1#"}
+            },
+            j_Bakery_PlayingCard11 = {
+                name = "11 of Spades",
+                text = {"Gives {C:mult}Mult{} and {C:chips}Chips", "of {C:attention}Pair"},
+                unlock = {"Get {C:attention}Pair", "to level {C:attention}#1#"}
             }
         },
         Tag = {

@@ -509,3 +509,40 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = "PlayingCard11",
+    name = "PlayingCard11",
+    atlas = 'Bakery',
+    pos = {
+        x = 3,
+        y = 1
+    },
+    rarity = 1,
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = false,
+    config = {
+        extra = {
+            unlock_level = 20
+        }
+    },
+    locked_loc_vars = function(self, card)
+        return {
+            vars = {self.config.extra.unlock_level}
+        }
+    end,
+    check_for_unlock = function(self, args)
+        return G.GAME.hands["Pair"].level >= self.config.extra.unlock_level
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                mult = to_number(G.GAME.hands["Pair"].mult),
+                chips = to_number(G.GAME.hands["Pair"].chips)
+            }
+        end
+    end
+}
