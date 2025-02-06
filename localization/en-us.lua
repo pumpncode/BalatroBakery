@@ -92,6 +92,12 @@ return {
                 name = "The Leader",
                 text = {"-1 Hand", "-1 Discard"}
             }
+        },
+        Spectral = {
+            c_Bakery_Astrology = {
+                name = "Astrology",
+                text = {"{C:money}Sell{} all {C:attention}hand levels", "for {C:money}$#1#{} each"}
+            }
         }
     },
     misc = {
