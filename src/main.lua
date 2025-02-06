@@ -5,6 +5,7 @@ assert(SMODS.load_file('src/tag.lua'))()
 assert(SMODS.load_file('src/blind.lua'))()
 assert(SMODS.load_file('src/challenge.lua'))()
 assert(SMODS.load_file('src/consumable.lua'))()
+assert(SMODS.load_file('src/enhancement.lua'))()
 
 SMODS.Atlas {
     key = "modicon",

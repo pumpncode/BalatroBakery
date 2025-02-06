@@ -118,6 +118,16 @@ return {
             c_Bakery_Astrology = {
                 name = "Astrology",
                 text = {"{C:money}Sell{} all {C:attention}hand levels", "for {C:money}$#1#{} each"}
+            },
+            c_Bakery_TimeMachine = {
+                name = "Time Machine",
+                text = {"Enhances {C:attention}#1#{} selected", "card into a", "{C:attention}#2#"}
+            }
+        },
+        Enhanced = {
+            m_Bakery_TimeWalk = {
+                name = "Time Walk",
+                text = {"{C:blue}+1{} Hand", "no rank or suit"}
             }
         }
     },

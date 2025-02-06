@@ -12,7 +12,8 @@ Current contents:
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 1 Blind
 - 2 Challenges
-- 1 Spectral Card
+- 2 Spectral Cards
+- 1 Enhancement
 - Miscellaneous modding API features
 
 ## Installation

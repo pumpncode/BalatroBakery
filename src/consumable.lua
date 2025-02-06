@@ -121,3 +121,28 @@ SMODS.Consumable {
         return false
     end
 }
+
+SMODS.Consumable {
+    key = 'TimeMachine',
+    set = 'Spectral',
+    atlas = "BakeryConsumables",
+    pos = {
+        x = 1,
+        y = 0
+    },
+    cost = 7,
+    config = {
+        mod_conv = 'm_Bakery_TimeWalk',
+        max_highlighted = 1
+    },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_Bakery_TimeWalk
+        return {
+            vars = {self.config.max_highlighted, localize {
+                type = 'name_text',
+                set = 'Enhanced',
+                key = self.config.mod_conv
+            }}
+        }
+    end
+}
