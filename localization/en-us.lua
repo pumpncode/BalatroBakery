@@ -40,6 +40,11 @@ return {
                 name = "Sticker Sheet",
                 text = {"Each {C:attention}stickered{} Joker", "gives {X:mult,C:white}x#1#{} Mult"},
                 unlock = {"Have an {C:attention}eternal", "{C:attention}rental{} Joker"}
+            },
+            j_Bakery_PlayingCard = {
+                name = "1 of Spades",
+                text = {"Gives {C:mult}Mult{} and {C:chips}Chips", "of {C:attention}High Card"},
+                unlock = {"Get {C:attention}High Card", "to level {C:attention}#1#"}
             }
         },
         Tag = {

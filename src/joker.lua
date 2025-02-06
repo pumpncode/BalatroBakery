@@ -466,3 +466,46 @@ SMODS.Joker {
         end
     end
 }
+
+local function to_number(num) -- This shouldn't be necessary, but Talisman's __lt isn't working against numbers for whatever reason
+    if type(num) == "table" then
+        return num:to_number()
+    end
+    return num
+end
+SMODS.Joker {
+    key = "PlayingCard",
+    name = "PlayingCard",
+    atlas = 'Bakery',
+    pos = {
+        x = 2,
+        y = 1
+    },
+    rarity = 1,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = false,
+    config = {
+        extra = {
+            unlock_level = 20
+        }
+    },
+    locked_loc_vars = function(self, card)
+        return {
+            vars = {self.config.extra.unlock_level}
+        }
+    end,
+    check_for_unlock = function(self, args)
+        return G.GAME.hands["High Card"].level >= self.config.extra.unlock_level
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                mult = to_number(G.GAME.hands["High Card"].mult),
+                chips = to_number(G.GAME.hands["High Card"].chips)
+            }
+        end
+    end
+}
