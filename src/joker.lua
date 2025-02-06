@@ -401,3 +401,68 @@ j_proxy = SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = "StickerSheet",
+    name = "Sticker Sheet",
+    atlas = 'Bakery',
+    pos = {
+        x = 1,
+        y = 1
+    },
+    rarity = 2,
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = false,
+    config = {
+        extra = {
+            x_mult = 2
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.x_mult}
+        }
+    end,
+    check_for_unlock = function(self, args)
+        if not G.jokers or not G.jokers.cards then
+            return false
+        end
+        for _, other in pairs(G.jokers.cards) do
+            if other.ability.eternal and other.ability.rental then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.other_joker then
+            local mod_sticker = false
+            for k, v in ipairs(SMODS.Sticker.obj_buffer) do
+                if context.other_joker.ability[v] then
+                    mod_sticker = true
+                    break
+                end
+            end
+            if mod_sticker or context.other_joker.ability.eternal or context.other_joker.ability.rental or
+                context.other_joker.ability.perishable or context.other_joker.pinned then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        context.other_joker:juice_up(0.5, 0.5)
+                        return true
+                    end
+                }))
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = {card.ability.extra.x_mult}
+                    },
+                    Xmult_mod = card.ability.extra.x_mult
+                }
+            end
+        end
+    end
+}

@@ -32,8 +32,14 @@ return {
             },
             j_Bakery_Proxy = {
                 name = "Proxy",
-                text = {"Copies ability of", "most recently", "purchased {C:attention}Joker{}", "{C:inactive}(Currently {C:attention}#1#{C:inactive})"},
+                text = {"Copies ability of", "most recently", "purchased {C:attention}Joker{}",
+                        "{C:inactive}(Currently {C:attention}#1#{C:inactive})"},
                 unlock = {"Have {C:attention}#1#", "and {C:attention}#2#", "simultaneously"}
+            },
+            j_Bakery_StickerSheet = {
+                name = "Sticker Sheet",
+                text = {"Each {C:attention}stickered{} Joker", "gives {X:mult,C:white}x#1#{} Mult"},
+                unlock = {"Have an {C:attention}eternal", "{C:attention}rental{} Joker"}
             }
         },
         Tag = {
