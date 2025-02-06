@@ -645,3 +645,19 @@ function G.FUNCS.evaluate_play(...)
 end
 
 sendInfoMessage("mod_mult(), mod_chips(), and G.FUNCS.evaluate_play() patched. Reason: Balanced Challenge", "Bakery")
+
+local raw_G_FUNCS_buy_from_shop = G.FUNCS.buy_from_shop
+
+G.FUNCS.buy_from_shop = function(e)
+    local ret = raw_G_FUNCS_buy_from_shop(e)
+
+    local card = e.config.ref_table
+    if card.ability.set == 'Joker' then
+        local latest = Bakery_API.get_proxied_joker()
+        card.ability.Bakery_purchase_index = latest and latest.ability.Bakery_purchase_index or 1
+    end
+
+    return ret
+end
+
+sendInfoMessage("G.FUNCS.buy_from_shop() patched. Reason: Proxy", "Bakery")

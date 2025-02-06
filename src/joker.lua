@@ -308,3 +308,96 @@ function Card:set_sprites(center, front)
 end
 
 sendInfoMessage("Card:set_sprites() patched. Reason: Spinner Loading", "Bakery")
+
+local j_proxy
+function Bakery_API.get_proxied_joker()
+    if G.jokers and G.jokers.cards then
+        local other_joker = nil
+        local latest = -1
+        for _, other in pairs(G.jokers.cards) do
+            if other.config.center ~= j_proxy and other.ability.Bakery_purchase_index and
+                other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
+                latest = other.ability.Bakery_purchase_index
+                other_joker = other
+            end
+        end
+        return other_joker
+    end
+end
+j_proxy = SMODS.Joker {
+    key = "Proxy",
+    name = "Proxy",
+    atlas = 'Bakery',
+    pos = {
+        x = 0,
+        y = 1
+    },
+    rarity = 3,
+    cost = 9,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = false,
+    config = {
+        extra = {}
+    },
+    loc_vars = function(self, info_queue, card)
+        local other_joker = Bakery_API.get_proxied_joker()
+
+        return {
+            vars = {other_joker and (localize {
+                type = 'name_text',
+                set = other_joker.config.center.set,
+                key = other_joker.config.center.key
+            }) or localize('k_none')}
+        }
+    end,
+    locked_loc_vars = function(self, card)
+        return {
+            vars = {G.P_CENTERS['j_blueprint'].discovered and localize {
+                type = 'name_text',
+                key = 'j_blueprint',
+                set = "Joker"
+            } or localize('k_unknown'), G.P_CENTERS['j_brainstorm'].discovered and localize {
+                type = 'name_text',
+                key = 'j_brainstorm',
+                set = "Joker"
+            } or localize('k_unknown')}
+        }
+    end,
+    check_for_unlock = function(self, args)
+        if not G.jokers or not G.jokers.cards then
+            return false
+        end
+        local print = false
+        local storm = false
+        for _, other in pairs(G.jokers.cards) do
+            if other.config.center.key == 'j_blueprint' then
+                print = true
+            end
+            if other.config.center.key == 'j_brainstorm' then
+                storm = true
+            end
+        end
+        return print and storm
+    end,
+    calculate = function(self, card, context)
+        local other_joker = Bakery_API.get_proxied_joker()
+        if other_joker and other_joker ~= self and not context.no_blueprint then
+            context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1
+            context.blueprint_card = context.blueprint_card or self
+            if context.blueprint > #G.jokers.cards + 1 then
+                return
+            end
+            local other_joker_ret = other_joker:calculate_joker(context)
+            context.blueprint = nil
+            local eff_card = context.blueprint_card or self
+            context.blueprint_card = nil
+            if other_joker_ret then
+                other_joker_ret.card = eff_card
+                other_joker_ret.colour = G.C.BLUE
+                return other_joker_ret
+            end
+        end
+    end
+}

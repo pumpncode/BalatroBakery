@@ -29,6 +29,11 @@ return {
                 name = "Spinner",
                 text = {"Gives the {C:attention}bottom{} bonus", "Rotates {C:attention}clockwise",
                         "at end of {C:attention}round"}
+            },
+            j_Bakery_Proxy = {
+                name = "Proxy",
+                text = {"Copies ability of", "most recently", "purchased {C:attention}Joker{}", "{C:inactive}(Currently {C:attention}#1#{C:inactive})"},
+                unlock = {"Have {C:attention}#1#", "and {C:attention}#2#", "simultaneously"}
             }
         },
         Tag = {
