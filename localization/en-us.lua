@@ -50,6 +50,16 @@ return {
                 name = "11 of Spades",
                 text = {"Gives {C:mult}Mult{} and {C:chips}Chips", "of {C:attention}Pair"},
                 unlock = {"Get {C:attention}Pair", "to level {C:attention}#1#"}
+            },
+            j_Bakery_EvilSteven = {
+                name = "Evil Steven",
+                text = {"{C:red}Destroys{} all scored cards", "with {C:attention}even{} rank",
+                        "{C:inactive}(2, 4, 6, 8, 10)"}
+            },
+            j_Bakery_AwfulTodd = {
+                name = "Awful Todd",
+                text = {"{C:red}Destroys{} all scored cards", "with {C:attention}odd{} rank",
+                        "{C:inactive}(A, 3, 5, 7, 9)"}
             }
         },
         Tag = {

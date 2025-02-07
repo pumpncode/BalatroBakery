@@ -546,3 +546,65 @@ SMODS.Joker {
         end
     end
 }
+
+local parity = {
+    ["Ace"] = "odd",
+    ["2"] = "even",
+    ["3"] = "odd",
+    ["4"] = "even",
+    ["5"] = "odd",
+    ["6"] = "even",
+    ["7"] = "odd",
+    ["8"] = "even",
+    ["9"] = "odd",
+    ["10"] = "even",
+    ["Jack"] = nil,
+    ["Queen"] = nil,
+    ["King"] = nil
+}
+SMODS.Joker {
+    key = "EvilSteven",
+    name = "EvilSteven",
+    atlas = 'Bakery',
+    pos = {
+        x = 4,
+        y = 1
+    },
+    rarity = 2,
+    cost = 4,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.destroy_card and context.cardarea == G.play then
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] == "even" then
+                return {
+                    remove = true
+                }
+            end
+        end
+    end
+}
+SMODS.Joker {
+    key = "AwfulTodd",
+    name = "AwfulTodd",
+    atlas = 'Bakery',
+    pos = {
+        x = 5,
+        y = 1
+    },
+    rarity = 2,
+    cost = 4,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.destroy_card and context.cardarea == G.play then
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] == "odd" then
+                return {
+                    remove = true
+                }
+            end
+        end
+    end
+}
