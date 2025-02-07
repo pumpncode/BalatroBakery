@@ -17,9 +17,8 @@ SMODS.Challenge {
     },
     restrictions = {
         banned_cards = {{
-            id = 'v_seed_money'
-        }, {
-            id = 'v_money_tree'
+            id = 'v_seed_money',
+            ids = {'v_money_tree'}
         }, {
             id = 'j_to_the_moon'
         }, {
