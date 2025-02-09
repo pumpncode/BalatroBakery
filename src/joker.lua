@@ -630,7 +630,7 @@ SMODS.Joker {
     config = {
         extra = {
             mult = 0,
-            mult_gain = 3
+            mult_gain = 2
         }
     },
     blueprint_compat = true,
