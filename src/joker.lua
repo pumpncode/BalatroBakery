@@ -577,7 +577,8 @@ SMODS.Joker {
     perishable_compat = true,
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
-            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] == "even" then
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] ==
+                "even" then
                 return {
                     remove = true
                 }
@@ -600,11 +601,74 @@ SMODS.Joker {
     perishable_compat = true,
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
-            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] == "odd" then
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] ==
+                "odd" then
                 return {
                     remove = true
                 }
             end
+        end
+    end
+}
+
+SMODS.Atlas {
+    key = "BakeryJokerAgainstHumanity",
+    path = "BakeryJokerAgainstHumanity.png",
+    px = 71,
+    py = 95
+}
+SMODS.Joker {
+    key = "JokerAgainstHumanity",
+    name = "JokerAgainstHumanity",
+    atlas = 'BakeryJokerAgainstHumanity',
+    pos = {
+        x = 0,
+        y = 0
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+        extra = {
+            mult = 0,
+            mult_gain = 3
+        }
+    },
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.mult_gain, card.ability.extra.mult}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+
+        if context.before and G.GAME.hands[context.scoring_name].level == 1 and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+            return {
+                message = 'Upgraded!',
+                colour = G.C.MULT,
+                card = card
+            }
+        end
+    end,
+    set_sprites = function(self, card, front)
+        -- sendInfoMessage(inspect(card), "Bakery")
+        local c = card or {}
+        local a = c.ability or {}
+        local e = a.extra or {}
+        e.x = e.x or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
+        e.y = e.y or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
+        if card and card.children and card.children.center and card.children.center.set_sprite_pos then
+            card.children.center:set_sprite_pos({
+                x = e.x,
+                y = e.y
+            })
         end
     end
 }

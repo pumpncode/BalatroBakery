@@ -60,6 +60,11 @@ return {
                 name = "Awful Todd",
                 text = {"{C:red}Destroys{} all scored cards", "with {C:attention}odd{} rank",
                         "{C:inactive}(A, 3, 5, 7, 9)"}
+            },
+            j_Bakery_JokerAgainstHumanity = {
+                name = "Joker Against Humanity",
+                text = {"Gains {C:mult}+#1#{} mult", "when played {C:attention}poker hand{}",
+                        "is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inative} Mult){}"}
             }
         },
         Tag = {
