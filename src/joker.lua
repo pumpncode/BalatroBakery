@@ -661,16 +661,15 @@ SMODS.Joker {
         end
     end,
     set_sprites = function(self, card, front)
-        -- sendInfoMessage(inspect(card), "Bakery")
         local c = card or {}
-        local a = c.ability or {}
-        local e = a.extra or {}
-        e.x = e.x or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
-        e.y = e.y or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
+        c.ability = c.ability or {}
+        -- The seeding is broken by visiting the collection, but whatever, it's only cosmetic
+        c.ability.Bakery_x = c.ability.Bakery_x or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
+        c.ability.Bakery_y = c.ability.Bakery_y or pseudorandom(pseudoseed("JokerAgainstHumanity"), 0, 3)
         if card and card.children and card.children.center and card.children.center.set_sprite_pos then
             card.children.center:set_sprite_pos({
-                x = e.x,
-                y = e.y
+                x = c.ability.Bakery_x,
+                y = c.ability.Bakery_y
             })
         end
     end
