@@ -464,6 +464,9 @@ SMODS.Joker {
                 }
             end
         end
+    end,
+    in_pool = function(self, args)
+        return G.GAME.stake >= 4
     end
 }
 
