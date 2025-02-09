@@ -64,7 +64,7 @@ return {
             j_Bakery_JokerAgainstHumanity = {
                 name = "Joker Against Humanity",
                 text = {"Gains {C:mult}+#1#{} mult", "when played {C:attention}poker hand{}",
-                        "is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inative} Mult){}"}
+                        "is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
             }
         },
         Tag = {
