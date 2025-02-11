@@ -35,3 +35,19 @@ pattern = "local stay_flipped = "
 position = 'after'
 payload = 'stay_flipped or '
 times = 1
+
+[[patches]]
+[patches.regex]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = "G.hand.highlighted"
+position = 'at'
+payload = 'Bakery_API.get_highlighted()'
+times = 10
+
+[[patches]]
+[patches.regex]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = "G.hand:unhighlight_all\\(\\)"
+position = 'at'
+payload = 'Bakery_API.unhighlight_all()'
+times = 1
