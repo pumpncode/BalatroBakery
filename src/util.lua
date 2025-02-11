@@ -128,41 +128,6 @@ function Bakery_API.reset_table(table, ...)
     }), reset, ...
 end
 
---- Splits a table into a "read" half and a "write" half.
----@param table table @The table to modify.
----@return table, table @The read half, followed by the write half.
-function Bakery_API.read_write_table(table, ...)
-    local read = setmetatable({}, {
-        __index = function(_, k)
-            return table[k]
-        end,
-        __newindex = function(_, k, v)
-            error("Attempt to write to a read-only table", 2)
-        end,
-        __pairs = function(_)
-            return pairs(table)
-        end,
-        __ipairs = function(_)
-            return ipairs(table)
-        end
-    })
-    local write = setmetatable({}, {
-        __index = function(_, k)
-            error("Attempt to read from a write-only table", 2)
-        end,
-        __newindex = function(_, k, v)
-            table[k] = v
-        end,
-        __pairs = function(_)
-            error("Attempt to read from a write-only table", 2)
-        end,
-        __ipairs = function(_)
-            error("Attempt to read from a write-only table", 2)
-        end
-    })
-    return read, write, ...
-end
-
 -- Polyfill a tag trigger when scoring
 -- This is a bit of a hack (it retriggers 2s, 3s, 4s, and 5s), but it should work.
 local raw_modify_hand = Blind.modify_hand
@@ -454,15 +419,13 @@ end
 sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
 
 -- Maps the keys of Blinds to how many times they've been defeated this session.
-local defeated_blinds_read, defeated_blinds_reset = Bakery_API.reset_table {}
-local defeated_blinds_read, defeated_blinds_write = Bakery_API.read_write_table(
-    Bakery_API.aggressive_default_table(defeated_blinds_read, 0))
-Bakery_API.defeated_blinds = defeated_blinds_read
+local defeated_blinds, defeated_blinds_reset = Bakery_API.reset_table {}
+Bakery_API.defeated_blinds = Bakery_API.aggressive_default_table(defeated_blinds, 0)
 
 local raw_Blind_defeat = Blind.defeat
 function Blind:defeat(silent)
     raw_Blind_defeat(self, silent)
-    defeated_blinds_write[self.config.blind.key] = defeated_blinds_read[self.config.blind.key] + 1
+    Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
 end
 local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
 G.FUNCS.load_profile = function(...)
@@ -473,11 +436,10 @@ end
 sendInfoMessage("Blind:defeat() and G.FUNCS.load_profile() patched. Reason: Unlock conditions", "Bakery")
 
 -- Any deck or card sleeve whose key is true in this table will receive no money from any source.
-local no_money_decks_read, no_money_decks_write = Bakery_API.read_write_table {
+Bakery_API.no_money_decks = {
     b_Bakery_Credit = true,
     sleeve_Bakery_Credit = true
 }
-Bakery_API.no_money_decks = no_money_decks_write
 
 local raw_ease_dollars = ease_dollars
 function ease_dollars(mod, instant)
@@ -485,8 +447,8 @@ function ease_dollars(mod, instant)
         mod = math.min(G.GAME.modifiers.Bakery_Vagabond - G.GAME.dollars, mod)
     end
 
-    if mod <= 0 or (not no_money_decks_read[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
-        not no_money_decks_read[G.GAME.selected_sleeve]) then
+    if mod <= 0 or (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
+        not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
         return raw_ease_dollars(mod, instant)
     end
 
@@ -546,10 +508,9 @@ sendInfoMessage("Blind:press_play() patched. Reason: Credit Deck + Credit Sleeve
 -- The front sprite of the card should be specified in `config.extra.front_pos`, and the back in `config.extra.back_pos`.
 -- `config.extra.flipped` will be indicate whether the card has been flipped with `Bakery_API.flip_double_sided(card)`.
 -- `config.extra.flipped` does NOT include effects like Amber Acorn.
-local double_sided_jokers_read, double_sided_jokers_write = Bakery_API.read_write_table {
+Bakery_API.double_sided_jokers = {
     j_Bakery_Werewolf = true
 }
-Bakery_API.double_sided_jokers = double_sided_jokers_write
 
 -- Flips a double-sided card.
 function Bakery_API.flip_double_sided(card)
@@ -591,7 +552,7 @@ end
 
 local raw_Card_draw = Card.draw
 function Card:draw(layer)
-    if self.config.center and double_sided_jokers_read[self.config.center.key] then
+    if self.config.center and Bakery_API.double_sided_jokers[self.config.center.key] then
         local sprite_facing = self.sprite_facing
         self.sprite_facing = "front"
         self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or

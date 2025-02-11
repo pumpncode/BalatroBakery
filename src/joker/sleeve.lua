@@ -1,8 +1,8 @@
 local next_key, j_sleeve, no_recurse
 
 local card_area_size = {
-    W = 0, -- 0.6 * G.CARD_W,
-    H = 0, -- 0.6 * G.CARD_H
+    W = 0,
+    H = 0,
     X = G.CARD_W * 0.5,
     Y = G.CARD_H * 0.3
 }
@@ -126,7 +126,7 @@ j_sleeve = SMODS.Joker {
     end
 }
 
-Bakery_API.sleevearea_for_key = function(k)
+local function sleevearea_for_key(k)
     for _, v in ipairs(G.I.CARDAREA) do
         if v.config.Bakery_sleeve_key == k then
             return v
@@ -135,7 +135,7 @@ Bakery_API.sleevearea_for_key = function(k)
 end
 next_key = function()
     local key = 1
-    while Bakery_API.sleevearea_for_key(key) do
+    while sleevearea_for_key(key) do
         key = key + 1
     end
     return key
@@ -262,7 +262,7 @@ function Bakery_API.get_highlighted()
     local comb = {unpack(G.hand.highlighted)}
     for k, v in ipairs(G.jokers.cards) do
         if v.config.center.key == j_sleeve.key and v.ability.extra.key then
-            for k, c in ipairs((Bakery_API.sleevearea_for_key(v.ability.extra.key) or {
+            for k, c in ipairs((sleevearea_for_key(v.ability.extra.key) or {
                 highlighted = {}
             }).highlighted) do
                 comb[#comb + 1] = c
@@ -276,7 +276,7 @@ function Bakery_API.unhighlight_all()
     G.hand:unhighlight_all()
     for k, v in ipairs(G.jokers.cards) do
         if v.config.center.key == j_sleeve.key and v.ability.extra.key then
-            local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
+            local area = sleevearea_for_key(v.ability.extra.key)
             if area then
                 area:unhighlight_all()
             end
