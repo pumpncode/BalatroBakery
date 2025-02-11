@@ -75,25 +75,24 @@ j_sleeve = SMODS.Joker {
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
-    calculate = function(self, card, context)
-        if context.selling_self and card.ability.extra.occupied and not card.ability.extra.override then
-            self:_remove_card(card, not self:Bakery_can_use(card))
-        end
+    _hand_available = function()
+        return
+            G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or
+                G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.PLAY_TAROT
     end,
     Bakery_can_use = function(self, card)
         if card.ability.extra.occupied then
             return G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE ==
-                       G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE ==
-                       G.STATES.SMODS_BOOSTER_OPENED
+                       G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
         else
             return not card.ability.extra.override and #G.hand.highlighted == 1
         end
     end,
-    _remove_card = function(self, card, to_deck)
+    Bakery_remove_card = function(self, card, force)
         if card.ability.extra.occupied then
             no_recurse = true
-            draw_card(G["Bakery_sleeve_" .. card.ability.extra.key], to_deck and G.deck or G.hand, nil, nil, nil,
-                G["Bakery_sleeve_" .. card.ability.extra.key].cards[1], nil, nil, true)
+            draw_card(G["Bakery_sleeve_" .. card.ability.extra.key], self._hand_available() and G.hand or G.deck, nil,
+                nil, nil, G["Bakery_sleeve_" .. card.ability.extra.key].cards[1], nil, nil, true)
             G.E_MANAGER:add_event(Event {
                 trigger = 'immediate',
                 func = function()
@@ -112,11 +111,12 @@ j_sleeve = SMODS.Joker {
     end,
     Bakery_use_joker = function(self, card)
         if card.ability.extra.occupied then
-            self:_remove_card(card)
+            self:Bakery_remove_card(card)
         else
             card.ability.extra.key = next_key()
             CardSleeveCardArea(card.ability.extra.key, card)
-            draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil, nil, true)
+            draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil,
+                nil, true)
             card.ability.extra.occupied = true
             card:highlight(card.highlighted)
         end
@@ -238,7 +238,27 @@ function Game:start_run(args)
     return ret
 end
 
-sendInfoMessage("G.UIDEF.use_and_sell_buttons(), Card:load() and Game:start_run() patched. Reason: Card Sleeve",
+local raw_copy_card = copy_card
+function copy_card(other, new_card, card_scale, playing_card, strip_edition)
+    local ret = raw_copy_card(other, new_card, card_scale, playing_card, strip_edition)
+    if ret.config.center.key == j_sleeve.key then
+        ret.ability.extra.key = nil
+        ret.ability.extra.occupied = false
+        ret.ability.extra.override = nil
+    end
+    return ret
+end
+
+local raw_Card_remove = Card.remove
+function Card:remove()
+    raw_Card_remove(self)
+    if self.config.center.Bakery_remove_card then
+        self.config.center:Bakery_remove_card(self, true)
+    end
+end
+
+sendInfoMessage(
+    "G.UIDEF.use_and_sell_buttons(), Card:load(), Game:start_run(), copy_card() and Card:remove() patched. Reason: Card Sleeve",
     "Bakery")
 
 function G.FUNCS.Bakery_can_use_joker(node)
