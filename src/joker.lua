@@ -674,3 +674,5 @@ SMODS.Joker {
         end
     end
 }
+
+Bakery_API.load('sleeve')

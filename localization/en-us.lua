@@ -65,6 +65,10 @@ return {
                 name = "Joker Against Humanity",
                 text = {"Gains {C:mult}+#1#{} mult", "when played {C:attention}poker hand{}",
                         "is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
+            },
+            j_Bakery_CardSleeve = {
+                name = "Card Sleeve",
+                text = {"{C:attention}Holds{} one", "playing card"}
             }
         },
         Tag = {
@@ -154,6 +158,10 @@ return {
         v_text = {
             ch_c_Bakery_Balanced = {"{C:mult}Mult{} cannot exceed {C:chips}Chips{}"},
             ch_c_Bakery_Vagabond = {"{C:money}Money{} cannot exceed {C:money}$#1#"}
+        },
+        dictionary = {
+            b_Bakery_store = "STORE",
+            b_Bakery_return = "GET"
         }
     }
 }

@@ -1,0 +1,29 @@
+[manifest]
+version = "1.0.0"
+priority = 999
+
+[[patches]]
+[patches.regex]
+target = "card.lua"
+# pattern = "(?<!get_poker_hand_info\\()G.hand.highlighted"
+pattern = "([^o]\\(|[^(])(G.hand.highlighted)"
+root_capture = '2'
+position = 'at'
+payload = 'Bakery_API.get_highlighted()'
+times = 35
+
+[[patches]]
+[patches.regex]
+target = "card.lua"
+pattern = "G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK"
+position = 'at'
+payload = 'self.ability.name ~= "Cryptid" or ($0)'
+times = 1
+
+[[patches]]
+[patches.regex]
+target = "card.lua"
+pattern = "G.hand:unhighlight_all\\(\\)"
+position = 'at'
+payload = 'Bakery_API.unhighlight_all()'
+times = 2
