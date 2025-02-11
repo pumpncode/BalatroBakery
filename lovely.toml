@@ -27,3 +27,11 @@ pattern = "G.hand:unhighlight_all\\(\\)"
 position = 'at'
 payload = 'Bakery_API.unhighlight_all()'
 times = 2
+
+[[patches]]
+[patches.regex]
+target = "functions/common_events.lua"
+pattern = "local stay_flipped = "
+position = 'after'
+payload = 'stay_flipped or '
+times = 1

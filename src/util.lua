@@ -426,6 +426,19 @@ local raw_Blind_defeat = Blind.defeat
 function Blind:defeat(silent)
     raw_Blind_defeat(self, silent)
     Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
+
+    for k, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.occupied then
+            local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
+            if area then
+                for k, v in ipairs(area.cards) do
+                    if v.facing == "back" then
+                        v:flip()
+                    end
+                end
+            end
+        end
+    end
 end
 local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
 G.FUNCS.load_profile = function(...)

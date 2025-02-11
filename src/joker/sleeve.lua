@@ -93,7 +93,7 @@ j_sleeve = SMODS.Joker {
         if card.ability.extra.occupied then
             no_recurse = true
             draw_card(G["Bakery_sleeve_" .. card.ability.extra.key], to_deck and G.deck or G.hand, nil, nil, nil,
-                G["Bakery_sleeve_" .. card.ability.extra.key].cards[1])
+                G["Bakery_sleeve_" .. card.ability.extra.key].cards[1], nil, nil, true)
             G.E_MANAGER:add_event(Event {
                 trigger = 'immediate',
                 func = function()
@@ -116,7 +116,7 @@ j_sleeve = SMODS.Joker {
         else
             card.ability.extra.key = next_key()
             CardSleeveCardArea(card.ability.extra.key, card)
-            draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1])
+            draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil, nil, true)
             card.ability.extra.occupied = true
             card:highlight(card.highlighted)
         end
@@ -126,7 +126,7 @@ j_sleeve = SMODS.Joker {
     end
 }
 
-local function sleevearea_for_key(k)
+function Bakery_API.sleevearea_for_key(k)
     for _, v in ipairs(G.I.CARDAREA) do
         if v.config.Bakery_sleeve_key == k then
             return v
@@ -135,7 +135,7 @@ local function sleevearea_for_key(k)
 end
 next_key = function()
     local key = 1
-    while sleevearea_for_key(key) do
+    while Bakery_API.sleevearea_for_key(key) do
         key = key + 1
     end
     return key
@@ -262,7 +262,7 @@ function Bakery_API.get_highlighted()
     local comb = {unpack(G.hand.highlighted)}
     for k, v in ipairs(G.jokers.cards) do
         if v.config.center.key == j_sleeve.key and v.ability.extra.key then
-            for k, c in ipairs((sleevearea_for_key(v.ability.extra.key) or {
+            for k, c in ipairs((Bakery_API.sleevearea_for_key(v.ability.extra.key) or {
                 highlighted = {}
             }).highlighted) do
                 comb[#comb + 1] = c
@@ -276,7 +276,7 @@ function Bakery_API.unhighlight_all()
     G.hand:unhighlight_all()
     for k, v in ipairs(G.jokers.cards) do
         if v.config.center.key == j_sleeve.key and v.ability.extra.key then
-            local area = sleevearea_for_key(v.ability.extra.key)
+            local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
             if area then
                 area:unhighlight_all()
             end
