@@ -675,3 +675,41 @@ SMODS.Joker {
 }
 
 Bakery_API.load('sleeve')
+
+SMODS.Joker {
+    key = "BongardProblem",
+    name = "BongardProblem",
+    atlas = 'Bakery',
+    pos = {
+        x = 1,
+        y = 2
+    },
+    rarity = 2,
+    cost = 7,
+    config = {
+        extra = {
+            xmult = 2
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.xmult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if not SMODS.has_no_suit(context.scoring_hand[1]) and
+                not SMODS.has_no_suit(context.scoring_hand[#context.scoring_hand]) and
+                (SMODS.has_any_suit(context.scoring_hand[1]) or
+                    SMODS.has_any_suit(context.scoring_hand[#context.scoring_hand]) or
+                    not context.scoring_hand[1]:is_suit(context.scoring_hand[#context.scoring_hand].base.suit)) then
+                return {
+                    x_mult = card.ability.extra.xmult
+                }
+            end
+        end
+    end
+}

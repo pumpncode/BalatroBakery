@@ -69,6 +69,11 @@ return {
             j_Bakery_CardSleeve = {
                 name = "Card Sleeve",
                 text = {"{C:attention}Holds{} one", "playing card"}
+            },
+            j_Bakery_BongardProblem = {
+                name = "Bongard Problem",
+                text = {"{X:mult,C:white}X#1#{} Mult if", "leftmost and rightmost", "scoring cards are",
+                        "different {C:attention}suits"}
             }
         },
         Tag = {
