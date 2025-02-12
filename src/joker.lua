@@ -512,7 +512,6 @@ SMODS.Joker {
         end
     end
 }
-
 SMODS.Joker {
     key = "PlayingCard11",
     name = "PlayingCard11",

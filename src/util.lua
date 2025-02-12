@@ -626,7 +626,7 @@ G.FUNCS.buy_from_shop = function(e)
     local card = e.config.ref_table
     if card.ability.set == 'Joker' then
         local latest = Bakery_API.get_proxied_joker()
-        card.ability.Bakery_purchase_index = latest and latest.ability.Bakery_purchase_index or 1
+        card.ability.Bakery_purchase_index = latest and (latest.ability.Bakery_purchase_index + 1) or 1
     end
 
     return ret
