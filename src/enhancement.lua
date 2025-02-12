@@ -40,9 +40,12 @@ SMODS.Enhancement {
                         return true
                     end
                 })
-            end
+            end -- Entirely visual
             ease_hands_played(1)
             delay(0.85)
+            return {
+                effect = true
+            }
         end
     end
 }
