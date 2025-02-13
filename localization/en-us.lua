@@ -141,6 +141,10 @@ return {
             bl_Bakery_Aleph = {
                 name = "The Leader",
                 text = {"-1 Hand", "-1 Discard"}
+            },
+            bl_Bakery_Tsadi = {
+                name = "The Attrition",
+                text = {"{C:red}-#1#{} Mult", "before scoring"}
             }
         },
         Spectral = {
@@ -174,7 +178,8 @@ return {
             b_Bakery_return = "GET"
         },
         v_dictionary = {
-            b_Bakery_deposit = "DEPOSIT $#1#"
+            b_Bakery_deposit = "DEPOSIT $#1#",
+            b_Bakery_ante_times = "(Ante*#1#)"
         }
     }
 }

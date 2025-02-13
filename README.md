@@ -10,7 +10,7 @@ Current contents:
 - 3 Tags
 - 3 Decks
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
-- 1 Blind
+- 2 Blinds
 - 2 Challenges
 - 2 Spectral Cards
 - 1 Enhancement
