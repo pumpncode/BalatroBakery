@@ -728,8 +728,8 @@ SMODS.Joker {
     config = {
         extra = {
             mult = 0,
-            cost = 4,
-            mult_gain = 8
+            cost = 5,
+            mult_gain = 3
         }
     },
     loc_vars = function(self, info_queue, card)
