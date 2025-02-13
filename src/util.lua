@@ -633,3 +633,12 @@ G.FUNCS.buy_from_shop = function(e)
 end
 
 sendInfoMessage("G.FUNCS.buy_from_shop() patched. Reason: Proxy", "Bakery")
+
+function Bakery_API.crash()
+    G.E_MANAGER:add_event(Event {
+        trigger = "immediate",
+        func = function()
+            error()
+        end
+    })
+end
