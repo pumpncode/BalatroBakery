@@ -713,3 +713,61 @@ SMODS.Joker {
         end
     end
 }
+
+Bakery_API.usable_jokers.j_Bakery_CoinSlot = true
+SMODS.Joker {
+    key = "CoinSlot",
+    name = "CoinSlot",
+    atlas = 'Bakery',
+    pos = {
+        x = 2,
+        y = 2
+    },
+    rarity = 1,
+    cost = 1,
+    config = {
+        extra = {
+            mult = 0,
+            cost = 4,
+            mult_gain = 8
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.mult_gain, card.ability.extra.cost, card.ability.extra.mult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+    end,
+    Bakery_can_use = function(self, card)
+        return card:can_sell_card() and card.ability.extra.cost <= G.GAME.dollars - G.GAME.bankrupt_at
+    end,
+    Bakery_use_joker = function(self, card)
+        ease_dollars(-card.ability.extra.cost)
+        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+        card_eval_status_text(card, 'extra', nil, math.random(0, 100), nil, {
+            mult_mod = true,
+            message = localize {
+                type = 'variable',
+                key = 'a_mult',
+                vars = {card.ability.extra.mult}
+            }
+        })
+        card:highlight(card.highlighted)
+    end,
+    Bakery_use_button_text = function(self, card)
+        return localize {
+            type = 'variable',
+            key = 'b_Bakery_deposit',
+            vars = {card.ability.extra.cost}
+        }
+    end
+}

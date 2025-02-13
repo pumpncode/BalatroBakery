@@ -74,6 +74,11 @@ return {
                 name = "Bongard Problem",
                 text = {"{X:mult,C:white}X#1#{} Mult if", "leftmost and rightmost", "scoring cards are",
                         "different {C:attention}suits"}
+            },
+            j_Bakery_CoinSlot = {
+                name = "Coin Slot",
+                text = {"Gains {C:mult}+#1#{} Mult", "per {C:money}$#2#{} put", "into the slot",
+                        "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"}
             }
         },
         Tag = {
@@ -167,6 +172,9 @@ return {
         dictionary = {
             b_Bakery_store = "STORE",
             b_Bakery_return = "GET"
+        },
+        v_dictionary = {
+            b_Bakery_deposit = "DEPOSIT $#1#"
         }
     }
 }
