@@ -748,9 +748,14 @@ SMODS.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return card:can_sell_card() and card.ability.extra.cost <= G.GAME.dollars - G.GAME.bankrupt_at
+        return card:can_sell_card() and card.ability.extra.cost <= G.GAME.dollars + (G.GAME.dollar_buffer or 0) -
+                   G.GAME.bankrupt_at
     end,
     Bakery_use_joker = function(self, card)
+        if not self:Bakery_can_use(card) then
+            return
+        end
+        G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
         ease_dollars(-card.ability.extra.cost)
         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
         card_eval_status_text(card, 'extra', nil, math.random(0, 100), nil, {
@@ -761,7 +766,13 @@ SMODS.Joker {
                 vars = {card.ability.extra.mult}
             }
         })
-        card:highlight(card.highlighted)
+        G.E_MANAGER:add_event(Event({
+            func = (function()
+                G.GAME.dollar_buffer = G.GAME.dollar_buffer + card.ability.extra.cost
+                return true
+            end)
+        }))
+        Bakery_API.rehighlight(card)
     end,
     Bakery_use_button_text = function(self, card)
         return localize {

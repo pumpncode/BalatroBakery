@@ -102,7 +102,7 @@ j_sleeve = SMODS.Joker {
                     card.ability.extra.occupied = false
                     card.ability.extra.override = nil
                     no_recurse = false
-                    card:highlight(card.highlighted)
+                    Bakery_API.rehighlight(card)
                     return true
                 end
             })
@@ -118,7 +118,7 @@ j_sleeve = SMODS.Joker {
             draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil,
                 nil, true)
             card.ability.extra.occupied = true
-            card:highlight(card.highlighted)
+            Bakery_API.rehighlight(card)
         end
     end,
     Bakery_use_button_text = function(self, card)
@@ -302,4 +302,13 @@ function Bakery_API.unhighlight_all()
             end
         end
     end
+end
+
+function Bakery_API.rehighlight(card)
+    local highlighted = card.highlighted
+    if card.children.use_button then
+        card.children.use_button:remove()
+        card.children.use_button = nil
+    end
+    card:highlight(card.highlighted)
 end
