@@ -79,6 +79,10 @@ return {
                 name = "Coin Slot",
                 text = {"Gains {C:mult}+#1#{} Mult", "per {C:money}$#2#{} put", "into the slot",
                         "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"}
+            },
+            j_Bakery_Pyrite = {
+                name = "Pyrite",
+                text = {"Draw {C:attention}#1#{} extra cards", "in {C:attention}first hand{} of round"}
             }
         },
         Tag = {

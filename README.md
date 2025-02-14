@@ -6,7 +6,7 @@ Additions are generally meant to be well-balanced with vanilla, although the dec
 
 Current contents:
 
-- 15 Jokers
+- 16 Jokers
 - 3 Tags
 - 3 Decks
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)

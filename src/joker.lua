@@ -782,3 +782,36 @@ SMODS.Joker {
         }
     end
 }
+
+SMODS.Joker {
+    key = "Pyrite",
+    name = "Pyrite",
+    atlas = 'Bakery',
+    pos = {
+        x = 3,
+        y = 2
+    },
+    rarity = 1,
+    cost = 5,
+    config = {
+        extra = {
+            cards = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.cards}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.first_hand_drawn then
+            juice_card(card)
+            for i = 1, card.ability.extra.cards do
+                draw_card(G.deck, G.hand, i * 100 / card.ability.extra.cards, 'up', true)
+            end
+        end
+    end
+}
