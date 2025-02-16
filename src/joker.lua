@@ -5,10 +5,18 @@ SMODS.Atlas {
     py = 95
 }
 
-SMODS.Joker {
+function Bakery_API.Joker(o)
+    o.name = o.name or o.key
+    o.atlas = o.atlas or 'Bakery'
+    o.pos = o.pos or {
+        x = 0.5,
+        y = 0.5
+    }
+    return SMODS.Joker(o)
+end
+
+Bakery_API.Joker {
     key = "Tarmogoyf",
-    name = "Tarmogoyf",
-    atlas = 'Bakery',
     pos = {
         x = 0,
         y = 0
@@ -72,10 +80,8 @@ SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "Auctioneer",
-    name = "Auctioneer",
-    atlas = 'Bakery',
     pos = {
         x = 1,
         y = 0
@@ -116,10 +122,8 @@ SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "Don",
-    name = "Don",
-    atlas = 'Bakery',
     pos = {
         x = 2,
         y = 0
@@ -150,10 +154,8 @@ SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "Werewolf",
-    name = "Werewolf",
-    atlas = 'Bakery',
     rarity = 3,
     cost = 5,
     blueprint_compat = true,
@@ -223,10 +225,8 @@ SMODS.Joker {
     end
 }
 
-local j_spinner = SMODS.Joker {
+local j_spinner = Bakery_API.Joker {
     key = "Spinner",
-    name = "Spinner",
-    atlas = 'Bakery',
     pos = {
         x = 5,
         y = 0
@@ -324,10 +324,8 @@ function Bakery_API.get_proxied_joker()
         return other_joker
     end
 end
-j_proxy = SMODS.Joker {
+j_proxy = Bakery_API.Joker {
     key = "Proxy",
-    name = "Proxy",
-    atlas = 'Bakery',
     pos = {
         x = 0,
         y = 1
@@ -402,10 +400,8 @@ j_proxy = SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "StickerSheet",
-    name = "Sticker Sheet",
-    atlas = 'Bakery',
     pos = {
         x = 1,
         y = 1
@@ -476,10 +472,8 @@ local function to_number(num) -- This shouldn't be necessary, but Talisman's __l
     end
     return num
 end
-SMODS.Joker {
+Bakery_API.Joker {
     key = "PlayingCard",
-    name = "PlayingCard",
-    atlas = 'Bakery',
     pos = {
         x = 2,
         y = 1
@@ -512,10 +506,8 @@ SMODS.Joker {
         end
     end
 }
-SMODS.Joker {
+Bakery_API.Joker {
     key = "PlayingCard11",
-    name = "PlayingCard11",
-    atlas = 'Bakery',
     pos = {
         x = 3,
         y = 1
@@ -564,10 +556,8 @@ local parity = {
     ["Queen"] = nil,
     ["King"] = nil
 }
-SMODS.Joker {
+Bakery_API.Joker {
     key = "EvilSteven",
-    name = "EvilSteven",
-    atlas = 'Bakery',
     pos = {
         x = 4,
         y = 1
@@ -588,10 +578,8 @@ SMODS.Joker {
         end
     end
 }
-SMODS.Joker {
+Bakery_API.Joker {
     key = "AwfulTodd",
-    name = "AwfulTodd",
-    atlas = 'Bakery',
     pos = {
         x = 5,
         y = 1
@@ -619,9 +607,8 @@ SMODS.Atlas {
     px = 71,
     py = 95
 }
-SMODS.Joker {
+Bakery_API.Joker {
     key = "JokerAgainstHumanity",
-    name = "JokerAgainstHumanity",
     atlas = 'BakeryJokerAgainstHumanity',
     pos = {
         x = 0,
@@ -676,10 +663,8 @@ SMODS.Joker {
 
 Bakery_API.load('sleeve')
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "BongardProblem",
-    name = "BongardProblem",
-    atlas = 'Bakery',
     pos = {
         x = 1,
         y = 2
@@ -715,10 +700,8 @@ SMODS.Joker {
 }
 
 Bakery_API.usable_jokers.j_Bakery_CoinSlot = true
-SMODS.Joker {
+Bakery_API.Joker {
     key = "CoinSlot",
-    name = "CoinSlot",
-    atlas = 'Bakery',
     pos = {
         x = 2,
         y = 2
@@ -783,10 +766,8 @@ SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "Pyrite",
-    name = "Pyrite",
-    atlas = 'Bakery',
     pos = {
         x = 3,
         y = 2
@@ -816,10 +797,8 @@ SMODS.Joker {
     end
 }
 
-SMODS.Joker {
+Bakery_API.Joker {
     key = "Snowball",
-    name = "Snowball",
-    atlas = 'Bakery',
     pos = {
         x = 4,
         y = 2
