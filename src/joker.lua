@@ -815,3 +815,47 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = "Snowball",
+    name = "Snowball",
+    atlas = 'Bakery',
+    pos = {
+        x = 4,
+        y = 2
+    },
+    rarity = 3,
+    cost = 8,
+    config = {
+        x_mult = 1,
+        extra = {
+            xmult_gain = 0.1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.xmult_gain, card.ability.x_mult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.setting_blind and not context.blueprint and not card.getting_sliced then
+            card.ability.x_mult = card.ability.x_mult + card.ability.extra.xmult_gain
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {
+                        message = localize {
+                            type = 'variable',
+                            key = 'a_xmult',
+                            vars = {card.ability.x_mult}
+                        }
+                    });
+                    return true
+                end
+            }))
+            return nil, true
+        end
+    end
+}

@@ -83,6 +83,11 @@ return {
             j_Bakery_Pyrite = {
                 name = "Pyrite",
                 text = {"Draw {C:attention}#1#{} extra cards", "in {C:attention}first hand{} of round"}
+            },
+            j_Bakery_Snowball = {
+                name = "Snowball",
+                text = {"Gains {X:mult,C:white}X#1#{} Mult", "when {C:attention}Blind{} is selected",
+                        "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"}
             }
         },
         Tag = {
