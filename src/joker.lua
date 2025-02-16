@@ -12,6 +12,20 @@ function Bakery_API.Joker(o)
         x = 0.5,
         y = 0.5
     }
+    local raw_o_set_badges = o.set_badges
+    o.set_badges = function(self, card, badges)
+        if self.artist then
+            local artist = Bakery_API.contributors[self.artist]
+            badges[#badges + 1] = create_badge(localize {
+                type = 'variable',
+                key = 'v_Bakery_artist',
+                vars = {artist.name}
+            }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
+        end
+        if raw_o_set_badges then
+            raw_o_set_badges(self, card, badges)
+        end
+    end
     return SMODS.Joker(o)
 end
 
@@ -735,9 +749,6 @@ Bakery_API.Joker {
                    G.GAME.bankrupt_at
     end,
     Bakery_use_joker = function(self, card)
-        if not self:Bakery_can_use(card) then
-            return
-        end
         G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
         ease_dollars(-card.ability.extra.cost)
         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
@@ -836,5 +847,61 @@ Bakery_API.Joker {
             }))
             return nil, true
         end
+    end
+}
+
+Bakery_API.usable_jokers.j_Bakery_GetOutOfJailFreeCard = true
+Bakery_API.Joker {
+    key = "GetOutOfJailFreeCard",
+    pos = {
+        x = 5,
+        y = 2
+    },
+    artist = "GhostSalt",
+    rarity = 2,
+    cost = 7,
+    config = {
+        extra = {
+            used = false,
+            xmult = 5
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.xmult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.joker_main and card.ability.extra.used then
+            return {
+                x_mult = card.ability.extra.xmult,
+                func = function()
+                    G.GAME.joker_buffer = G.GAME.joker_buffer - 1
+                    G.E_MANAGER:add_event(Event {
+                        trigger = 'before',
+                        delay = 1.12,
+                        func = function()
+                            G.GAME.joker_buffer = 0
+                            card:juice_up(0.8, 0.8)
+                            card:start_dissolve({HEX("57ecab")}, nil, 1.6)
+                            return true
+                        end
+                    })
+                end
+            }
+        end
+    end,
+    Bakery_can_use = function(self, card)
+        return card:can_sell_card() and not card.ability.extra.used
+    end,
+    Bakery_use_joker = function(self, card)
+        card.ability.extra.used = true
+        juice_card_until(card, function()
+            return true
+        end)
+        Bakery_API.rehighlight(card)
     end
 }

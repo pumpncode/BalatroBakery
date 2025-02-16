@@ -181,7 +181,7 @@ function G.UIDEF.use_and_sell_buttons(card)
                     n = G.UIT.T,
                     config = {
                         text = card.config.center.Bakery_use_button_text and
-                            card.config.center:Bakery_use_button_text(card) or localize('b_Bakery_store'),
+                            card.config.center:Bakery_use_button_text(card) or localize('b_use'),
                         colour = G.C.UI.TEXT_LIGHT,
                         scale = 0.55,
                         shadow = true
@@ -273,7 +273,8 @@ function G.FUNCS.Bakery_can_use_joker(node)
 end
 function G.FUNCS.Bakery_use_joker(node)
     local card = node.config.ref_table
-    if card and card.config.center.Bakery_use_joker then
+    if card and card.config.center.Bakery_use_joker and
+        (not card.config.center.Bakery_can_use or card.config.center:Bakery_can_use(card)) then
         card.config.center:Bakery_use_joker(card)
     end
 end

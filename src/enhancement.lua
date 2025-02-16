@@ -27,7 +27,8 @@ SMODS.Enhancement {
             if not (Talisman and Talisman.config_file and Talisman.config_file.disable_anims) then
                 G.E_MANAGER:add_event(Event {
                     trigger = 'before',
-                    delay = 1 * G.SETTINGS.GAMESPEED,
+                    delay = 1,
+                    timer = 'REAL',
                     func = function()
                         play_sound("Bakery_TimeWalk", 0.8 + math.random() * 0.2, 1)
                         return true

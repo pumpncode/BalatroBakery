@@ -88,6 +88,10 @@ return {
                 name = "Snowball",
                 text = {"Gains {X:mult,C:white}X#1#{} Mult", "when {C:attention}Blind{} is selected",
                         "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"}
+            },
+            j_Bakery_GetOutOfJailFreeCard = {
+                name = "Get Out of Jail Free Card",
+                text = {"{C:attention}Use{} to get {X:mult,C:white}X#1#{} Mult", "for {C:attention}one hand"}
             }
         },
         Tag = {
@@ -188,7 +192,8 @@ return {
         },
         v_dictionary = {
             b_Bakery_deposit = "DEPOSIT $#1#",
-            b_Bakery_ante_times = "(Ante*#1#)"
+            b_Bakery_ante_times = "(Ante*#1#)",
+            v_Bakery_artist = "Artist: #1#"
         }
     }
 }

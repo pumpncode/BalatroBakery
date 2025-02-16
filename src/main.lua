@@ -12,6 +12,7 @@ function Bakery_API.load(file)
 end
 
 Bakery_API.load('util')
+Bakery_API.load('contributor')
 Bakery_API.load('joker')
 Bakery_API.load('back')
 Bakery_API.load('tag')
