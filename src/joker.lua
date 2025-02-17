@@ -509,7 +509,7 @@ Bakery_API.Joker {
         }
     end,
     check_for_unlock = function(self, args)
-        return G.GAME.hands["High Card"].level >= self.config.extra.unlock_level
+        return to_number(G.GAME.hands["High Card"].level) >= self.config.extra.unlock_level
     end,
     calculate = function(self, card, context)
         if context.joker_main then
@@ -543,7 +543,7 @@ Bakery_API.Joker {
         }
     end,
     check_for_unlock = function(self, args)
-        return G.GAME.hands["Pair"].level >= self.config.extra.unlock_level
+        return to_number(G.GAME.hands["Pair"].level) >= self.config.extra.unlock_level
     end,
     calculate = function(self, card, context)
         if context.joker_main then
