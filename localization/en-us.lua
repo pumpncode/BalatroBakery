@@ -92,6 +92,11 @@ return {
             j_Bakery_GetOutOfJailFreeCard = {
                 name = "Get Out of Jail Free Card",
                 text = {"{C:attention}Use{} to get {X:mult,C:white}X#1#{} Mult", "for {C:attention}one hand"}
+            },
+            j_Bakery_TransparentBackBuffer = {
+                name = "Transparent Back Buffer",
+                text = {"{C:mult}+#1#{} Mult per scored card", "if played hand alternates",
+                        "{C:attention}red{} and {C:attention}black{} suits"}
             }
         },
         Tag = {

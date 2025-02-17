@@ -905,3 +905,66 @@ Bakery_API.Joker {
         Bakery_API.rehighlight(card)
     end
 }
+
+Bakery_API.black_suits = {"Spades", "Clubs"}
+Bakery_API.red_suits = {"Hearts", "Diamonds"}
+function Bakery_API.is_any_suit(card, suits)
+    for _, s in pairs(suits) do
+        if card:is_suit(s) then
+            return true
+        end
+    end
+    return false
+end
+function Bakery_API.alternates_suits(hand, first, second)
+    if not first then
+        return Bakery_API.alternates_suits(hand, Bakery_API.red_suits, Bakery_API.black_suits) or
+                   Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
+    end
+
+    for i = 1, #hand, 2 do
+        if not Bakery_API.is_any_suit(hand[i], first) then
+            return false
+        end
+    end
+
+    for i = 2, #hand, 2 do
+        if not Bakery_API.is_any_suit(hand[i], second) then
+            return false
+        end
+    end
+
+    return true
+end
+Bakery_API.Joker {
+    key = "TransparentBackBuffer",
+    pos = {
+        x = 0,
+        y = 3
+    },
+    rarity = 1,
+    cost = 4,
+    config = {
+        extra = {
+            mult = 6
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.mult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local hand = context.scoring_hand
+            if Bakery_API.alternates_suits(context.scoring_hand) then
+                return {
+                    mult = card.ability.extra.mult * #context.scoring_hand
+                }
+            end
+        end
+    end
+}
