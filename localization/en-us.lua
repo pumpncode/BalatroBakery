@@ -118,6 +118,10 @@ return {
             tag_Bakery_PolyTag = {
                 name = "Poly Tag",
                 text = {"Gives {X:mult,C:white}x#1#{} Mult when scored", "Lasts {C:attention}1{} round"}
+            },
+            tag_Bakery_PennyTag = {
+                name = "Penny Tag",
+                text = {"Scored cards give {C:money}$#1#", "for the next {C:attention}#2#{} hands"}
             }
         },
         Back = {

@@ -650,3 +650,21 @@ function Bakery_API.crash(message)
         end
     })
 end
+
+local raw_eval_card = eval_card
+function eval_card(card, context)
+    local ret, trig = raw_eval_card(card, context)
+
+    if context.cardarea == G.play and context.main_scoring then
+        for i = 1, #G.GAME.tags do
+            ret['tag' .. i] = G.GAME.tags[i]:apply_to_run({
+                type = 'Bakery_score_card',
+                card = card
+            })
+        end
+    end
+
+    return ret, trig
+end
+
+sendInfoMessage("eval_card() patched. Reason: Penny Tag", "Bakery")

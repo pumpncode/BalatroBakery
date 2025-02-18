@@ -154,3 +154,43 @@ SMODS.Tag {
         end
     end
 }
+
+SMODS.Tag {
+    key = "PennyTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 3,
+        y = 0
+    },
+    min_ante = 0,
+    config = {
+        dollars = 1,
+        hands = 5
+    },
+    loc_vars = function(self, info_queue, tag)
+        return {
+            vars = {tag.ability.dollars or self.config.dollars, tag.ability.hands or self.config.hands}
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered and context.type == 'Bakery_score_card' then
+            return {
+                func = function()
+                    juice_card(tag)
+                end,
+                extra = {
+                    dollars = tag.ability.dollars or self.config.dollars
+                }
+            }
+        end
+        if not tag.triggered and context.type == 'Bakery_play_hand_late' then
+            tag.ability.hands = (tag.ability.hands or self.config.hands) - 1
+            if tag.ability.hands == 0 then
+                tag.triggered = true
+                tag:yep('X', G.C.RED, function()
+                    return true
+                end)
+            end
+        end
+    end
+}
