@@ -966,3 +966,54 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.rarities = {
+    Common = 1,
+    Uncommon = 2,
+    Rare = 3,
+    Legendary = 4
+}
+function Bakery_API.count_rarities()
+    if not G.jokers then
+        return 0
+    end
+    local count = 0
+    local rarities = {}
+    for _, v in ipairs(G.jokers.cards) do
+        local rarity = Bakery_API.rarities[v.config.center.rarity] or v.config.center.rarity
+        if not rarities[rarity] then
+            rarities[rarity] = true
+            count = count + 1
+        end
+    end
+    return count
+end
+Bakery_API.Joker {
+    key = "TierList",
+    pos = {
+        x = 1,
+        y = 3
+    },
+    rarity = 3,
+    cost = 8,
+    config = {
+        extra = {
+            xmult = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.xmult, Bakery_API.count_rarities() * card.ability.extra.xmult}
+        }
+    end,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                x_mult = Bakery_API.count_rarities() * card.ability.extra.xmult
+            }
+        end
+    end
+}

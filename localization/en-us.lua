@@ -97,6 +97,12 @@ return {
                 name = "Transparent Back Buffer",
                 text = {"{C:mult}+#1#{} Mult per scored card", "if played hand alternates",
                         "{C:attention}red{} and {C:attention}black{} suits"}
+            },
+            j_Bakery_TierList = {
+                name = "Tier List",
+                text = {"{X:mult,C:white}X#1#{} Mult for each {C:attention}unique",
+                        "{C:attention}rarity{} among your {C:attention}Jokers{}",
+                        "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"}
             }
         },
         Tag = {
