@@ -656,6 +656,9 @@ Bakery_API.Joker {
         end
     end,
     set_sprites = function(self, card, front)
+        if not self.discovered then
+            return
+        end
         local c = card or {}
         c.ability = c.ability or {}
         -- The seeding is broken by visiting the collection, but whatever, it's only cosmetic
@@ -740,8 +743,8 @@ Bakery_API.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return card:can_sell_card() and card.ability.extra.cost <= Bakery_API.to_number(G.GAME.dollars) + Bakery_API.to_number(G.GAME.dollar_buffer or 0) -
-        Bakery_API.to_number(G.GAME.bankrupt_at)
+        return card:can_sell_card() and card.ability.extra.cost <= Bakery_API.to_number(G.GAME.dollars) +
+                   Bakery_API.to_number(G.GAME.dollar_buffer or 0) - Bakery_API.to_number(G.GAME.bankrupt_at)
     end,
     Bakery_use_joker = function(self, card)
         G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
