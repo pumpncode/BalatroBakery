@@ -454,14 +454,22 @@ Bakery_API.no_money_decks = {
     sleeve_Bakery_Credit = true
 }
 
+function Bakery_API.to_number(num) -- This shouldn't be necessary, but Talisman's __lt and __gt aren't working against numbers for whatever reason
+    if type(num) == "table" then
+        return num:to_number()
+    end
+    return num
+end
+
 local raw_ease_dollars = ease_dollars
 function ease_dollars(mod, instant)
     if G.GAME.modifiers.Bakery_Vagabond then
         mod = math.min(G.GAME.modifiers.Bakery_Vagabond - G.GAME.dollars, mod)
     end
 
-    if mod <= 0 or (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
-        not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
+    if Bakery_API.to_number(mod) <= 0 or
+        (not Bakery_API.no_money_decks[G.GAME.selected_back_key.key or G.GAME.selected_back_key] and
+            not Bakery_API.no_money_decks[G.GAME.selected_sleeve]) then
         return raw_ease_dollars(mod, instant)
     end
 

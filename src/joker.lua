@@ -480,12 +480,6 @@ Bakery_API.Joker {
     end
 }
 
-local function to_number(num) -- This shouldn't be necessary, but Talisman's __lt isn't working against numbers for whatever reason
-    if type(num) == "table" then
-        return num:to_number()
-    end
-    return num
-end
 Bakery_API.Joker {
     key = "PlayingCard",
     pos = {
