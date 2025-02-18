@@ -137,21 +137,6 @@ SMODS.Tag {
                 return true
             end)
         end
-    end,
-    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        SMODS.Tag.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-
-        if card then
-            -- card.tag_sprite:define_draw_steps({{
-            --     shader = 'dissolve',
-            --     shadow_height = 0.05
-            -- }, {
-            --     shader = 'dissolve'
-            -- }, {
-            --     shader = 'polychrome'
-            -- }})
-            card.tag_sprite:draw_shader('polychrome', nil, nil)
-        end
     end
 }
 

@@ -410,7 +410,7 @@ end
 local raw_Object_call = Object.__call
 function Object:__call(...)
     local arg = {...}
-    if self == Tag and arg[1] == "tag_Bakery_PolyTag" then
+    if self == Tag and arg[1] == "tag_Bakery_PolyTag" and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
         return raw_Object_call(PolyTag, ...)
     end
     return raw_Object_call(self, ...)
