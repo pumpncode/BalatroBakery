@@ -645,7 +645,8 @@ Bakery_API.Joker {
             }
         end
 
-        if context.before and G.GAME.hands[context.scoring_name].level == 1 and not context.blueprint then
+        if context.before and Bakery_API.to_number(G.GAME.hands[context.scoring_name].level) == 1 and
+            not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
             return {
                 message = 'Upgraded!',
