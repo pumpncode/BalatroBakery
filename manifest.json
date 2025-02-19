@@ -9,7 +9,7 @@
 	"badge_colour": "EDD198",
 	"badge_text_colour": "362708",
 	"display_name": "Bakery",
-	"version": "0.1.24~2",
+	"version": "0.1.25~1",
 	"dependencies": [
 		"Steamodded (>=1.0.0~ALPHA-1304a)",
 		"Lovely (>=0.6)"

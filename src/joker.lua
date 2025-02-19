@@ -1017,3 +1017,41 @@ Bakery_API.Joker {
         end
     end
 }
+
+Bakery_API.Joker {
+    key = "Tag",
+    -- atlas = "tags",
+    -- prefix_config = {
+    --     atlas = false
+    -- },
+    pos = {
+        x = 2,
+        y = 3
+    },
+    pixel_size = {
+        w = 34,
+        h = 34
+    },
+    rarity = 2,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {
+            x_mult = 2
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.x_mult}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.Bakery_calculate_tags_late then
+            return {
+                x_mult = card.ability.extra.x_mult
+            }
+        end
+    end
+}

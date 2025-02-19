@@ -316,10 +316,7 @@ end
 
 function Back:trigger_effect(args)
     if args.context == 'final_scoring_step' then
-        for i = 1, #G.GAME.tags do
-            local ret = G.GAME.tags[i]:apply_to_run({
-                type = 'Bakery_play_hand_late'
-            })
+        local function handle(ret, tag)
             if ret ~= nil then
                 args.chips = mod_chips(args.chips + (ret.chips or 0))
                 args.mult = mod_mult(args.mult + (ret.mult or 0))
@@ -330,10 +327,24 @@ function Back:trigger_effect(args)
                     mult = args.mult,
                     d_chips = ret.chips,
                     chips = args.chips,
-                    card = ret.card or G.GAME.tags[i],
+                    card = ret.card or tag,
                     after = ret.after
                 })
             end
+        end
+
+        for i = 1, #G.GAME.tags do
+            if not G.GAME.tags[i].triggered then
+                for j = 1, #G.jokers.cards do
+                    handle(G.jokers.cards[j]:calculate_joker({
+                        Bakery_calculate_tags_late = true,
+                        tag = G.GAME.tags[i]
+                    }), G.GAME.tags[i])
+                end
+            end
+            handle(G.GAME.tags[i]:apply_to_run({
+                type = 'Bakery_play_hand_late'
+            }), G.GAME.tags[i])
         end
     end
 

@@ -103,6 +103,10 @@ return {
                 text = {"{X:mult,C:white}X#1#{} Mult for each {C:attention}unique",
                         "{C:attention}rarity{} among your {C:attention}Jokers{}",
                         "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"}
+            },
+            j_Bakery_Tag = {
+                name = "Tag",
+                text = {"{C:attention}Tags{} give {X:mult,C:white}X#1#{} Mult"}
             }
         },
         Tag = {
