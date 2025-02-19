@@ -50,7 +50,7 @@ function CardSleeveCardArea:remove_card(card)
     if not no_recurse then
         for k, v in ipairs(G.jokers.cards) do
             if v.config.center.key == j_sleeve.key and v.ability.extra.key == self.config.Bakery_sleeve_key then
-                j_sleeve:_remove_card(v)
+                j_sleeve:Bakery_remove_card(v)
             end
         end
     end
