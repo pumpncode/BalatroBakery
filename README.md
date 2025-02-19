@@ -14,7 +14,7 @@ Current contents:
 - 2 Challenges
 - 2 Spectral Cards
 - 1 Enhancement
-- Miscellaneous modding API features (If this mod does something interesting, it can probably be uses as a dependency to do that thing)
+- Miscellaneous modding API features (If this mod does something interesting, it can probably be used as a dependency to do that thing)
 
 ## Installation
 
