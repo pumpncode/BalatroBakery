@@ -80,6 +80,7 @@ SMODS.Tag {
         d_mult = 1
     },
     loc_vars = function(self, info_queue, tag)
+        tag.ability = tag.ability or {}
         tag.ability.chips = tag.ability.chips or self.config.chips
         tag.ability.mult = tag.ability.mult or self.config.mult
         return {
@@ -88,6 +89,7 @@ SMODS.Tag {
     end,
     apply = function(self, tag, context)
         if not tag.triggered and self.config.type == context.type then
+            tag.ability = tag.ability or {}
             tag.ability.chips = tag.ability.chips or self.config.chips
             tag.ability.mult = tag.ability.mult or self.config.mult
             local ret = {
@@ -153,11 +155,13 @@ SMODS.Tag {
         hands = 5
     },
     loc_vars = function(self, info_queue, tag)
+        tag.ability = tag.ability or {}
         return {
             vars = {tag.ability.dollars or self.config.dollars, tag.ability.hands or self.config.hands}
         }
     end,
     apply = function(self, tag, context)
+        tag.ability = tag.ability or {}
         if not tag.triggered and context.type == 'Bakery_score_card' then
             return {
                 func = function()
