@@ -1,4 +1,6 @@
+-- KEEP_LITE
 return {
+    -- END_KEEP_LITE
     descriptions = {
         Joker = {
             j_Bakery_Tarmogoyf = {
@@ -196,14 +198,16 @@ return {
             }
         }
     },
+    -- KEEP_LITE
     misc = {
-        challenge_names = {
-            c_Bakery_Balanced = "Balanced",
-            c_Bakery_Vagabond = "Vagabond"
-        },
         v_text = {
             ch_c_Bakery_Balanced = {"{C:mult}Mult{} cannot exceed {C:chips}Chips{}"},
             ch_c_Bakery_Vagabond = {"{C:money}Money{} cannot exceed {C:money}$#1#"}
+        },
+        -- END_KEEP_LITE
+        challenge_names = {
+            c_Bakery_Balanced = "Balanced",
+            c_Bakery_Vagabond = "Vagabond"
         },
         dictionary = {
             b_Bakery_store = "STORE",
@@ -214,5 +218,6 @@ return {
             b_Bakery_ante_times = "(Ante*#1#)",
             v_Bakery_artist = "Artist: #1#"
         }
+        -- KEEP_LITE
     }
 }

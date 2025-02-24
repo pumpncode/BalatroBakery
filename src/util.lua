@@ -619,7 +619,7 @@ Bakery_API.guard(function()
     local last_chips = 0
     local raw_mod_mult = mod_mult
     function mod_mult(m)
-        if G.GAME.modifiers.Bakery_Balanceds then
+        if G.GAME.modifiers.Bakery_Balanced then
             return math.min(raw_mod_mult(m), math.max(last_chips, 0))
         end
         return raw_mod_mult(m)
