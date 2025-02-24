@@ -2,8 +2,8 @@ name: Create Lite Version
 
 on:
     push:
-        # branches:
-        #     - main
+        branches:
+            - main
 
 permissions:
     contents: write
@@ -27,6 +27,7 @@ jobs:
             git checkout origin/main -- .
         - name: Strip functionality
           run: |
+            shopt -s globstar
             for file in **/*.lua; do
                 keep=0
                 while IFS="" read -r line || [ -n "$line" ]
