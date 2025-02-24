@@ -1,0 +1,25 @@
+{
+  "id": "Bakery_Lite",
+  "name": "Bakery (Lite)",
+  "author": [
+    "BakersDozenBagels"
+  ],
+  "description": "The API-only version of Bakery.",
+  "prefix": "Bakery",
+  "main_file": "src/main.lua",
+  "priority": 0,
+  "badge_colour": "EDD198",
+  "badge_text_colour": "362708",
+  "display_name": "Bakery (Lite)",
+  "version": "0.1.25~5",
+  "dependencies": [
+    "Steamodded (>=1.0.0~ALPHA-1304a)",
+    "Lovely (>=0.6)"
+  ],
+  "conflicts": [
+    "Cryptid"
+  ],
+  "provides": [
+    "Bakery (0.1.25~5)"
+  ]
+}
