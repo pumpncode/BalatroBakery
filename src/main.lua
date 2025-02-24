@@ -36,7 +36,6 @@ Bakery_API.load('blind')
 Bakery_API.load('challenge')
 Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
--- END_KEEP_LITE
 
 SMODS.Atlas {
     key = "modicon",
@@ -44,3 +43,4 @@ SMODS.Atlas {
     px = 34,
     py = 34
 }
+-- END_KEEP_LITE
