@@ -1,1 +1,8 @@
-# Bakery Lite Version\n\nA version of [Bakery](https://github.com/BakersDozenBagels/BalatroBakery) with no content. This can be used as a dependency for other mods.\n\n## Installation\n\n1. Bakery requires [Steamodded](https://github.com/Steamodded/smods). Follow the instructions to install it if you haven't already.\n2. Clone this repository into your mods folder, or download it as a zip and place it there.
+# Bakery Lite Version
+
+A version of [Bakery](https://github.com/BakersDozenBagels/BalatroBakery) with no content. This can be used as a dependency for other mods.
+
+## Installation
+
+1. Bakery requires [Steamodded](https://github.com/Steamodded/smods). Follow the instructions to install it if you haven't already.
+2. Clone this repository into your mods folder, or download it as a zip and place it there.
