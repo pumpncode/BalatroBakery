@@ -47,6 +47,13 @@ jobs:
                     esac
                 done < "$file" | sponge "$file"
             done
+
+            for file in assets/**/*.*; do
+                if [ "$(basename "$file")" != Icon.png ]; then
+                    git rm -f "$file"
+                    rm -f "$file"
+                fi
+            done
         - name: Update metadata
           run: |
             jq '.id = "Bakery_Lite" | .name = "Bakery (Lite)" | .display_name = "Bakery (Lite)" | .description = "The API-only version of Bakery." | .provides[0] = "Bakery (" + .version + ")"' manifest.json | sponge manifest.json

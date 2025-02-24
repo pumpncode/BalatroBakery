@@ -29,3 +29,10 @@ Bakery_API.load('blind')
 Bakery_API.load('challenge')
 Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
+
+SMODS.Atlas {
+    key = "modicon",
+    path = "Icon.png",
+    px = 34,
+    py = 34
+}
