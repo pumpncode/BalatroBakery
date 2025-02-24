@@ -1,5 +1,21 @@
-Bakery_API = {}
+-- KEEP_LITE
+Bakery_API = Bakery_API or {}
+if not Bakery_API.Provider then
+    Bakery_API.Provider = "Bakery_Lite"
+    -- END_KEEP_LITE
+    Bakery_API.Provider = "Bakery"
+    -- KEEP_LITE
+end
 Bakery_API.load_stack = {}
+function Bakery_API.guard(f)
+    local provider = "Bakery_Lite"
+    -- END_KEEP_LITE
+    provider = "Bakery"
+    -- KEEP_LITE
+    if Bakery_API.Provider == provider then
+        f()
+    end
+end
 function Bakery_API.load(file)
     table.insert(Bakery_API.load_stack, file)
     local path = ''
@@ -20,6 +36,7 @@ Bakery_API.load('blind')
 Bakery_API.load('challenge')
 Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
+-- END_KEEP_LITE
 
 SMODS.Atlas {
     key = "modicon",

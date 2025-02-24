@@ -21,3 +21,8 @@ Current contents:
 1. Bakery requires [Steamodded](https://github.com/Steamodded/smods). Follow the instructions to install it if you haven't already.
 2. Clone this repository into your mods folder, or download it as a zip and place it there.
 3. Enjoy!
+
+## Lite Version
+
+If another mod depends on Bakery, but you do not want Bakery's additions, you can install the [lite version](https://github.com/BakersDozenBagels/BalatroBakery/tree/lite). This version only has a modding API and nothing else. Note that both versions can be installed together without issue.
+

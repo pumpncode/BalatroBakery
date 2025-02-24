@@ -5,29 +5,33 @@ SMODS.Atlas {
     py = 95
 }
 
-function Bakery_API.Joker(o)
-    o.name = o.name or o.key
-    o.atlas = o.atlas or 'Bakery'
-    o.pos = o.pos or {
-        x = 0.5,
-        y = 0.5
-    }
-    local raw_o_set_badges = o.set_badges
-    o.set_badges = function(self, card, badges)
-        if self.artist then
-            local artist = Bakery_API.contributors[self.artist]
-            badges[#badges + 1] = create_badge(localize {
-                type = 'variable',
-                key = 'v_Bakery_artist',
-                vars = {artist.name}
-            }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
+-- KEEP_LITE
+Bakery_API.guard(function()
+    function Bakery_API.Joker(o)
+        o.name = o.name or o.key
+        o.atlas = o.atlas or 'Bakery'
+        o.pos = o.pos or {
+            x = 0.5,
+            y = 0.5
+        }
+        local raw_o_set_badges = o.set_badges
+        o.set_badges = function(self, card, badges)
+            if self.artist then
+                local artist = Bakery_API.contributors[self.artist]
+                badges[#badges + 1] = create_badge(localize {
+                    type = 'variable',
+                    key = 'v_Bakery_artist',
+                    vars = {artist.name}
+                }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
+            end
+            if raw_o_set_badges then
+                raw_o_set_badges(self, card, badges)
+            end
         end
-        if raw_o_set_badges then
-            raw_o_set_badges(self, card, badges)
-        end
+        return SMODS.Joker(o)
     end
-    return SMODS.Joker(o)
-end
+end)
+-- END_KEEP_LITE
 
 Bakery_API.Joker {
     key = "Tarmogoyf",
@@ -323,22 +327,25 @@ end
 
 sendInfoMessage("Card:set_sprites() patched. Reason: Spinner Loading", "Bakery")
 
-local j_proxy
-function Bakery_API.get_proxied_joker()
-    if G.jokers and G.jokers.cards then
-        local other_joker = nil
-        local latest = -1
-        for _, other in pairs(G.jokers.cards) do
-            if other.config.center ~= j_proxy and other.ability.Bakery_purchase_index and
-                other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
-                latest = other.ability.Bakery_purchase_index
-                other_joker = other
+-- KEEP_LITE
+Bakery_API.guard(function()
+    function Bakery_API.get_proxied_joker()
+        if G.jokers and G.jokers.cards then
+            local other_joker = nil
+            local latest = -1
+            for _, other in pairs(G.jokers.cards) do
+                if other.config.center ~= G.P_CENTERS.j_Bakery_Proxy and other.ability.Bakery_purchase_index and
+                    other.ability.Bakery_purchase_index > latest and other.config.center.blueprint_compat then
+                    latest = other.ability.Bakery_purchase_index
+                    other_joker = other
+                end
             end
+            return other_joker
         end
-        return other_joker
     end
-end
-j_proxy = Bakery_API.Joker {
+end)
+-- END_KEEP_LITE
+Bakery_API.Joker {
     key = "Proxy",
     pos = {
         x = 0,
@@ -673,7 +680,9 @@ Bakery_API.Joker {
     end
 }
 
+-- KEEP_LITE
 Bakery_API.load('sleeve')
+-- END_KEEP_LITE
 
 Bakery_API.Joker {
     key = "BongardProblem",
@@ -904,36 +913,40 @@ Bakery_API.Joker {
     end
 }
 
-Bakery_API.black_suits = {"Spades", "Clubs"}
-Bakery_API.red_suits = {"Hearts", "Diamonds"}
-function Bakery_API.is_any_suit(card, suits)
-    for _, s in pairs(suits) do
-        if card:is_suit(s) then
-            return true
+-- KEEP_LITE
+Bakery_API.guard(function()
+    Bakery_API.black_suits = {"Spades", "Clubs"}
+    Bakery_API.red_suits = {"Hearts", "Diamonds"}
+    function Bakery_API.is_any_suit(card, suits)
+        for _, s in pairs(suits) do
+            if card:is_suit(s) then
+                return true
+            end
         end
+        return false
     end
-    return false
-end
-function Bakery_API.alternates_suits(hand, first, second)
-    if not first then
-        return Bakery_API.alternates_suits(hand, Bakery_API.red_suits, Bakery_API.black_suits) or
-                   Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
-    end
-
-    for i = 1, #hand, 2 do
-        if not Bakery_API.is_any_suit(hand[i], first) then
-            return false
+    function Bakery_API.alternates_suits(hand, first, second)
+        if not first then
+            return Bakery_API.alternates_suits(hand, Bakery_API.red_suits, Bakery_API.black_suits) or
+                       Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
         end
-    end
 
-    for i = 2, #hand, 2 do
-        if not Bakery_API.is_any_suit(hand[i], second) then
-            return false
+        for i = 1, #hand, 2 do
+            if not Bakery_API.is_any_suit(hand[i], first) then
+                return false
+            end
         end
-    end
 
-    return true
-end
+        for i = 2, #hand, 2 do
+            if not Bakery_API.is_any_suit(hand[i], second) then
+                return false
+            end
+        end
+
+        return true
+    end
+end)
+-- END_KEEP_LITE
 Bakery_API.Joker {
     key = "TransparentBackBuffer",
     pos = {
@@ -967,27 +980,31 @@ Bakery_API.Joker {
     end
 }
 
-Bakery_API.rarities = {
-    Common = 1,
-    Uncommon = 2,
-    Rare = 3,
-    Legendary = 4
-}
-function Bakery_API.count_rarities()
-    if not G.jokers then
-        return 0
-    end
-    local count = 0
-    local rarities = {}
-    for _, v in ipairs(G.jokers.cards) do
-        local rarity = Bakery_API.rarities[v.config.center.rarity] or v.config.center.rarity
-        if not rarities[rarity] then
-            rarities[rarity] = true
-            count = count + 1
+-- KEEP_LITE
+Bakery_API.guard(function()
+    Bakery_API.rarities = {
+        Common = 1,
+        Uncommon = 2,
+        Rare = 3,
+        Legendary = 4
+    }
+    function Bakery_API.count_rarities()
+        if not G.jokers then
+            return 0
         end
+        local count = 0
+        local rarities = {}
+        for _, v in ipairs(G.jokers.cards) do
+            local rarity = Bakery_API.rarities[v.config.center.rarity] or v.config.center.rarity
+            if not rarities[rarity] then
+                rarities[rarity] = true
+                count = count + 1
+            end
+        end
+        return count
     end
-    return count
-end
+end)
+-- END_KEEP_LITE
 Bakery_API.Joker {
     key = "TierList",
     pos = {
