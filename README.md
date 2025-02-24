@@ -1,6 +1,6 @@
 # Bakery Lite Version
 
-A version of [Bakery](https://github.com/BakersDozenBagels/BalatroBakery) with no content. This can be used as a dependency for other mods.
+A version of [Bakery](https://github.com/BakersDozenBagels/BalatroBakery) with no content. This can be used as a dependency for other mods. Note that both versions can be installed together without issue.
 
 ## Installation
 

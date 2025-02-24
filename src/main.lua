@@ -1,11 +1,11 @@
 Bakery_API = Bakery_API or {}
+local my_version = "Bakery_Lite"
 if not Bakery_API.Provider then
-    Bakery_API.Provider = "Bakery_Lite"
+    Bakery_API.Provider = my_version
 end
 Bakery_API.load_stack = {}
 function Bakery_API.guard(f)
-    local provider = "Bakery_Lite"
-    if Bakery_API.Provider == provider then
+    if Bakery_API.Provider == my_version then
         f()
     end
 end
@@ -30,9 +30,11 @@ Bakery_API.load('challenge')
 Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
 
-SMODS.Atlas {
-    key = "modicon",
-    path = "Icon.png",
-    px = 34,
-    py = 34
-}
+Bakery_API.guard(function()
+    SMODS.Atlas {
+        key = "modicon",
+        path = "Icon.png",
+        px = 34,
+        py = 34
+    }
+end)
