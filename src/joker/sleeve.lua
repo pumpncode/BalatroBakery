@@ -284,7 +284,7 @@ Bakery_API.guard(function()
     function Bakery_API.get_highlighted()
         local comb = {unpack(G.hand.highlighted)}
         for k, v in ipairs(G.jokers.cards) do
-            if v.config.center.key == j_sleeve.key and v.ability.extra.key then
+            if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
                 for k, c in ipairs((Bakery_API.sleevearea_for_key(v.ability.extra.key) or {
                     highlighted = {}
                 }).highlighted) do
@@ -298,7 +298,7 @@ Bakery_API.guard(function()
     function Bakery_API.unhighlight_all()
         G.hand:unhighlight_all()
         for k, v in ipairs(G.jokers.cards) do
-            if v.config.center.key == j_sleeve.key and v.ability.extra.key then
+            if  v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
                 local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
                 if area then
                     area:unhighlight_all()
