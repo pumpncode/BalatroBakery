@@ -89,7 +89,7 @@ j_sleeve = SMODS.Joker {
         end
     end,
     Bakery_remove_card = function(self, card, force)
-        if card.ability.extra.occupied then
+        if card.ability.extra.occupied and not card.ability.extra.override then
             no_recurse = true
             draw_card(G["Bakery_sleeve_" .. card.ability.extra.key], self._hand_available() and G.hand or G.deck, nil,
                 nil, nil, G["Bakery_sleeve_" .. card.ability.extra.key].cards[1], nil, nil, true)
