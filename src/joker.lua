@@ -307,7 +307,7 @@ local j_spinner = Bakery_API.Joker {
 local raw_Card_set_sprites = Card.set_sprites
 function Card:set_sprites(center, front)
     raw_Card_set_sprites(self, center, front)
-    if center == j_spinner and center.unlocked and center.discovered then
+    if center == j_spinner and (center.discovered or self.params.bypass_discovery_center) then
         self.children.center.role.r_bond = 'Weak'
         self.children.center.role.role_type = 'Major'
         local t = self.T
@@ -663,7 +663,7 @@ Bakery_API.Joker {
         end
     end,
     set_sprites = function(self, card, front)
-        if not self.discovered then
+        if not self.discovered and not card.params.bypass_discovery_center then
             return
         end
         local c = card or {}

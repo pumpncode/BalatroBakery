@@ -584,7 +584,8 @@ Bakery_API.guard(function()
 
     local raw_Card_draw = Card.draw
     function Card:draw(layer)
-        if self.config.center and Bakery_API.double_sided_jokers[self.config.center.key] then
+        if self.config.center and (self.config.center.discovered or self.params.bypass_discovery_center) and
+            Bakery_API.double_sided_jokers[self.config.center.key] then
             local sprite_facing = self.sprite_facing
             self.sprite_facing = "front"
             self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or
