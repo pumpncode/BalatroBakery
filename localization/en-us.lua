@@ -15,16 +15,16 @@ return {
             },
             j_Bakery_Don = {
                 name = 'Don',
-                text = {"{X:mult,C:white}x#1#{} Mult", "Lose {C:money}$#2#{} per played hand"}
+                text = {"{X:mult,C:white}X#1#{} Mult", "Lose {C:money}$#2#{} per played hand"}
             },
             j_Bakery_Werewolf = {
                 name = 'Werewolf (Day)',
-                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
+                text = {"{X:mult,C:white}X#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
                         "if {C:attention}no discards{} were used"}
             },
             j_Bakery_Werewolf_Back = {
                 name = 'Werewolf (Night)',
-                text = {"{X:mult,C:white}x#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
+                text = {"{X:mult,C:white}X#1#{} Mult", "{C:attention}Transform{} this Joker", "at end of round",
                         "if {C:attention}2 or more", "{C:attention}discards{} were used"}
             },
             j_Bakery_Spinner = {
@@ -40,7 +40,7 @@ return {
             },
             j_Bakery_StickerSheet = {
                 name = "Sticker Sheet",
-                text = {"Each {C:attention}stickered{} Joker", "gives {X:mult,C:white}x#1#{} Mult"},
+                text = {"Each {C:attention}stickered{} Joker", "gives {X:mult,C:white}X#1#{} Mult"},
                 unlock = {"Have an {C:attention}eternal", "{C:attention}rental{} Joker"}
             },
             j_Bakery_PlayingCard = {
@@ -123,7 +123,7 @@ return {
             },
             tag_Bakery_PolyTag = {
                 name = "Poly Tag",
-                text = {"Gives {X:mult,C:white}x#1#{} Mult when scored", "Lasts {C:attention}1{} round"}
+                text = {"Gives {X:mult,C:white}X#1#{} Mult when scored", "Lasts {C:attention}1{} round"}
             },
             tag_Bakery_PennyTag = {
                 name = "Penny Tag",
@@ -141,7 +141,7 @@ return {
         Back = {
             b_Bakery_Violet = {
                 name = "Violet Deck",
-                text = {"Gives {X:mult,C:white}x#1#{} Mult"},
+                text = {"Gives {X:mult,C:white}X#1#{} Mult"},
                 unlock = {"Defeat {C:purple}#1#"}
             },
             b_Bakery_House = {
@@ -159,7 +159,7 @@ return {
         Sleeve = {
             sleeve_Bakery_Violet = {
                 name = "Violet Sleeve",
-                text = {"Gives {X:mult,C:white}x#1#{} Mult"}
+                text = {"Gives {X:mult,C:white}X#1#{} Mult"}
             },
             sleeve_Bakery_House = {
                 name = "House Sleeve",
