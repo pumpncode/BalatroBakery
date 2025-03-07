@@ -328,7 +328,7 @@ Bakery_API.guard(function()
                         mult = args.mult,
                         d_chips = ret.chips,
                         chips = args.chips,
-                        card = ret.card or tag,
+                        card = ret.tag or tag,
                         after = ret.after
                     })
                 end
