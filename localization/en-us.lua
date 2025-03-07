@@ -128,6 +128,14 @@ return {
             tag_Bakery_PennyTag = {
                 name = "Penny Tag",
                 text = {"Scored cards give {C:money}$#1#", "for the next {C:attention}#2#{} hands"}
+            },
+            tag_Bakery_BlankTag = {
+                name = "Blank Tag",
+                text = {"{C:inactive}Does nothing?"}
+            },
+            tag_Bakery_AntiTag = {
+                name = "Anti Tag",
+                text = {"{C:dark_edition}+1{} Joker slot"}
             }
         },
         Back = {

@@ -187,3 +187,66 @@ SMODS.Tag {
         end
     end
 }
+
+SMODS.Tag {
+    key = "BlankTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 4,
+        y = 0
+    },
+    min_ante = 0,
+    in_pool = function(self, args)
+        for i = 1, #G.GAME.tags do
+            if G.GAME.tags[i].key == "tag_Bakery_BlankTag" then
+                return false
+            end
+        end
+        return true
+    end
+}
+
+SMODS.Tag {
+    key = "AntiTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 5,
+        y = 0
+    },
+    min_ante = 1,
+    in_pool = function(self, args)
+        local found = false
+        for i = 1, #G.GAME.tags do
+            if G.GAME.tags[i].key == "tag_Bakery_BlankTag" then
+                if found then
+                    return true, {
+                        allow_duplicates = true
+                    }
+                end
+                found = true
+            end
+        end
+        return found, {
+            allow_duplicates = false
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered then
+            for i = 1, #G.GAME.tags do
+                if G.GAME.tags[i].key == "tag_Bakery_BlankTag" and not G.GAME.tags[i].triggered then
+                    G.GAME.tags[i].triggered = true
+                    G.GAME.tags[i]:yep('-', G.C.PURPLE, function()
+                        return true
+                    end)
+                end
+            end
+
+            tag.triggered = true
+            tag:yep('-', G.C.PURPLE, function()
+                G.jokers.config.card_limit = G.jokers.config.card_limit + 1
+                return true
+            end)
+            return true
+        end
+    end
+}

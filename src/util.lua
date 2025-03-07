@@ -357,6 +357,7 @@ Bakery_API.guard(function()
     sendInfoMessage("Blind:modify_hand(), update_hand_text(), and Back:trigger_effect() patched. Reason: Scoring tags",
         "Bakery")
 
+    -- END_KEEP_LITE
     -- Polyfill to render Poly Tag specially
     local PolySprite = Sprite:extend()
     function PolySprite:draw(overlay)
@@ -393,7 +394,7 @@ Bakery_API.guard(function()
             self.tilt_var.amt = self.ambient_tilt * (0.5 + math.cos(tilt_angle)) * tilt_factor
         end
 
-        self:draw_shader('polychrome', nil, self.ARGS.send_to_shader)
+        self:draw_shader(self.shader, nil, self.ARGS.send_to_shader)
     end
 
     local PolyTag = Tag:extend()
@@ -407,13 +408,14 @@ Bakery_API.guard(function()
             amt = 0
         }
         setmetatable(tag_sprite, PolySprite)
+        tag_sprite.shader = self.ability.shader
         return tag_sprite_tab, tag_sprite
     end
 
     local raw_Tag_load = Tag.load
     function Tag:load(tbl)
         raw_Tag_load(self, tbl)
-        if tbl.key == "tag_Bakery_PolyTag" then
+        if tbl.key == "tag_Bakery_PolyTag" or tbl.key == "tag_BakeryAntiTag" then
             setmetatable(self, PolyTag)
         end
     end
@@ -421,13 +423,23 @@ Bakery_API.guard(function()
     local raw_Object_call = Object.__call
     function Object:__call(...)
         local arg = {...}
-        if self == Tag and arg[1] == "tag_Bakery_PolyTag" and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
-            return raw_Object_call(PolyTag, ...)
+        if self == Tag then
+            if arg[1] == "tag_Bakery_PolyTag" and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
+                local ret = raw_Object_call(PolyTag, ...)
+                ret.ability.shader = 'polychrome'
+                return ret
+            end
+            if arg[1] == "tag_Bakery_AntiTag" and (G.P_TAGS.tag_Bakery_AntiTag.discovered or not arg[2]) then
+                local ret = raw_Object_call(PolyTag, ...)
+                ret.ability.shader = 'negative'
+                return ret
+            end
         end
         return raw_Object_call(self, ...)
     end
 
     sendInfoMessage("Object:__call() and Tag:load() patched. Reason: Rendering Poly Tag", "Bakery")
+    -- KEEP_LITE
 
     -- Maps the keys of Blinds to how many times they've been defeated this session.
     local defeated_blinds, defeated_blinds_reset = Bakery_API.reset_table {}
