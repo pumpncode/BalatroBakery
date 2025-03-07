@@ -11,6 +11,9 @@ permissions:
 jobs:
     build:
         runs-on: ubuntu-latest
+        concurrency:
+          group: update-lite
+          cancel-in-progress: true
         steps:
         - name: Checkout repository
           uses: actions/checkout@v4
