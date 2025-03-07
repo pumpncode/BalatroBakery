@@ -157,7 +157,7 @@ Bakery_API.guard(function()
                 d_chips = ret.chips,
                 chips = chips,
                 dollars = ret.dollars,
-                card = ret.card or default_card,
+                card = ret.tag or default_card,
                 after = ret.after
             })
         end
