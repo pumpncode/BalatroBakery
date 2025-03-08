@@ -146,3 +146,73 @@ SMODS.Consumable {
         }
     end
 }
+
+Bakery_API.credit(SMODS.Consumable {
+    key = 'Scribe',
+    set = 'Tarot',
+    atlas = "BakeryConsumables",
+    pos = {
+        x = 2,
+        y = 0
+    },
+    artist = "GhostSalt",
+    cost = 4,
+    config = {
+        extra = {
+            hl = 1,
+            copies = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_Bakery_Carbon
+        return {
+            vars = {self.config.extra.copies, self.config.extra.hl}
+        }
+    end,
+    can_use = function(self, card)
+        local count = #Bakery_API.get_highlighted() + #G.jokers.highlighted
+        return count >= 1 and count <= card.ability.extra.hl and #G.jokers.highlighted + #G.jokers.cards <=
+                   G.jokers.config.card_limit
+    end,
+    use = function(self, card, area, copier)
+        if not self:can_use(card) then
+            return
+        end
+
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                local new_cards = {}
+                for i = 1, #Bakery_API.get_highlighted() do
+                    local copied = Bakery_API.get_highlighted()[i]
+                    local _first_dissolve = nil
+                    local new_cards = {}
+                    for i = 1, card.ability.extra.copies do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local _card = copy_card(copied, nil, nil, G.playing_card)
+                        _card:set_edition("e_Bakery_Carbon", true, true)
+                        _card:set_eternal(nil)
+                        _card:add_to_deck()
+                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                        table.insert(G.playing_cards, _card)
+                        G.hand:emplace(_card)
+                        _card:start_materialize(nil, _first_dissolve)
+                        _first_dissolve = true
+                        new_cards[#new_cards + 1] = _card
+                    end
+                end
+
+                for i = 1, #G.jokers.highlighted do
+                    local copied = G.jokers.highlighted[i]
+                    local _card = copy_card(copied, nil, nil, nil, copied.edition)
+                    _card:set_edition("e_Bakery_Carbon", true, true)
+                    _card:set_eternal(nil)
+                    _card:add_to_deck()
+                    G.jokers:emplace(_card)
+                end
+
+                playing_card_joker_effects(new_cards)
+                return true
+            end
+        }))
+    end
+})

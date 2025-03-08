@@ -199,10 +199,22 @@ return {
                 text = {"Enhances {C:attention}#1#{} selected", "card into a", "{C:attention}#2#"}
             }
         },
+        Tarot = {
+            c_Bakery_Scribe = {
+                name = "The Scribe",
+                text = {"Create {C:attention}#1#{} {C:dark_edition}Carbon{}", "copy of {C:attention}#2#{} selected", "{C:attention}playing card{} or {C:attention}Joker", "{C:inactive}(Must have room)", "{C:inactive}(Removes {C:eternal}Eternal{C:inactive} from copy)"}
+            }
+        },
         Enhanced = {
             m_Bakery_TimeWalk = {
                 name = "Time Walk",
                 text = {"{C:blue}+1{} Hand", "no rank or suit"}
+            }
+        },
+        Edition = {
+            e_Bakery_Carbon = {
+                name = "Carbon",
+                text = {"{C:red}Self-destructs", "after scoring"}
             }
         }
     },
@@ -225,6 +237,9 @@ return {
             b_Bakery_deposit = "DEPOSIT $#1#",
             b_Bakery_ante_times = "(Ante*#1#)",
             v_Bakery_artist = "Artist: #1#"
+        },
+        labels = {
+            Bakery_Carbon = "Carbon"
         }
         -- KEEP_LITE
     }

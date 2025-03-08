@@ -33,6 +33,7 @@ Bakery_API.load('blind')
 Bakery_API.load('challenge')
 Bakery_API.load('consumable')
 Bakery_API.load('enhancement')
+Bakery_API.load('edition')
 
 Bakery_API.guard(function()
     SMODS.Atlas {

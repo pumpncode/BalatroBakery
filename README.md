@@ -12,8 +12,10 @@ Current contents:
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 2 Blinds
 - 2 Challenges
+- 1 Tarot Card
 - 2 Spectral Cards
 - 1 Enhancement
+- 1 Edition
 - Miscellaneous modding API features (If this mod does something interesting, it can probably be used as a dependency to do that thing)
 
 ## Installation
