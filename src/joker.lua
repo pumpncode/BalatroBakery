@@ -6,21 +6,7 @@ Bakery_API.guard(function()
             x = 0.5,
             y = 0.5
         }
-        local raw_o_set_badges = o.set_badges
-        o.set_badges = function(self, card, badges)
-            if self.artist then
-                local artist = Bakery_API.contributors[self.artist]
-                badges[#badges + 1] = create_badge(localize {
-                    type = 'variable',
-                    key = 'v_Bakery_artist',
-                    vars = {artist.name}
-                }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
-            end
-            if raw_o_set_badges then
-                raw_o_set_badges(self, card, badges)
-            end
-        end
-        return SMODS.Joker(o)
+        return Bakery_API.credit(SMODS.Joker(o))
     end
 end)
 Bakery_API.guard(function()
