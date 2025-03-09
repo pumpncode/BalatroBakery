@@ -10,7 +10,7 @@ return {
             },
             j_Bakery_Auctioneer = {
                 name = 'Auctioneer',
-                text = {"When {C:attention}blind{} is selected", "{C:money}sells{} Joker to the right",
+                text = {"When {C:attention}Blind{} is selected", "{C:money}sells{} Joker to the right",
                         "for {C:attention}#1#x{} its sell value"}
             },
             j_Bakery_Don = {
