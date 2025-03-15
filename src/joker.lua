@@ -263,7 +263,7 @@ local j_spinner = Bakery_API.Joker {
     },
     calculate = function(self, card, context)
         if context.joker_main then
-            return card.ability.extra.effect[math.floor(card.ability.extra.rotation) % 4]
+            return card.ability.extra.effect[math.floor(card.ability.extra.rotation or 0) % 4]
         end
 
         if context.Bakery_after_eval then
@@ -273,20 +273,20 @@ local j_spinner = Bakery_API.Joker {
                 func = function()
                     play_sound('tarot1')
                     card:juice_up(0.3, 0.3)
-                    card.ability.extra.rotation = math.floor(card.ability.extra.rotation) + 1
+                    card.ability.extra.rotation = math.floor(card.ability.extra.rotation or 0) + 1
                     return true
                 end
             })
         end
     end,
     calc_dollar_bonus = function(self, card)
-        local dollars = card.ability.extra.dollars[math.floor(card.ability.extra.rotation) % 4 + 1]
+        local dollars = card.ability.extra.dollars[math.floor(card.ability.extra.rotation or 0) % 4 + 1]
         if dollars > 0 then
             return dollars
         end
     end,
     set_ability = function(self, joker)
-        joker.ability.extra.rotation = math.floor(joker.ability.extra.rotation) or pseudorandom(pseudoseed("Spinner"), 0, 3)
+        joker.ability.extra.rotation = math.floor(joker.ability.extra.rotation or pseudorandom(pseudoseed("Spinner"), 0, 3))
     end
 }
 
