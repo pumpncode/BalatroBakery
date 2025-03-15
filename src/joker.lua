@@ -119,7 +119,7 @@ Bakery_API.Joker {
                 local sliced_card = G.jokers.cards[my_pos + 1]
                 sliced_card.getting_sliced = true
 
-                sliced_card.sell_cost = sliced_card.sell_cost * 3
+                sliced_card.sell_cost = sliced_card.sell_cost * card.ability.extra.scale
                 sliced_card:sell_card()
             end
         end
