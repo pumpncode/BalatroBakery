@@ -364,7 +364,9 @@ Bakery_API.guard(function()
     local raw_Blind_defeat = Blind.defeat
     function Blind:defeat(silent)
         raw_Blind_defeat(self, silent)
-        Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
+        if self.config.blind.key then
+            Bakery_API.defeated_blinds[self.config.blind.key] = Bakery_API.defeated_blinds[self.config.blind.key] + 1
+        end
 
         for k, v in ipairs(G.jokers.cards) do
             if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.occupied then
