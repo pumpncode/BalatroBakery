@@ -65,8 +65,8 @@ return {
             },
             j_Bakery_JokerAgainstHumanity = {
                 name = "Joker Against Humanity",
-                text = {"Gains {C:mult}+#1#{} Mult", "when played {C:attention}poker hand{}",
-                        "is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
+                text = {"Gains {C:mult}+#1#{} Mult", "when played {C:attention}poker",
+                        "{C:attention}hand{} is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
             },
             j_Bakery_CardSleeve = {
                 name = "Card Sleeve",
@@ -109,6 +109,10 @@ return {
             j_Bakery_Tag = {
                 name = "Tag",
                 text = {"{C:attention}Tags{} give {X:mult,C:white}X#1#{} Mult"}
+            },
+            j_Bakery_GlassCannon = {
+                name = "Glass Cannon",
+                text = {"{X:mult,C:white}X#1#{} Mult", "{C:red}Self-destructs{} if Mult is", "{C:attention}at least #2#{} afterwards"}
             }
         },
         Tag = {
@@ -231,7 +235,8 @@ return {
         },
         dictionary = {
             b_Bakery_store = "STORE",
-            b_Bakery_return = "GET"
+            b_Bakery_return = "GET",
+            b_Bakery_shattered = "Shattered!"
         },
         v_dictionary = {
             b_Bakery_deposit = "DEPOSIT $#1#",

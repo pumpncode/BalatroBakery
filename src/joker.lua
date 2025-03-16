@@ -286,7 +286,8 @@ local j_spinner = Bakery_API.Joker {
         end
     end,
     set_ability = function(self, joker)
-        joker.ability.extra.rotation = math.floor(joker.ability.extra.rotation or pseudorandom(pseudoseed("Spinner"), 0, 3))
+        joker.ability.extra.rotation = math.floor(joker.ability.extra.rotation or
+                                                      pseudorandom(pseudoseed("Spinner"), 0, 3))
     end
 }
 
@@ -713,7 +714,7 @@ Bakery_API.Joker {
         x = 2,
         y = 2
     },
-    rarity = 1,
+    rarity = 2,
     cost = 1,
     config = {
         extra = {
@@ -1055,6 +1056,52 @@ Bakery_API.Joker {
             return {
                 x_mult = card.ability.extra.x_mult
             }
+        end
+    end
+}
+
+Bakery_API.Joker {
+    key = "GlassCannon",
+    pos = {
+        x = 3,
+        y = 3
+    },
+    rarity = 2,
+    cost = 9,
+    blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = true,
+    config = {
+        extra = {
+            x_mult = 3,
+            limit = 100
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.x_mult, card.ability.extra.limit}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main and not card.shattered then
+            SMODS.calculate_effect({
+                x_mult = card.ability.extra.x_mult
+            }, card)
+            if Bakery_API.to_number(mult) >= card.ability.extra.limit and not context.blueprint then
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'before',
+                    delay = 0.4,
+                    func = function()
+                        card:shatter()
+                        return true
+                    end
+                })
+                return {
+                    message = localize('b_Bakery_shattered'),
+                    colour = G.C.RED
+                }
+            end
+            return {}, true
         end
     end
 }
