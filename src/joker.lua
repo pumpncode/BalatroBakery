@@ -707,7 +707,6 @@ Bakery_API.Joker {
     end
 }
 
-Bakery_API.usable_jokers.j_Bakery_CoinSlot = true
 Bakery_API.Joker {
     key = "CoinSlot",
     pos = {
@@ -844,7 +843,6 @@ Bakery_API.Joker {
     end
 }
 
-Bakery_API.usable_jokers.j_Bakery_GetOutOfJailFreeCard = true
 Bakery_API.Joker {
     key = "GetOutOfJailFreeCard",
     pos = {

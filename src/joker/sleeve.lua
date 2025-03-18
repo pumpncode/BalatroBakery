@@ -200,14 +200,30 @@ sendInfoMessage("Game:start_run(), copy_card(), and Card:load() patched. Reason:
 
 -- KEEP_LITE
 Bakery_API.guard(function()
-    Bakery_API.usable_jokers = {
-        j_Bakery_CardSleeve = true
+    local raw_usable_jokers = {
+        j_Bakery_CardSleeve = true,
+        j_Bakery_GetOutOfJailFreeCard = true,
+        j_Bakery_CoinSlot = true
     }
+    Bakery_API.usable_jokers = setmetatable({}, {
+        __newindex = function(t, k, v)
+            sendWarnMessage("A mod is trying to set Bakery_API.usable_jokers." .. k ..
+                                ". This is no longer required, and the table will be removed in a future version of Bakery.",
+                "Bakery")
+            raw_usable_jokers[k] = v
+        end,
+        __index = function(t, k)
+            sendWarnMessage("A mod is trying to get Bakery_API.usable_jokers." .. k ..
+                                ". This table will be removed in a future version of Bakery.", "Bakery")
+            return raw_usable_jokers[k]
+        end
+    })
 
     local raw_G_UIDEF_use_and_sell_buttons = G.UIDEF.use_and_sell_buttons
     function G.UIDEF.use_and_sell_buttons(card)
         local ret = raw_G_UIDEF_use_and_sell_buttons(card)
-        if G.jokers and card.area.config.type == 'joker' and Bakery_API.usable_jokers[card.config.center.key] then
+        if G.jokers and card.area.config.type == 'joker' and card.config and card.config.center and
+            card.config.center.Bakery_use_joker then
             ret.nodes[1].nodes[2].nodes[1] = {
                 n = G.UIT.C,
                 config = {
@@ -298,7 +314,7 @@ Bakery_API.guard(function()
     function Bakery_API.unhighlight_all()
         G.hand:unhighlight_all()
         for k, v in ipairs(G.jokers.cards) do
-            if  v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
+            if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
                 local area = Bakery_API.sleevearea_for_key(v.ability.extra.key)
                 if area then
                     area:unhighlight_all()
