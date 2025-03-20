@@ -22,6 +22,16 @@ SMODS.Enhancement {
     no_suit = true,
     always_scores = true,
     weight = 0.1,
+    config = {
+        extra = {
+            hands = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.hands}
+        }
+    end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
             if not (Talisman and Talisman.config_file and Talisman.config_file.disable_anims) then
@@ -42,8 +52,10 @@ SMODS.Enhancement {
                     end
                 })
             end -- Entirely visual
-            ease_hands_played(1)
-            delay(0.85)
+            ease_hands_played(card.ability.extra.hands)
+            if not (Talisman and Talisman.config_file and Talisman.config_file.disable_anims) then
+                delay(0.85)
+            end
             return {
                 effect = true
             }
