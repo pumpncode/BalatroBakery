@@ -28,3 +28,6 @@ Current contents:
 
 If another mod depends on Bakery, but you do not want Bakery's additions, you can install the [lite version](https://github.com/BakersDozenBagels/BalatroBakery/tree/lite). This version only has a modding API and nothing else. Note that both versions can be installed together without issue.
 
+## Other Contributors
+
+Thanks to GhostSalt (@ghost12salt) and SadCube (@sadcube) on Discord for some of the artwork used.

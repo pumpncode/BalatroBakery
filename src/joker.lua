@@ -807,6 +807,7 @@ Bakery_API.Joker {
         x = 4,
         y = 2
     },
+    artist = "SadCube",
     rarity = 3,
     cost = 8,
     config = {
