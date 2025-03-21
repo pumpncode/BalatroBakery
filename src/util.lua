@@ -713,5 +713,13 @@ Bakery_API.guard(function()
         end
         return obj
     end
+
+    function Bakery_API.interest_scale(no_big)
+        local scale = 5
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Coin' then
+            scale = G.Bakery_charm_area.cards[1].ability.extra.mod
+        end
+        return not no_big and to_big and to_big(scale) or scale
+    end
 end)
 -- END_KEEP_LITE

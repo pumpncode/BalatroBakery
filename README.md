@@ -6,7 +6,8 @@ Additions are generally meant to be well-balanced with vanilla, although the dec
 
 Current contents:
 
-- 21 Jokers
+- 22 Jokers
+- 10 Charms (a new kind of thing in the shop)
 - 6 Tags
 - 3 Decks
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
@@ -26,7 +27,7 @@ Current contents:
 
 ## Lite Version
 
-If another mod depends on Bakery, but you do not want Bakery's additions, you can install the [lite version](https://github.com/BakersDozenBagels/BalatroBakery/tree/lite). This version only has a modding API and nothing else. Note that both versions can be installed together without issue.
+If another mod depends on Bakery, but you do not want Bakery's additions, you can install the [lite version](https://github.com/BakersDozenBagels/BalatroBakery/tree/lite). This version only has a modding API and nothing else. Note that both versions can be installed together without issue so long as both are up-to-date.
 
 ## Other Contributors
 

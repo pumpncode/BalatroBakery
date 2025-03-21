@@ -1,7 +1,7 @@
 -- KEEP_LITE
 return {
-    -- END_KEEP_LITE
     descriptions = {
+        -- END_KEEP_LITE
         Joker = {
             j_Bakery_Tarmogoyf = {
                 name = 'Tarmogoyf',
@@ -66,7 +66,8 @@ return {
             j_Bakery_JokerAgainstHumanity = {
                 name = "Joker Against Humanity",
                 text = {"Gains {C:mult}+#1#{} Mult", "when played {C:attention}poker",
-                        "{C:attention}hand{} is {C:attention}level 1{}", "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
+                        "{C:attention}hand{} is {C:attention}level 1{}",
+                        "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}"}
             },
             j_Bakery_CardSleeve = {
                 name = "Card Sleeve",
@@ -112,7 +113,8 @@ return {
             },
             j_Bakery_GlassCannon = {
                 name = "Glass Cannon",
-                text = {"{X:mult,C:white}X#1#{} Mult", "{C:red}Self-destructs{} if Mult is", "{C:attention}at least #2#{} afterwards"}
+                text = {"{X:mult,C:white}X#1#{} Mult", "{C:red}Self-destructs{} if Mult is",
+                        "{C:attention}at least #2#{} afterwards"}
             }
         },
         Tag = {
@@ -206,7 +208,9 @@ return {
         Tarot = {
             c_Bakery_Scribe = {
                 name = "The Scribe",
-                text = {"Create {C:attention}#1#{} {C:dark_edition}Carbon{}", "copy of {C:attention}#2#{} selected", "{C:attention}playing card{} or {C:attention}Joker", "{C:inactive}(Must have room)", "{C:inactive}(Removes {C:eternal}Eternal{C:inactive} from copy)"}
+                text = {"Create {C:attention}#1#{} {C:dark_edition}Carbon{}", "copy of {C:attention}#2#{} selected",
+                        "{C:attention}playing card{} or {C:attention}Joker", "{C:inactive}(Must have room)",
+                        "{C:inactive}(Removes {C:eternal}Eternal{C:inactive} from copy)"}
             }
         },
         Enhanced = {
@@ -220,9 +224,73 @@ return {
                 name = "Carbon",
                 text = {"{C:red}Self-destructs", "after scoring"}
             }
+        },
+        -- KEEP_LITE
+        BakeryCharm = {
+            -- END_KEEP_LITE
+            BakeryCharm_Bakery_Palette = {
+                name = "Palette",
+                text = {"{C:attention}Flushes{} may be made", "with at least", "{C:attention}4 suits"},
+                unlock = {"Have at least {C:attention}#1#", "cards of the same", "{C:attention}suit{} in your deck"}
+            },
+            BakeryCharm_Bakery_AnaglyphLens = {
+                name = "Anaglyph Lens",
+                text = {"Poker hands are determined", "as though the {C:attention}first{} card",
+                        "had been {C:attention}duplicated"},
+                unlock = {"Have {C:attention}#1# #2#", "simultaneously"}
+            },
+            BakeryCharm_Bakery_Pedigree = {
+                name = "Pedigree",
+                text = {"{C:attention}Full Houses{} may be made", "with {C:attention}suits{}",
+                        "{C:inactive}(in addition to {C:attention}ranks{C:inactive})"}
+            },
+            BakeryCharm_Bakery_Epitaph = {
+                name = "Epitaph",
+                text = {"{C:attention}Unscored{} played cards", "give {X:mult,C:white}X#1#{} Mult"},
+                unlock = {"Have only {C:attention}always-scoring", "cards in your deck"}
+            },
+            BakeryCharm_Bakery_Tome = {
+                name = "Tome",
+                text = {"You can {C:attention}discard", "{C:attention}0 cards{} to draw",
+                        "{C:attention}#1#{} extra cards"},
+                unlock = {"Have at least {C:attention}#1#", "cards in your hand"}
+            },
+            BakeryCharm_Bakery_Obsession = {
+                name = "Obsession",
+                text = {"You can {C:attention}discard", "{C:attention}0 cards{} to", "earn {C:money}$#1#{}"},
+                unlock = {"Win a run without", "discarding a single card"}
+            },
+            BakeryCharm_Bakery_Introversion = {
+                name = "Introversion",
+                text = {"{C:attention}Jokers{} do not", "appear in the shop"}
+            },
+            BakeryCharm_Bakery_Extroversion = {
+                name = "Extroversion",
+                text = {"{C:attention}Tarot{} and {C:attention}Planet{} cards", "do not appear in the shop"}
+            },
+            BakeryCharm_Bakery_Coin = {
+                name = "Coin",
+                text = {"{C:attention}Interest{} is earned", "for every {C:money}$#1#",
+                        "{C:inactive}(instead of every {C:money}$5{C:inactive})"}
+            },
+            BakeryCharm_Bakery_Void = {
+                name = "Void",
+                text = {"{C:dark_edition}Negative{} cards appear", "{X:dark_edition,C:white}#1#X{} as often"},
+                unlock = {"Have at least", "{C:attention}#1# Jokers"}
+            }
+            -- KEEP_LITE
+        },
+        Other = {
+            Bakery_charm = {
+                name = "Charm",
+                text = {"Only one charm may", "be equipped at a time,", "purchasing a new charm", "replaces an old one"}
+            },
+            undiscovered_bakerycharm = {
+                name = "Undiscovered",
+                text = {"Equip this charm", "in an unseeded run", "to learn what it does"}
+            }
         }
     },
-    -- KEEP_LITE
     misc = {
         v_text = {
             ch_c_Bakery_Balanced = {"{C:mult}Mult{} cannot exceed {C:chips}Chips{}"},
@@ -233,11 +301,22 @@ return {
             c_Bakery_Balanced = "Balanced",
             c_Bakery_Vagabond = "Vagabond"
         },
+        -- KEEP_LITE
         dictionary = {
+            -- END_KEEP_LITE
             b_Bakery_store = "STORE",
             b_Bakery_return = "GET",
-            b_Bakery_shattered = "Shattered!"
+            b_Bakery_shattered = "Shattered!",
+            k_Bakery_charm = "Charm",
+            k_Bakery_charms = "Charms",
+            b_Bakery_double_tags = "Double Tags",
+            -- KEEP_LITE
+            k_bakerycharm = "Charm",
+            k_BakeryCharmInfo = {"Only one charm may be equipped at a time.",
+                                 "Purchasing a new charm replaces an old one."},
+            b_Bakery_equip = "EQUIP"
         },
+        -- END_KEEP_LITE
         v_dictionary = {
             b_Bakery_deposit = "DEPOSIT $#1#",
             b_Bakery_ante_times = "(Ante*#1#)",
@@ -245,6 +324,16 @@ return {
         },
         labels = {
             Bakery_Carbon = "Carbon"
+        },
+        poker_hands = {
+            Bakery_StuffedHouse = "Stuffed House", -- Full House of suits & Full House of ranks
+            Bakery_SixOfAKind = "Six Of A Kind", -- Five of a Kind & 6 cards
+            Bakery_FlushSix = "Flush Six", -- Flush & Five of a Kind & 6 cards
+            Bakery_ThreePair = "Three Pair", -- 3X Pair
+            Bakery_FlushThreePair = "Flush Three Pair", -- Flush & 3X Pair
+            Bakery_TwoTriplets = "Two Triplets", -- 2X Thee of a Kind 
+            Bakery_FlushTriplets = "Flush Triplets", -- Flush & 2X Thee of a Kind
+            Bakery_FlushMansion = "Flush Mansion" -- Flush & Four of a Kind & Pair
         }
         -- KEEP_LITE
     }
