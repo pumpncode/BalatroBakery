@@ -83,91 +83,6 @@ Bakery_API.guard(function()
         }
     }
 
-    local function create_UIBox_your_collection_Bakery_charms()
-        local deck_tables = {}
-
-        G.your_collection = {}
-        for j = 1, 2 do
-            G.your_collection[j] = CardArea(G.ROOM.T.x + 0.2 * G.ROOM.T.w / 2, G.ROOM.T.h, 5 * G.CARD_W,
-                0.95 * G.CARD_W, {
-                    card_limit = 5,
-                    type = 'title',
-                    highlight_limit = 0,
-                    collection = true
-                })
-            table.insert(deck_tables, {
-                n = G.UIT.R,
-                config = {
-                    align = "cm",
-                    padding = 0.07,
-                    no_fill = true
-                },
-                nodes = {{
-                    n = G.UIT.O,
-                    config = {
-                        object = G.your_collection[j]
-                    }
-                }}
-            })
-        end
-
-        local joker_options = {}
-        for i = 1, math.ceil(#G.P_CENTER_POOLS.BakeryCharm / (5 * #G.your_collection)) do
-            table.insert(joker_options, localize('k_page') .. ' ' .. tostring(i) .. '/' ..
-                tostring(math.ceil(#G.P_CENTER_POOLS.BakeryCharm / (5 * #G.your_collection))))
-        end
-
-        for i = 1, 5 do
-            for j = 1, #G.your_collection do
-                local center = G.P_CENTER_POOLS.BakeryCharm[i + (j - 1) * 5]
-                if center then
-                    local card = Card(G.your_collection[j].T.x + G.your_collection[j].T.w / 2, G.your_collection[j].T.y,
-                        G.CARD_W, G.CARD_W, nil, center)
-                    card.sticker = get_joker_win_sticker(center)
-                    G.your_collection[j]:emplace(card)
-                    card:update_alert()
-                end
-            end
-        end
-
-        local t = create_UIBox_generic_options({
-            back_func = 'your_collection',
-            contents = {{
-                n = G.UIT.R,
-                config = {
-                    align = "cm",
-                    r = 0.1,
-                    colour = G.C.BLACK,
-                    emboss = 0.05
-                },
-                nodes = deck_tables
-            }, {
-                n = G.UIT.R,
-                config = {
-                    align = "cm"
-                },
-                nodes = {create_option_cycle({
-                    options = joker_options,
-                    w = 4.5,
-                    cycle_shoulders = true,
-                    opt_callback = 'your_collection_Bakery_Charms_page',
-                    current_option = 1,
-                    colour = G.C.RED,
-                    no_pips = true,
-                    focus_args = {
-                        snap_to = true,
-                        nav = 'wide'
-                    }
-                })}
-            }, simple_text_container('k_BakeryCharmInfo', {
-                colour = G.C.UI.TEXT_LIGHT,
-                scale = 0.5,
-                shadow = true
-            })}
-        })
-        return t
-    end
-
     G.FUNCS.your_collection_Bakery_Charms_page = function(args)
         if not args or not args.cycle_config then
             return
@@ -216,7 +131,16 @@ Bakery_API.guard(function()
     function G.FUNCS.your_collection_Bakery_Charms()
         G.SETTINGS.paused = true
         G.FUNCS.overlay_menu {
-            definition = create_UIBox_your_collection_Bakery_charms()
+            definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, {5, 5}, {
+                snap_back = true,
+                infotip = localize('k_BakeryCharmInfo'),
+                hide_single_page = true,
+                collapse_single_page = true,
+                h_mod = 0.65,
+                modify_card = function(card, center, i, j)
+                    card.T.h = card.T.w
+                end
+            })
         }
     end
 

@@ -312,8 +312,8 @@ return {
             b_Bakery_double_tags = "Double Tags",
             -- KEEP_LITE
             k_bakerycharm = "Charm",
-            k_BakeryCharmInfo = {"Only one charm may be equipped at a time.",
-                                 "Purchasing a new charm replaces an old one."},
+            k_BakeryCharmInfo = {"Only one charm may be equipped at a time,",
+                                 "purchasing a new charm replaces an old one."},
             b_Bakery_equip = "EQUIP"
         },
         -- END_KEEP_LITE
