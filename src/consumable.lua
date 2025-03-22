@@ -114,7 +114,7 @@ SMODS.Consumable {
     end,
     can_use = function(self, card)
         for k, v in pairs(G.GAME.hands) do
-            if v.level > 1 then
+            if (type(v.level) == 'table' and v.level:to_number() or v.level) > 1 then
                 return true
             end
         end
