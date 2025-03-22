@@ -80,6 +80,10 @@ Bakery_API.guard(function()
         pos = {
             x = 0,
             y = 1
+        },
+        overlay_pos = {
+            x = 0,
+            y = 2
         }
     }
 
