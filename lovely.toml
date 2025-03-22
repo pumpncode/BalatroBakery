@@ -51,3 +51,134 @@ pattern = "G.hand:unhighlight_all\\(\\)"
 position = 'at'
 payload = 'Bakery_API.unhighlight_all()'
 times = 1
+
+# Make locked charms not render the ?
+[[patches]]
+[patches.regex]
+target = '=[SMODS _ "src/card_draw.lua"]'
+pattern = 'then\n\s+local shared_sprite ='
+position = 'before'
+payload = 'and (self.ability.set ~= "BakeryCharm" or self.config.center.unlocked) '
+times = 1
+
+# Render charm unlock modal properly
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = "card_center\\.set == 'Voucher' and localize\\('k_voucher'\\) or localize\\('k_joker'\\)"
+position = 'at'
+payload = "card_center.set == 'Voucher' and localize('k_voucher') or card_center.set == 'BakeryCharm' and localize('k_bakerycharm') or localize('k_joker')"
+times = 1
+
+# cont.
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = 'G\.CARD_H, G\.P_CARDS\.empty, card_center'
+position = 'before'
+payload = "card_center.set == 'BakeryCharm' and G.CARD_W or "
+times = 2
+
+# cont.
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = 'G\.j_locked'
+position = 'before'
+payload = "card_center.set == 'BakeryCharm' and G.BakeryCharm_locked or "
+times = 1
+
+# Put charms in shop
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.voucher = SMODS.get_next_vouchers()'
+position = 'before'
+match_indent = true
+times = 1
+payload = "G.GAME.current_round.Bakery_charm = Bakery_API.get_next_charms()\n"
+
+# cont.
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'local vouchers_to_spawn = 0'
+position = 'before'
+match_indent = true
+times = 1
+payload = "Bakery_API.add_charms_to_shop()\n"
+
+# cont.
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = "local t2 = "
+position = 'after'
+times = 1
+payload = "card.ability.set == 'BakeryCharm' and Bakery_API.equip_button(card) or "
+
+# cont.
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "if card.area == G.shop_vouchers and G.shop_vouchers then --Add a redeem button"
+position = 'before'
+match_indent = true
+times = 1
+payload = '''
+if card.area == G.shop_vouchers and G.shop_vouchers then
+    base_attach.children.use_button = G.UIDEF.card_focus_button{
+      card = card, parent = base_attach, type = 'buy',
+      func = 'Bakery_can_equip', button = 'Bakery_equip_from_shop', card_width = card_width
+    }
+end
+'''
+
+# Create charm area
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'self.consumeables = CardArea('
+position = 'before'
+match_indent = true
+times = 1
+payload = "Bakery_API.create_charm_area()\n"
+
+# Coin Charm
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = "([^)p])/(5)"
+position = 'at'
+root_capture = "2"
+times = 7
+payload = "Bakery_API.interest_scale()"
+
+# cont.
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = '>= (to_big)?\(5\)'
+position = 'at'
+times = 1
+payload = ">= Bakery_API.interest_scale()"
+
+# cont.
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "key = 'interest', vars = \\{G\\.GAME\\.interest_amount, (5)"
+position = 'at'
+root_capture = '1'
+times = 1
+payload = 'Bakery_API.interest_scale(true)'
+
+# Epitaph Charm
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = "-- TARGET: add your own CardAreas for joker evaluation"
+position = 'before'
+match_indent = true
+times = 1
+payload = "t[#t + 1] = G.Bakery_charm_area"
