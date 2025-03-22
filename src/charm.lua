@@ -604,6 +604,11 @@ SMODS.PokerHand:take_ownership("Flush House", {
                 end
             end
         end
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #all_suits(3, scoring_hand) >= 1 and
+            #all_suits(2, scoring_hand) >= 2 and #get_X_same(3, scoring_hand, true) >= 1 and
+            #get_X_same(2, scoring_hand, true) >= 2 then
+            return "Bakery_StuffedFlush"
+        end
         if raw_flush_house_modify_display_text then
             return raw_flush_house_modify_display_text()
         end

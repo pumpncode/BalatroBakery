@@ -331,6 +331,7 @@ return {
         },
         poker_hands = {
             Bakery_StuffedHouse = "Stuffed House", -- Full House of suits & Full House of ranks
+            Bakery_StuffedFlush = "Stuffed Flush", -- Full House of suits & Full House of ranks & Flush (Possible with wild cards)
             Bakery_SixOfAKind = "Six Of A Kind", -- Five of a Kind & 6 cards
             Bakery_FlushSix = "Flush Six", -- Flush & Five of a Kind & 6 cards
             Bakery_ThreePair = "Three Pair", -- 3X Pair
