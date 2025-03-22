@@ -782,13 +782,14 @@ Bakery_API.Charm {
     end
 }
 
-Bakery_API.Charm {
+Bakery_API.credit(Bakery_API.Charm {
     key = "Rune",
     pos = {
         x = 4,
         y = 0
     },
     atlas = 'Charms',
+    artist = 'GhostSalt',
     unlocked = false,
     config = {
         extra = {
@@ -808,7 +809,7 @@ Bakery_API.Charm {
     check_for_unlock = function(self, args)
         return G.hand and #G.hand.cards >= 26
     end
-}
+})
 
 Bakery_API.Charm {
     key = "Obsession",
@@ -833,13 +834,14 @@ Bakery_API.Charm {
     end
 }
 
-Bakery_API.Charm {
+Bakery_API.credit(Bakery_API.Charm {
     key = "Introversion",
     pos = {
         x = 1,
         y = 1
     },
     atlas = 'Charms',
+    artist = 'GhostSalt',
     config = {
         extra = {}
     },
@@ -850,15 +852,16 @@ Bakery_API.Charm {
     unequip = function(self, card)
         G.GAME.joker_rate = card.ability.extra.prior
     end
-}
+})
 
-Bakery_API.Charm {
+Bakery_API.credit(Bakery_API.Charm {
     key = "Extroversion",
     pos = {
         x = 2,
         y = 1
     },
     atlas = 'Charms',
+    artist = 'GhostSalt',
     config = {
         extra = {}
     },
@@ -872,7 +875,7 @@ Bakery_API.Charm {
         G.GAME.tarot_rate = card.ability.extra.prior_t
         G.GAME.planet_rate = card.ability.extra.prior_p
     end
-}
+})
 
 Bakery_API.Charm {
     key = "Coin",
