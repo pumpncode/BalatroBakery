@@ -675,7 +675,7 @@ Bakery_API.Charm {
 local raw_G_FUNCS_can_discard = G.FUNCS.can_discard
 function G.FUNCS.can_discard(e)
     if G.GAME.current_round.discards_left > 0 and #G.hand.highlighted <= 0 and
-        (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Tome' or G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession') then
+        (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Rune' or G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession') then
         e.config.colour = G.C.RED
         e.config.button = 'Bakery_discard_zero'
     else
@@ -709,7 +709,7 @@ G.FUNCS.Bakery_discard_zero = function(e)
     if G.GAME.Bakery_charm then
         juice_card(G.Bakery_charm_area.cards[1])
     end
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Tome' then
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Rune' then
         local count = G.Bakery_charm_area.cards[1].ability.extra.cards
         for i = 1, count do
             draw_card(G.deck, G.hand, i * 100 / count, 'up', true)
@@ -777,7 +777,7 @@ Bakery_API.Charm {
 }
 
 Bakery_API.Charm {
-    key = "Tome",
+    key = "Rune",
     pos = {
         x = 4,
         y = 0

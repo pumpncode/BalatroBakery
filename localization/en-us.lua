@@ -249,8 +249,8 @@ return {
                 text = {"{C:attention}Unscored{} played cards", "give {X:mult,C:white}X#1#{} Mult"},
                 unlock = {"Have only {C:attention}always-scoring", "cards in your deck"}
             },
-            BakeryCharm_Bakery_Tome = {
-                name = "Tome",
+            BakeryCharm_Bakery_Rune = {
+                name = "Rune",
                 text = {"You can {C:attention}discard", "{C:attention}0 cards{} to draw",
                         "{C:attention}#1#{} extra cards"},
                 unlock = {"Have at least {C:attention}#1#", "cards in your hand"}
