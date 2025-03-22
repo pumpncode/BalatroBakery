@@ -659,8 +659,8 @@ SMODS.PokerHand:take_ownership("Full House", {
             #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_StuffedHouse"
         end
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #all_suits(3, scoring_hand) >= 1 and
-            #all_suits(2, scoring_hand) >= 2 and next(get_X_same(3, scoring_hand, true)) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #get_X_same(3, scoring_hand, true) >= 1 and
+            #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_TwoTriplets"
         end
         if raw_Full_House_modify_display_text then
