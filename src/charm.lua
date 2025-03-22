@@ -653,7 +653,7 @@ SMODS.PokerHand:take_ownership("Full House", {
     evaluate = function(parts)
         local val = raw_Full_House_evaluate(parts)
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 then
-            val = SMODS.merge_lists(val, parts.Bakery_s_all_pairs)
+            val = {SMODS.merge_lists(val, parts.Bakery_s_all_pairs)}
         end
         return val
     end,
