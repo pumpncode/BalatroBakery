@@ -184,15 +184,21 @@ Bakery_API.guard(function()
         return (G.GAME.starting_params.Bakery_charms_in_shop or 1) + (G.GAME.modifiers.Bakery_extra_charms or 0)
     end
 
-    function Bakery_API.get_next_charms(ret)
+    function Bakery_API.get_next_charms(ret, count)
         local ret = ret or {
             spawn = {}
         }
         local _pool, _pool_key = get_current_pool('BakeryCharm')
-        for i = 1, math.min(SMODS.size_of_pool(_pool), Bakery_API.get_charm_count()) do
+        local already = 0
+        for _, v in ipairs(_pool) do
+            if G.GAME.current_round.Bakery_charm.spawn[v] then
+                already = already + 1
+            end
+        end
+        for i = 1, math.min(SMODS.size_of_pool(_pool) - already, count or Bakery_API.get_charm_count()) do
             local center = pseudorandom_element(_pool, pseudoseed(_pool_key))
             local it = 1
-            while center == 'UNAVAILABLE' or center == G.GAME.Bakery_charm do
+            while center == 'UNAVAILABLE' or G.GAME.current_round.Bakery_charm.spawn[center] do
                 it = it + 1
                 center = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
             end
@@ -216,12 +222,12 @@ Bakery_API.guard(function()
         end
         for _, key in ipairs(G.GAME.current_round.Bakery_charm or {}) do
             if G.P_CENTERS[key] and G.GAME.current_round.Bakery_charm.spawn[key] and key ~= 'j_joker' then
-                Bakery_API.add_charm_to_shop(key)
+                Bakery_API.add_charm_to_shop(key, 'shop_voucher')
             end
         end
     end
 
-    function Bakery_API.add_charm_to_shop(key)
+    function Bakery_API.add_charm_to_shop(key, source)
         assert(key, "Expected a key")
         assert(G.P_CENTERS[key], "Invalid charm key: " .. key)
         local card = Card(G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2, G.shop_vouchers.T.y, G.CARD_W, G.CARD_W,
@@ -229,7 +235,7 @@ Bakery_API.guard(function()
                 bypass_discovery_center = true,
                 bypass_discovery_ui = true
             })
-        card.shop_voucher = true
+        card[source] = true
         create_shop_card_ui(card, 'Charm', G.shop_vouchers)
         card:start_materialize()
         G.shop_vouchers:emplace(card)

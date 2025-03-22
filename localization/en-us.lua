@@ -142,6 +142,10 @@ return {
             tag_Bakery_AntiTag = {
                 name = "Anti Tag",
                 text = {"{C:dark_edition}+1{} Joker slot"}
+            },
+            tag_Bakery_CharmTag = {
+                name = "Charm Tag",
+                text = {"Adds two {C:attention}Charms", "to the next shop"}
             }
         },
         Back = {
@@ -241,7 +245,7 @@ return {
             },
             BakeryCharm_Bakery_Pedigree = {
                 name = "Pedigree",
-                text = {"{C:attention}Full Houses{} may be made", "with {C:attention}suits{}",
+                text = {"{C:attention}Full Houses{} may be", "made with {C:attention}suits{}",
                         "{C:inactive}(in addition to {C:attention}ranks{C:inactive})"}
             },
             BakeryCharm_Bakery_Epitaph = {

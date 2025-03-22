@@ -250,3 +250,42 @@ SMODS.Tag {
         end
     end
 }
+
+SMODS.Tag {
+    key = "CharmTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 6,
+        y = 0
+    },
+    min_ante = 2,
+    loc_vars = function(self, info_queue, tag)
+        info_queue[#info_queue + 1] = {
+            set = "Other",
+            key = "Bakery_charm"
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered and context.type == 'voucher_add' then
+            tag.triggered = true
+
+            local keys = Bakery_API.get_next_charms(nil, 2)
+            local tbl = G.GAME.current_round.Bakery_charm
+            if keys[1] and keys[1] ~= 'j_joker' then
+                tag:yep('+', G.C.SECONDARY_SET.Voucher, function()
+                    tbl[#tbl + 1] = keys[1]
+                    tbl.spawn[keys[1]] = true
+                    Bakery_API.add_charm_to_shop(keys[1], 'from_tag')
+                    if keys[2] and keys[2] ~= 'j_joker' then
+                        tbl[#tbl + 1] = keys[2]
+                        tbl.spawn[keys[2]] = true
+                        Bakery_API.add_charm_to_shop(keys[2], 'from_tag')
+                    end
+                    return true
+                end)
+            else
+                tag:nope()
+            end
+        end
+    end
+}
