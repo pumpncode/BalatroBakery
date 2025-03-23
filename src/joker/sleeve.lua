@@ -279,6 +279,12 @@ Bakery_API.guard(function()
 
     sendInfoMessage("G.UIDEF.use_and_sell_buttons() and Card:remove() patched. Reason: Usable jokers", "Bakery")
 
+    function Bakery_API.default_can_use(card)
+        return card.area and card.area.config.type == 'joker' and
+                   not ((G.play and #G.play.cards > 0) or (G.CONTROLLER.locked) or
+                       (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
+    end
+
     function G.FUNCS.Bakery_can_use_joker(node)
         local card = node.config.ref_table
         if card and card.config.center.Bakery_can_use and card.config.center:Bakery_can_use(card) then

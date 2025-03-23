@@ -738,7 +738,7 @@ Bakery_API.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return card:can_sell_card() and card.ability.extra.cost <= Bakery_API.to_number(G.GAME.dollars) +
+        return Bakery_API.default_can_use(card) and card.ability.extra.cost <= Bakery_API.to_number(G.GAME.dollars) +
                    Bakery_API.to_number(G.GAME.dollar_buffer or 0) - Bakery_API.to_number(G.GAME.bankrupt_at)
     end,
     Bakery_use_joker = function(self, card)
@@ -888,7 +888,7 @@ Bakery_API.Joker {
         end
     end,
     Bakery_can_use = function(self, card)
-        return card:can_sell_card() and not card.ability.extra.used
+        return Bakery_API.default_can_use(card) and not card.ability.extra.used
     end,
     Bakery_use_joker = function(self, card)
         card.ability.extra.used = true
