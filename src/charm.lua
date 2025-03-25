@@ -194,6 +194,9 @@ Bakery_API.guard(function()
         }
         local _pool, _pool_key = get_current_pool('BakeryCharm')
         local already = 0
+        G.GAME.current_round.Bakery_charm = G.GAME.current_round.Bakery_charm or {
+            spawn = {}
+        }
         for _, v in ipairs(_pool) do
             if G.GAME.current_round.Bakery_charm.spawn[v] then
                 already = already + 1
