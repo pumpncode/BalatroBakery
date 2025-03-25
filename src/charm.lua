@@ -820,6 +820,26 @@ Bakery_API.credit(Bakery_API.Charm {
     end
 })
 
+local function big(x)
+    return to_big and to_big(x) or x
+end
+local juicing = false
+local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
+function Game:update_draw_to_hand(dt)
+    local function condition()
+        juicing = (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession' or G.GAME.Bakery_charm ==
+                      'BakeryCharm_Bakery_Rune') and G.GAME.current_round and G.GAME.current_round.discards_left > 0 and
+                      G.STATE ~= G.STATES.ROUND_EVAL
+        return juicing
+    end
+    if not juicing and condition() then
+        juice_card_until(G.Bakery_charm_area.cards[1], condition, true)
+    end
+    raw_Game_update_draw_to_hand(self, dt)
+end
+
+sendInfoMessage("Game:update_draw_to_hand() patched. Reason: Discard zero Charms juice")
+
 Bakery_API.Charm {
     key = "Obsession",
     pos = {
