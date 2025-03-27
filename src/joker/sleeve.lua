@@ -41,7 +41,6 @@ Bakery_API.guard(function()
                         hover = true,
                         shadow = true,
                         colour = G.C.UI.BACKGROUND_INACTIVE,
-                        one_press = true,
                         button = 'Bakery_use_joker',
                         func = 'Bakery_can_use_joker'
                     },
