@@ -189,7 +189,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_chips',
-                                vars = {anim.d_chips}
+                                vars = { anim.d_chips }
                             },
                             hold = 0.55,
                             backdrop_colour = G.C.CHIPS,
@@ -221,7 +221,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_mult',
-                                vars = {anim.d_mult}
+                                vars = { anim.d_mult }
                             },
                             scale = 0.7,
                             hold = 0.6125,
@@ -254,7 +254,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_xmult',
-                                vars = {anim.x_mult}
+                                vars = { anim.x_mult }
                             },
                             scale = 0.7,
                             hold = 0.6125,
@@ -381,6 +381,7 @@ Bakery_API.guard(function()
             end
         end
     end
+
     local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
     G.FUNCS.load_profile = function(...)
         defeated_blinds_reset()
@@ -519,9 +520,9 @@ Bakery_API.guard(function()
             local sprite_facing = self.sprite_facing
             self.sprite_facing = "front"
             self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or
-                                                    (self.ability.extra.flipped ~= (sprite_facing == "front") and
-                                                        self.ability.extra.front_pos or self.ability.extra.back_pos) or
-                                                    {
+                (self.ability.extra.flipped ~= (sprite_facing == "front") and
+                    self.ability.extra.front_pos or self.ability.extra.back_pos) or
+                {
                     x = 0.5,
                     y = 0
                 })
@@ -555,12 +556,14 @@ Bakery_API.guard(function()
         end
         return raw_mod_mult(m)
     end
+
     local raw_mod_chips = mod_chips
     function mod_chips(m)
         local ret = raw_mod_chips(m)
         last_chips = ret
         return ret
     end
+
     local raw_G_FUNCS_evaluate_play = G.FUNCS.evaluate_play
     function G.FUNCS.evaluate_play(...)
         raw_G_FUNCS_evaluate_play(...)
@@ -607,6 +610,15 @@ Bakery_API.guard(function()
             end
         end
 
+        if context.repetition and not context.repetition_only then
+            for i = 1, #G.GAME.tags do
+                ret['tag' .. i] = G.GAME.tags[i]:apply_to_run({
+                    type = 'Bakery_add_repetitions_to_card',
+                    context = context
+                })
+            end
+        end
+
         return ret, trig
     end
 
@@ -620,7 +632,7 @@ Bakery_API.guard(function()
                 badges[#badges + 1] = create_badge(localize {
                     type = 'variable',
                     key = 'v_Bakery_artist',
-                    vars = {artist.name}
+                    vars = { artist.name }
                 }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
             end
             if raw_obj_set_badges then
@@ -636,5 +648,14 @@ Bakery_API.guard(function()
             scale = G.Bakery_charm_area.cards[1].ability.extra.mod
         end
         return not no_big and to_big and to_big(scale) or scale
+    end
+
+    function Bakery_API.on_set_blind(blind)
+        for i = 1, #G.GAME.tags do
+            G.GAME.tags[i]:apply_to_run({
+                type = 'Bakery_set_blind',
+                blind = blind
+            })
+        end
     end
 end)
