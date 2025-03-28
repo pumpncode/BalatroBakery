@@ -1105,3 +1105,14 @@ Bakery_API.Joker {
         end
     end
 }
+
+local raw_Card_start_dissolve = Card.start_dissolve
+function Card:start_dissolve()
+    if self.config.center.key == "j_Bakery_GlassCannon" then
+        self:shatter()
+    else
+        raw_Card_start_dissolve(self)
+    end
+end
+
+sendInfoMessage("Card:start_dissolve() patched. Reason: Glass Cannon shatters", "Bakery")
