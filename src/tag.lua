@@ -376,6 +376,8 @@ local enhancement_tags = {
     { "Red",      5, "m_mult" },
 }
 
+local enhancement_tag_buffer = nil
+
 for i, t in ipairs(enhancement_tags) do
     SMODS.Tag {
         key = t[1] .. "Tag",
@@ -398,8 +400,13 @@ for i, t in ipairs(enhancement_tags) do
         end,
         apply = function(self, tag, context)
             tag.ability = tag.ability or {}
-            if not tag.triggered and (tag.ability.amount or self.config.amount) > 0 and context.type == 'Bakery_score_card' then
+            if not tag.triggered and (tag.ability.amount or self.config.amount) > 0 and context.type == 'Bakery_score_card' and enhancement_tag_buffer ~= context.card then
                 tag.ability.amount = (tag.ability.amount or self.config.amount) - 1
+                enhancement_tag_buffer = context.card
+                G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.4, func = function()
+                    enhancement_tag_buffer = nil
+                    return true
+                end })
                 return {
                     func = function()
                         G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.4, func = function()
