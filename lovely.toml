@@ -182,3 +182,12 @@ position = 'before'
 match_indent = true
 times = 1
 payload = "t[#t + 1] = G.Bakery_charm_area"
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "-- TARGET: setting_blind effects"
+position = "after"
+match_indent = true
+times = 1
+payload = "Bakery_API.on_set_blind(G.GAME.round_resets.blind)"

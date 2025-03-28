@@ -147,6 +147,10 @@ return {
                 name = "Charm Tag",
                 text = { "Adds two {C:attention}Charms", "to the next shop" }
             },
+            tag_Bakery_DownTag = {
+                name = "Down Tag",
+                text = { "Disables effect of", "next {C:attention}Boss Blind" }
+            },
             tag_Bakery_UpTag = {
                 name = "Up Tag",
                 text = { "{C:attention}Retrigger{} all scored", "cards for the next", "{C:attention}#1#{} hands" }

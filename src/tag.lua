@@ -290,7 +290,39 @@ SMODS.Tag {
     end
 }
 
--- TODO: Down Tag
+SMODS.Tag {
+    key = "DownTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 7,
+        y = 0
+    },
+    min_ante = 2,
+    in_pool = function()
+        return (G.GAME.round_resets.ante) % G.GAME.win_ante ~= 0
+    end,
+    apply = function(self, tag, context)
+        tag.ability = tag.ability or {}
+        if not tag.triggered and context.type == 'Bakery_set_blind' and context.blind.boss then
+            G.E_MANAGER:add_event(Event {
+                func = function()
+                    if context.blind.disabled then
+                        tag.triggered = false
+                        return true
+                    end
+                    tag:yep(localize('ph_boss_disabled'), G.C.RED, function()
+                        return true
+                    end)
+                    context.blind:disable()
+                    play_sound('timpani')
+                    delay(0.4)
+                    return true
+                end
+            })
+            tag.triggered = true
+        end
+    end
+}
 
 SMODS.Tag {
     key = "UpTag",
@@ -313,7 +345,7 @@ SMODS.Tag {
         tag.ability = tag.ability or {}
         if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' then
             return {
-                func = function() 
+                func = function()
                     juice_card(tag)
                 end,
                 message = 'Again!',

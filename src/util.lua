@@ -733,5 +733,14 @@ Bakery_API.guard(function()
         end
         return not no_big and to_big and to_big(scale) or scale
     end
+
+    function Bakery_API.on_set_blind(blind)
+        for i = 1, #G.GAME.tags do
+            G.GAME.tags[i]:apply_to_run({
+                type = 'Bakery_set_blind',
+                blind = blind
+            })
+        end
+    end
 end)
 -- END_KEEP_LITE
