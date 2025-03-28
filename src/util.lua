@@ -190,7 +190,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_chips',
-                                vars = {anim.d_chips}
+                                vars = { anim.d_chips }
                             },
                             hold = 0.55,
                             backdrop_colour = G.C.CHIPS,
@@ -222,7 +222,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_mult',
-                                vars = {anim.d_mult}
+                                vars = { anim.d_mult }
                             },
                             scale = 0.7,
                             hold = 0.6125,
@@ -255,7 +255,7 @@ Bakery_API.guard(function()
                             text = localize {
                                 type = 'variable',
                                 key = 'a_xmult',
-                                vars = {anim.x_mult}
+                                vars = { anim.x_mult }
                             },
                             scale = 0.7,
                             hold = 0.6125,
@@ -365,7 +365,7 @@ Bakery_API.guard(function()
 
         self.ARGS.send_to_shader = self.ARGS.send_to_shader or {}
         self.ARGS.send_to_shader[1] = math.min(self.VT.r * 3, 1) + G.TIMERS.REAL / (28) +
-                                          (self.juice and self.juice.r * 20 or 0) + self.tilt_var.amt
+            (self.juice and self.juice.r * 20 or 0) + self.tilt_var.amt
         self.ARGS.send_to_shader[2] = G.TIMERS.REAL
 
         self.tilt_var = self.tilt_var or {
@@ -378,19 +378,19 @@ Bakery_API.guard(function()
         local tilt_factor = 0.3
         if self.states.focus.is then
             self.tilt_var.mx, self.tilt_var.my = G.CONTROLLER.cursor_position.x + self.tilt_var.dx * self.T.w *
-                                                     G.TILESCALE * G.TILESIZE, G.CONTROLLER.cursor_position.y +
+                G.TILESCALE * G.TILESIZE, G.CONTROLLER.cursor_position.y +
                 self.tilt_var.dy * self.T.h * G.TILESCALE * G.TILESIZE
             self.tilt_var.amt = math.abs(self.hover_offset.y + self.hover_offset.x - 1 + self.tilt_var.dx +
-                                             self.tilt_var.dy - 1) * tilt_factor
+                self.tilt_var.dy - 1) * tilt_factor
         elseif self.states.hover.is then
             self.tilt_var.mx, self.tilt_var.my = G.CONTROLLER.cursor_position.x, G.CONTROLLER.cursor_position.y
             self.tilt_var.amt = math.abs(self.hover_offset.y + self.hover_offset.x - 1) * tilt_factor
         elseif self.ambient_tilt then
             local tilt_angle = G.TIMERS.REAL * (1.56 + (self.ID / 1.14212) % 1) + self.ID / 1.35122
             self.tilt_var.mx = ((0.5 + 0.5 * self.ambient_tilt * math.cos(tilt_angle)) * self.VT.w + self.VT.x +
-                                   G.ROOM.T.x) * G.TILESIZE * G.TILESCALE
+                G.ROOM.T.x) * G.TILESIZE * G.TILESCALE
             self.tilt_var.my = ((0.5 + 0.5 * self.ambient_tilt * math.sin(tilt_angle)) * self.VT.h + self.VT.y +
-                                   G.ROOM.T.y) * G.TILESIZE * G.TILESCALE
+                G.ROOM.T.y) * G.TILESIZE * G.TILESCALE
             self.tilt_var.amt = self.ambient_tilt * (0.5 + math.cos(tilt_angle)) * tilt_factor
         end
 
@@ -422,7 +422,7 @@ Bakery_API.guard(function()
 
     local raw_Object_call = Object.__call
     function Object:__call(...)
-        local arg = {...}
+        local arg = { ... }
         if self == Tag then
             if arg[1] == "tag_Bakery_PolyTag" and (G.P_TAGS.tag_Bakery_PolyTag.discovered or not arg[2]) then
                 local ret = raw_Object_call(PolyTag, ...)
@@ -465,6 +465,7 @@ Bakery_API.guard(function()
             end
         end
     end
+
     local raw_G_FUNCS_load_profile = G.FUNCS.load_profile
     G.FUNCS.load_profile = function(...)
         defeated_blinds_reset()
@@ -603,9 +604,9 @@ Bakery_API.guard(function()
             local sprite_facing = self.sprite_facing
             self.sprite_facing = "front"
             self.children.center:set_sprite_pos(self.ability.extra.flipped == nil and self.ability.extra.front_pos or
-                                                    (self.ability.extra.flipped ~= (sprite_facing == "front") and
-                                                        self.ability.extra.front_pos or self.ability.extra.back_pos) or
-                                                    {
+                (self.ability.extra.flipped ~= (sprite_facing == "front") and
+                    self.ability.extra.front_pos or self.ability.extra.back_pos) or
+                {
                     x = 0.5,
                     y = 0
                 })
@@ -639,12 +640,14 @@ Bakery_API.guard(function()
         end
         return raw_mod_mult(m)
     end
+
     local raw_mod_chips = mod_chips
     function mod_chips(m)
         local ret = raw_mod_chips(m)
         last_chips = ret
         return ret
     end
+
     local raw_G_FUNCS_evaluate_play = G.FUNCS.evaluate_play
     function G.FUNCS.evaluate_play(...)
         raw_G_FUNCS_evaluate_play(...)
@@ -691,6 +694,15 @@ Bakery_API.guard(function()
             end
         end
 
+        if context.repetition and not context.repetition_only then
+            for i = 1, #G.GAME.tags do
+                ret['tag' .. i] = G.GAME.tags[i]:apply_to_run({
+                    type = 'Bakery_add_repetitions_to_card',
+                    context = context
+                })
+            end
+        end
+
         return ret, trig
     end
 
@@ -704,7 +716,7 @@ Bakery_API.guard(function()
                 badges[#badges + 1] = create_badge(localize {
                     type = 'variable',
                     key = 'v_Bakery_artist',
-                    vars = {artist.name}
+                    vars = { artist.name }
                 }, artist.bg or G.C.RED, artist.fg or G.C.BLACK, 0.7)
             end
             if raw_obj_set_badges then

@@ -291,7 +291,47 @@ SMODS.Tag {
 }
 
 -- TODO: Down Tag
--- TODO: Up Tag
+
+SMODS.Tag {
+    key = "UpTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 8,
+        y = 0
+    },
+    min_ante = 4,
+    config = {
+        hands = 3
+    },
+    loc_vars = function(self, info_queue, tag)
+        tag.ability = tag.ability or {}
+        return {
+            vars = { tag.ability.hands or self.config.hands }
+        }
+    end,
+    apply = function(self, tag, context)
+        tag.ability = tag.ability or {}
+        if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' then
+            return {
+                func = function() 
+                    juice_card(tag)
+                end,
+                message = 'Again!',
+                repetitions = 1,
+                card = context.context.other_card
+            }
+        end
+        if not tag.triggered and context.type == 'Bakery_play_hand_late' then
+            tag.ability.hands = (tag.ability.hands or self.config.hands) - 1
+            if tag.ability.hands == 0 then
+                tag.triggered = true
+                tag:yep('X', G.C.RED, function()
+                    return true
+                end)
+            end
+        end
+    end
+}
 
 local enhancement_tags = {
     { "Alert",    3, "m_glass" },
