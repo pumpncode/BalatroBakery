@@ -27,8 +27,8 @@ Bakery_API.guard(function()
 end)
 Bakery_API.load('sleeve')
 Bakery_API.guard(function()
-    Bakery_API.black_suits = {"Spades", "Clubs"}
-    Bakery_API.red_suits = {"Hearts", "Diamonds"}
+    Bakery_API.black_suits = { "Spades", "Clubs" }
+    Bakery_API.red_suits = { "Hearts", "Diamonds" }
     function Bakery_API.is_any_suit(card, suits)
         for _, s in pairs(suits) do
             if card:is_suit(s) then
@@ -37,10 +37,11 @@ Bakery_API.guard(function()
         end
         return false
     end
+
     function Bakery_API.alternates_suits(hand, first, second)
         if not first then
             return Bakery_API.alternates_suits(hand, Bakery_API.red_suits, Bakery_API.black_suits) or
-                       Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
+                Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
         end
 
         for i = 1, #hand, 2 do
