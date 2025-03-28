@@ -39,14 +39,14 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult_gain, card.ability.extra.mult}
+            vars = { card.ability.extra.mult_gain, card.ability.extra.mult }
         }
     end,
     calculate = function(self, card, context)
         if context.discard and not context.blueprint and not context.retrigger_joker and not context.other_card.debuff then
             local rank = context.other_card:get_id()
             if rank > 0 -- Stone cards are random negative ranks
-            and card.ability.extra.used_ranks[rank] == nil then
+                and card.ability.extra.used_ranks[rank] == nil then
                 card.ability.extra.used_ranks[rank] = true
                 card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
                 return {
@@ -63,7 +63,7 @@ Bakery_API.Joker {
                 message = localize {
                     type = 'variable',
                     key = 'a_mult',
-                    vars = {card.ability.extra.mult},
+                    vars = { card.ability.extra.mult },
                     card = card
                 }
             }
@@ -102,7 +102,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.scale}
+            vars = { card.ability.extra.scale }
         }
     end,
     calculate = function(self, card, context)
@@ -145,7 +145,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.x_mult, card.ability.extra.cost}
+            vars = { card.ability.extra.x_mult, card.ability.extra.cost }
         }
     end,
     calculate = function(self, card, context)
@@ -188,7 +188,7 @@ Bakery_API.Joker {
             }
         end
         return {
-            vars = {self.key == "j_Bakery_Werewolf_Back" and card.ability.extra.back or card.ability.extra.front}
+            vars = { self.key == "j_Bakery_Werewolf_Back" and card.ability.extra.back or card.ability.extra.front }
         }
     end,
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
@@ -258,7 +258,7 @@ local j_spinner = Bakery_API.Joker {
                 },
                 [3] = {}
             },
-            dollars = {0, 0, 0, 5}
+            dollars = { 0, 0, 0, 5 }
         }
     },
     calculate = function(self, card, context)
@@ -287,7 +287,7 @@ local j_spinner = Bakery_API.Joker {
     end,
     set_ability = function(self, joker)
         joker.ability.extra.rotation = math.floor(joker.ability.extra.rotation or
-                                                      pseudorandom(pseudoseed("Spinner"), 0, 3))
+            pseudorandom(pseudoseed("Spinner"), 0, 3))
     end
 }
 
@@ -351,16 +351,16 @@ Bakery_API.Joker {
         local other_joker = Bakery_API.get_proxied_joker()
 
         return {
-            vars = {other_joker and (localize {
+            vars = { other_joker and (localize {
                 type = 'name_text',
                 set = other_joker.config.center.set,
                 key = other_joker.config.center.key
-            }) or localize('k_none')}
+            }) or localize('k_none') }
         }
     end,
     locked_loc_vars = function(self, card)
         return {
-            vars = {G.P_CENTERS['j_blueprint'].discovered and localize {
+            vars = { G.P_CENTERS['j_blueprint'].discovered and localize {
                 type = 'name_text',
                 key = 'j_blueprint',
                 set = "Joker"
@@ -368,7 +368,7 @@ Bakery_API.Joker {
                 type = 'name_text',
                 key = 'j_brainstorm',
                 set = "Joker"
-            } or localize('k_unknown')}
+            } or localize('k_unknown') }
         }
     end,
     check_for_unlock = function(self, args)
@@ -427,7 +427,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.x_mult}
+            vars = { card.ability.extra.x_mult }
         }
     end,
     check_for_unlock = function(self, args)
@@ -462,7 +462,7 @@ Bakery_API.Joker {
                     message = localize {
                         type = 'variable',
                         key = 'a_xmult',
-                        vars = {card.ability.extra.x_mult}
+                        vars = { card.ability.extra.x_mult }
                     },
                     Xmult_mod = card.ability.extra.x_mult
                 }
@@ -493,7 +493,7 @@ Bakery_API.Joker {
     },
     locked_loc_vars = function(self, card)
         return {
-            vars = {self.config.extra.unlock_level}
+            vars = { self.config.extra.unlock_level }
         }
     end,
     check_for_unlock = function(self, args)
@@ -527,7 +527,7 @@ Bakery_API.Joker {
     },
     locked_loc_vars = function(self, card)
         return {
-            vars = {self.config.extra.unlock_level}
+            vars = { self.config.extra.unlock_level }
         }
     end,
     check_for_unlock = function(self, args)
@@ -629,7 +629,7 @@ Bakery_API.Joker {
     perishable_compat = true,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult_gain, card.ability.extra.mult}
+            vars = { card.ability.extra.mult_gain, card.ability.extra.mult }
         }
     end,
     calculate = function(self, card, context)
@@ -686,7 +686,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.xmult}
+            vars = { card.ability.extra.xmult }
         }
     end,
     blueprint_compat = true,
@@ -724,7 +724,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult_gain, card.ability.extra.cost, card.ability.extra.mult}
+            vars = { card.ability.extra.mult_gain, card.ability.extra.cost, card.ability.extra.mult }
         }
     end,
     blueprint_compat = true,
@@ -739,7 +739,7 @@ Bakery_API.Joker {
     end,
     Bakery_can_use = function(self, card)
         return Bakery_API.default_can_use(card) and card.ability.extra.cost <= Bakery_API.to_number(G.GAME.dollars) +
-                   Bakery_API.to_number(G.GAME.dollar_buffer or 0) - Bakery_API.to_number(G.GAME.bankrupt_at)
+            Bakery_API.to_number(G.GAME.dollar_buffer or 0) - Bakery_API.to_number(G.GAME.bankrupt_at)
     end,
     Bakery_use_joker = function(self, card)
         G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.cost
@@ -750,7 +750,7 @@ Bakery_API.Joker {
             message = localize {
                 type = 'variable',
                 key = 'a_mult',
-                vars = {card.ability.extra.mult}
+                vars = { card.ability.extra.mult }
             }
         })
         G.E_MANAGER:add_event(Event({
@@ -765,7 +765,7 @@ Bakery_API.Joker {
         return localize {
             type = 'variable',
             key = 'b_Bakery_deposit',
-            vars = {card.ability.extra.cost}
+            vars = { card.ability.extra.cost }
         }
     end
 }
@@ -785,7 +785,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.cards}
+            vars = { card.ability.extra.cards }
         }
     end,
     blueprint_compat = true,
@@ -818,7 +818,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.xmult_gain, card.ability.x_mult}
+            vars = { card.ability.extra.xmult_gain, card.ability.x_mult }
         }
     end,
     blueprint_compat = true,
@@ -833,7 +833,7 @@ Bakery_API.Joker {
                         message = localize {
                             type = 'variable',
                             key = 'a_xmult',
-                            vars = {card.ability.x_mult}
+                            vars = { card.ability.x_mult }
                         }
                     });
                     return true
@@ -861,7 +861,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.xmult}
+            vars = { card.ability.extra.xmult }
         }
     end,
     blueprint_compat = true,
@@ -879,7 +879,7 @@ Bakery_API.Joker {
                         func = function()
                             G.GAME.joker_buffer = 0
                             card:juice_up(0.8, 0.8)
-                            card:start_dissolve({HEX("57ecab")}, nil, 1.6)
+                            card:start_dissolve({ HEX("57ecab") }, nil, 1.6)
                             return true
                         end
                     })
@@ -901,8 +901,8 @@ Bakery_API.Joker {
 
 -- KEEP_LITE
 Bakery_API.guard(function()
-    Bakery_API.black_suits = {"Spades", "Clubs"}
-    Bakery_API.red_suits = {"Hearts", "Diamonds"}
+    Bakery_API.black_suits = { "Spades", "Clubs" }
+    Bakery_API.red_suits = { "Hearts", "Diamonds" }
     function Bakery_API.is_any_suit(card, suits)
         for _, s in pairs(suits) do
             if card:is_suit(s) then
@@ -911,10 +911,11 @@ Bakery_API.guard(function()
         end
         return false
     end
+
     function Bakery_API.alternates_suits(hand, first, second)
         if not first then
             return Bakery_API.alternates_suits(hand, Bakery_API.red_suits, Bakery_API.black_suits) or
-                       Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
+                Bakery_API.alternates_suits(hand, Bakery_API.black_suits, Bakery_API.red_suits)
         end
 
         for i = 1, #hand, 2 do
@@ -948,7 +949,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult}
+            vars = { card.ability.extra.mult }
         }
     end,
     blueprint_compat = true,
@@ -1006,7 +1007,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.xmult, Bakery_API.count_rarities() * card.ability.extra.xmult}
+            vars = { card.ability.extra.xmult, Bakery_API.count_rarities() * card.ability.extra.xmult }
         }
     end,
     blueprint_compat = true,
@@ -1047,11 +1048,11 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.x_mult}
+            vars = { card.ability.extra.x_mult }
         }
     end,
     calculate = function(self, card, context)
-        if context.Bakery_calculate_tags_late then
+        if context.Bakery_calculate_tags_late and not self.debuffed then
             return {
                 x_mult = card.ability.extra.x_mult
             }
@@ -1078,7 +1079,7 @@ Bakery_API.Joker {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.x_mult, card.ability.extra.limit}
+            vars = { card.ability.extra.x_mult, card.ability.extra.limit }
         }
     end,
     calculate = function(self, card, context)
