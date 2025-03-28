@@ -189,7 +189,15 @@ return {
             },
             tag_Bakery_StrangeTag = {
                 name = "Strange Tag",
-                text = { }
+                text = {}
+            },
+            tag_Bakery_TopTag = {
+                name = "Top Tag",
+                text = { "Gives {C:money}$1{} per", "card in your deck", "{C:inactive}(Will give {C:money}$#1#{C:inactive})" }
+            },
+            tag_Bakery_BottomTag = {
+                name = "Bottom Tag",
+                text = { "Gives {C:money}$10{} per", "empty Joker slot", "{C:inactive}(Will give {C:money}$#1#{C:inactive})" }
             }
         },
         Back = {

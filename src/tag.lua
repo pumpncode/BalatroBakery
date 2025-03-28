@@ -503,3 +503,53 @@ SMODS.Tag {
         end
     end
 }
+
+SMODS.Tag {
+    key = "TopTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 0,
+        y = 2
+    },
+    min_ante = 4,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { G.deck and #G.deck.cards or 0 }
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered then
+            tag.triggered = true
+            local amount = G.deck and #G.deck.cards or 0
+            tag:yep(localize('$') .. amount, G.C.MONEY, function()
+                ease_dollars(amount)
+                return true
+            end)
+        end
+    end
+}
+
+SMODS.Tag {
+    key = "BottomTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 1,
+        y = 2
+    },
+    min_ante = 4,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { G.jokers and (G.jokers.config.card_limit - #G.jokers.cards) * 10 or 0 }
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered then
+            tag.triggered = true
+            local amount = G.jokers and (G.jokers.config.card_limit - #G.jokers.cards) * 10 or 0
+            tag:yep(localize('$') .. amount, G.C.MONEY, function()
+                ease_dollars(amount)
+                return true
+            end)
+        end
+    end
+}
