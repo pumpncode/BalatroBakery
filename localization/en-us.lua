@@ -186,6 +186,10 @@ return {
             tag_Bakery_RedTag = {
                 name = "Red Tag",
                 text = { "Enhances next {C:attention}#1#", "scored cards to", "{C:attention}#2#" }
+            },
+            tag_Bakery_StrangeTag = {
+                name = "Strange Tag",
+                text = { }
             }
         },
         Back = {

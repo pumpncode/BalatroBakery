@@ -444,3 +444,62 @@ for i, t in ipairs(enhancement_tags) do
         end
     }
 end
+
+SMODS.Tag {
+    key = "StrangeTag",
+    atlas = 'BakeryTags',
+    pos = {
+        x = 8,
+        y = 1
+    },
+    config = {
+        min = 10,
+        max = 30,
+        odds = 10
+    },
+    min_ante = 0,
+    loc_vars = function(self, info_queue, card)
+        local r_mults = {}
+        for i = self.config.min, self.config.max do
+            r_mults[#r_mults + 1] = tostring(i)
+        end
+        local loc_mult = ' ' .. (localize('k_mult')) .. ' '
+        return {
+            main_start = { { n = G.UIT.T, config = { text = '  +', colour = G.C.MULT, scale = 0.32 } },
+                { n = G.UIT.O, config = { object = DynaText({ string = r_mults, colours = { G.C.RED }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32, min_cycle_time = 0 }) } },
+                {
+                    n = G.UIT.O,
+                    config = {
+                        object = DynaText({
+                            string = {
+                                { string = 'rand()', colour = G.C.JOKER_GREY }, { string = "#@" .. (G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.id or 11) .. (G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.suit:sub(1, 1) or 'D'), colour = G.C.RED },
+                                loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult, loc_mult,
+                                loc_mult, loc_mult, loc_mult, loc_mult },
+                            colours = { G.C.UI.TEXT_DARK },
+                            pop_in_rate = 9999999,
+                            silent = true,
+                            random_element = true,
+                            pop_delay = 0.2011,
+                            scale = 0.32,
+                            min_cycle_time = 0
+                        })
+                    }
+                }
+            }
+        }
+    end,
+    apply = function(self, tag, context)
+        if not tag.triggered and context.type == 'Bakery_play_hand_early' then
+            if pseudorandom('tag_Bakery_StrangeTag') < 1 / self.config.odds then
+                tag.triggered = true
+                tag:yep('X', G.C.RED, function()
+                    return true
+                end)
+            end
+            return {
+                mult = self.config.min +
+                    math.floor((self.config.max - self.config.min + 1) * pseudorandom('tag_Bakery_StrangeTag'))
+            }
+        end
+    end
+}
