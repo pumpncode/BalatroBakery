@@ -41,7 +41,7 @@ SMODS.Tag {
         if not tag.triggered and tag.config.type == context.type then
             tag.triggered = true
 
-            local in_posession = {0}
+            local in_posession = { 0 }
             for k, v in ipairs(G.jokers.cards) do
                 if Bakery_API.retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
                     in_posession[1] = in_posession[1] + 1
@@ -88,7 +88,7 @@ SMODS.Tag {
         tag.ability.chips = tag.ability.chips or self.config.chips
         tag.ability.mult = tag.ability.mult or self.config.mult
         return {
-            vars = {tag.ability.chips, tag.ability.mult, self.config.d_chips, self.config.d_mult}
+            vars = { tag.ability.chips, tag.ability.mult, self.config.d_chips, self.config.d_mult }
         }
     end,
     apply = function(self, tag, context)
@@ -128,7 +128,7 @@ SMODS.Tag {
     },
     loc_vars = function(self, info_queue, tag)
         return {
-            vars = {self.config.x_mult}
+            vars = { self.config.x_mult }
         }
     end,
     apply = function(self, tag, context)
@@ -161,7 +161,7 @@ SMODS.Tag {
     loc_vars = function(self, info_queue, tag)
         tag.ability = tag.ability or {}
         return {
-            vars = {tag.ability.dollars or self.config.dollars, tag.ability.hands or self.config.hands}
+            vars = { tag.ability.dollars or self.config.dollars, tag.ability.hands or self.config.hands }
         }
     end,
     apply = function(self, tag, context)
@@ -289,3 +289,79 @@ SMODS.Tag {
         end
     end
 }
+
+-- TODO: Down Tag
+-- TODO: Up Tag
+
+local enhancement_tags = {
+    { "Alert",    3, "m_glass" },
+    { "Gold",     3, "m_gold" },
+    { "Battery",  3, "m_steel" },
+    { "Rock",     3, "m_stone" },
+    { "Equal",    3, "m_wild" },
+    { "Roulette", 5, "m_lucky" },
+    { "Blue",     5, "m_bonus" },
+    { "Red",      5, "m_mult" },
+}
+
+for i, t in ipairs(enhancement_tags) do
+    SMODS.Tag {
+        key = t[1] .. "Tag",
+        atlas = 'BakeryTags',
+        pos = {
+            x = i - 1,
+            y = 1
+        },
+        min_ante = 0,
+        config = {
+            amount = t[2],
+            enhancement = t[3]
+        },
+        loc_vars = function(self, info_queue, tag)
+            info_queue[#info_queue + 1] = G.P_CENTERS[self.config.enhancement]
+            tag.ability = tag.ability or {}
+            return {
+                vars = { tag.ability.amount or self.config.amount, localize { set = "Enhanced", type = "name_text", key = self.config.enhancement } }
+            }
+        end,
+        apply = function(self, tag, context)
+            tag.ability = tag.ability or {}
+            if not tag.triggered and (tag.ability.amount or self.config.amount) > 0 and context.type == 'Bakery_score_card' then
+                tag.ability.amount = (tag.ability.amount or self.config.amount) - 1
+                return {
+                    func = function()
+                        G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.4, func = function()
+                            play_sound('tarot1')
+                            tag:juice_up(0.3, 0.5)
+                            return true
+                        end })
+                        G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.15, func = function()
+                            context.card:flip()
+                            play_sound('card1', 0.85)
+                            context.card:juice_up(0.3, 0.3)
+                            return true
+                        end })
+                        delay(0.2)
+                        G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.1, func = function()
+                            context.card:set_ability(G.P_CENTERS[self.config.enhancement])
+                            return true
+                        end })
+                        G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.15, func = function()
+                            context.card:flip()
+                            play_sound('tarot2', 0.85, 0.6)
+                            context.card:juice_up(0.3, 0.3)
+                            return true
+                        end })
+                        delay(0.1)
+                    end
+                }
+            end
+            if not tag.triggered and context.type == 'Bakery_play_hand_late' and tag.ability.amount == 0 then
+                tag.triggered = true
+                tag:yep('X', G.C.RED, function()
+                    return true
+                end)
+            end
+        end
+    }
+end
