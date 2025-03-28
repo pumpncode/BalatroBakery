@@ -144,7 +144,7 @@ return {
                 text = { "{C:dark_edition}+1{} Joker slot" }
             },
             tag_Bakery_CharmTag = {
-                name = "Charm Tag",
+                name = "Equip Tag",
                 text = { "Adds two {C:attention}Charms", "to the next shop" }
             },
             tag_Bakery_DownTag = {
