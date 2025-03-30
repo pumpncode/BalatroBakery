@@ -687,7 +687,11 @@ Bakery_API.guard(function()
 
         if context.cardarea == G.play and context.main_scoring then
             for i = 1, #G.GAME.tags do
-                ret['tag' .. i] = G.GAME.tags[i]:apply_to_run({
+                local suffix = ''
+                while ret['tag' .. i ..suffix] do
+                    suffix = suffix .. 'x'
+                end
+                ret['tag' .. i .. suffix] = G.GAME.tags[i]:apply_to_run({
                     type = 'Bakery_score_card',
                     card = card
                 })

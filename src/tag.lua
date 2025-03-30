@@ -403,7 +403,7 @@ for i, t in ipairs(enhancement_tags) do
             if not tag.triggered and (tag.ability.amount or self.config.amount) > 0 and context.type == 'Bakery_score_card' and enhancement_tag_buffer ~= context.card then
                 tag.ability.amount = (tag.ability.amount or self.config.amount) - 1
                 enhancement_tag_buffer = context.card
-                G.E_MANAGER:add_event(Event { trigger = 'after', delay = 0.4, func = function()
+                G.E_MANAGER:add_event(Event { blocking = false, func = function()
                     enhancement_tag_buffer = nil
                     return true
                 end })
