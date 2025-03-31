@@ -157,3 +157,19 @@ SMODS.Blind {
         end
     end
 }
+
+SMODS.Blind {
+    key = "Kaf",
+    atlas = "BakeryBlinds",
+    pos = {
+        y = 4
+    },
+    boss = {
+        min = 2,
+        max = 0
+    },
+    boss_colour = HEX('93a9ff'),
+    modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
+        return mult, 0, hand_chips ~= 0
+    end
+}
