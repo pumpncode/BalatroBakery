@@ -22,7 +22,8 @@ return {
             k_bakerycharm = "Charm",
             k_BakeryCharmInfo = { "Only one charm may be equipped at a time,",
                 "purchasing a new charm replaces an old one." },
-            b_Bakery_equip = "EQUIP"
+            b_Bakery_equip = "EQUIP",
+            b_Bakery_ante = "(Ante)"
         },
     }
 }
