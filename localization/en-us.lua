@@ -249,6 +249,18 @@ return {
             bl_Bakery_Tsadi = {
                 name = "The Attrition",
                 text = { "{C:red}-#1#{} Mult", "before scoring" }
+            },
+            bl_Bakery_He = {
+                name = "The Solo",
+                text = {"Only {C:attention}one", "card scores"}
+            },
+            bl_Bakery_Qof = {
+                name = "The Witch",
+                text = {"Adds {C:attention}#1#", "{C:purple}Curses{} to your deck"}
+            },
+            bl_Bakery_Kaf = {
+                name = "The Build",
+                text = {"No base chips"}
             }
         },
         Spectral = {
