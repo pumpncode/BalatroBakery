@@ -92,3 +92,68 @@ SMODS.Blind {
     },
     boss_colour = HEX('ffd78e')
 }
+
+SMODS.Blind {
+    key = "Qof",
+    atlas = "BakeryBlinds",
+    pos = {
+        y = 3
+    },
+    boss = {
+        min = 2,
+        max = 0
+    },
+    boss_colour = HEX('e9b4ff'),
+    collection_loc_vars = function(self)
+        return { vars = { localize 'b_Bakery_ante' } }
+    end,
+    loc_vars = function(self)
+        return { vars = { G.GAME.round_resets.ante } }
+    end,
+    set_blind = function(self)
+        local cards = {}
+        for _ = 1, G.GAME.round_resets.ante do
+            local front = pseudorandom_element(G.P_CARDS, pseudoseed('bl_Bakery_Qof'))
+            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+            local card = Card(G.discard.T.x + G.discard.T.w / 2, G.discard.T.y, G.CARD_W, G.CARD_H, front,
+                G.P_CENTERS.m_Bakery_Curse, { playing_card = G.playing_card })
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card:start_materialize({ G.C.SECONDARY_SET.Enhanced })
+                    G.play:emplace(card)
+                    table.insert(G.playing_cards, card)
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    return true
+                end
+            }))
+            cards[#cards + 1] = card
+        end
+
+        for i = 1, G.GAME.round_resets.ante do
+            draw_card(G.play, G.deck, 90 + i, 'up', nil)
+        end
+        playing_card_joker_effects(cards)
+    end,
+    disable = function(self)
+        local done = 0
+        for i = 1, #G.deck.cards do
+            if G.deck.cards[i].config.center.key == 'm_Bakery_Curse' then
+                G.E_MANAGER:add_event(Event {
+                    func = function()
+                        G.deck.cards[i]:start_dissolve()
+                        return true
+                    end
+                })
+                done = done + 1
+                if done >= G.GAME.round_resets.ante then
+                    return
+                end
+            end
+        end
+    end
+}
