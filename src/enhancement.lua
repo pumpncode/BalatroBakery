@@ -29,7 +29,7 @@ SMODS.Enhancement {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.hands}
+            vars = { card.ability.extra.hands }
         }
     end,
     calculate = function(self, card, context)
@@ -74,5 +74,6 @@ SMODS.Enhancement {
     no_rank = true,
     no_suit = true,
     never_scores = true,
-    weight = 0
+    weight = 0,
+    in_pool = function() return false end
 }

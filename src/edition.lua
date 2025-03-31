@@ -27,5 +27,6 @@ SMODS.Edition {
                 remove = true
             }
         end
-    end
+    end,
+    in_pool = function() return false end
 }
