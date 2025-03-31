@@ -62,3 +62,17 @@ SMODS.Enhancement {
         end
     end
 }
+
+SMODS.Enhancement {
+    key = "Curse",
+    atlas = 'BakeryEnhancements',
+    pos = {
+        x = 1,
+        y = 0
+    },
+    replace_base_card = true,
+    no_rank = true,
+    no_suit = true,
+    never_scores = true,
+    weight = 0
+}
