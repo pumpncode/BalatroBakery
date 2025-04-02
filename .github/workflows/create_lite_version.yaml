@@ -68,7 +68,7 @@ jobs:
           run: |
             git commit -a --amend -m "Update lite version to $(jq '.version' manifest.json)"
             git push origin lite --force-with-lease
-            git tag -a -m "Version $(jq -r '.version' manifest.json)-lite" "$(jq '.version' manifest.json)-lite"
+            git tag -a -m "Version $(jq -r '.version' manifest.json)-lite" "$(jq -r '.version' manifest.json)-lite"
             git checkout origin/main
-            git tag -a -m "Version $(jq -r '.version' manifest.json)" "$(jq '.version' manifest.json)"
+            git tag -a -m "Version $(jq -r '.version' manifest.json)" "$(jq -r '.version' manifest.json)"
             git push origin --tags
