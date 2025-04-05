@@ -38,7 +38,7 @@ SMODS.Blind {
     boss_colour = HEX('ff004b'),
     config = {
         extra = {
-            scale = 10
+            scale = 5
         }
     },
     collection_loc_vars = function(self)
