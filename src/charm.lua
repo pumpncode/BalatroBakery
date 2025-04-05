@@ -631,13 +631,14 @@ SMODS.PokerHand:take_ownership("Flush", {
     end
 })
 
-Bakery_API.Charm {
+Bakery_API.credit(Bakery_API.Charm {
     key = "AnaglyphLens",
     pos = {
         x = 1,
         y = 0
     },
     atlas = 'Charms',
+    artist = "SadCube",
     unlocked = false,
     locked_loc_vars = function(info_queue, card)
         return {
@@ -653,7 +654,7 @@ Bakery_API.Charm {
         end
         return count >= 9
     end
-}
+})
 
 local raw_Full_House_evaluate = SMODS.PokerHands['Full House'].evaluate
 local raw_Full_House_modify_display_text = SMODS.PokerHands['Full House'].modify_display_text
