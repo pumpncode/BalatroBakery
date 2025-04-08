@@ -509,6 +509,8 @@ Bakery_API.Charm {
     end
 }
 
+Bakery_API.no_update_joker_display = false
+
 local raw_evaluate_poker_hand = evaluate_poker_hand
 function evaluate_poker_hand(hand)
     if G.GAME.Bakery_charm ~= 'BakeryCharm_Bakery_AnaglyphLens' or #hand == 0 then
@@ -537,7 +539,9 @@ function evaluate_poker_hand(hand)
             end
         end
     end
+    Bakery_API.no_update_joker_display = true
     clone:remove()
+    Bakery_API.no_update_joker_display = false
     return ret2
 end
 

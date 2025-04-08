@@ -192,3 +192,13 @@ position = "after"
 match_indent = true
 times = 1
 payload = "Bakery_API.on_set_blind(G.GAME.round_resets.blind)"
+
+# Joker Display compat
+[[patches]]
+[patches.pattern]
+target = '=[SMODS JokerDisplay "src/display_functions.lua"]'
+pattern = "card_remove_ref(self)"
+position = "after"
+match_indent = true
+times = 1
+payload = "if Bakery_API.no_update_joker_display then return end"
