@@ -825,9 +825,6 @@ Bakery_API.credit(Bakery_API.Charm {
     end
 })
 
-local function big(x)
-    return to_big and to_big(x) or x
-end
 local juicing = false
 local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
 function Game:update_draw_to_hand(dt)
