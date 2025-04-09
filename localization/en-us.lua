@@ -94,7 +94,8 @@ return {
             },
             j_Bakery_GetOutOfJailFreeCard = {
                 name = "Get Out of Jail Free Card",
-                text = { "{C:attention}Use{} to get {X:mult,C:white}X#1#{} Mult", "for {C:attention}one hand" }
+                text = { "{C:attention}Use{} to get {X:mult,C:white}X#1#{} Mult", "for {C:attention}one hand",
+                    "{C:inactive}This card may be kept", "{C:inactive}until needed or sold" }
             },
             j_Bakery_TransparentBackBuffer = {
                 name = "Transparent Back Buffer",
@@ -252,15 +253,15 @@ return {
             },
             bl_Bakery_He = {
                 name = "The Solo",
-                text = {"Only {C:attention}one", "card scores"}
+                text = { "Only {C:attention}one", "card scores" }
             },
             bl_Bakery_Qof = {
                 name = "The Witch",
-                text = {"Adds {C:attention}#1#", "{C:purple}Curses{} to your deck"}
+                text = { "Adds {C:attention}#1#", "{C:purple}Curses{} to your deck" }
             },
             bl_Bakery_Kaf = {
                 name = "The Build",
-                text = {"No base chips"}
+                text = { "No base chips" }
             }
         },
         Spectral = {
