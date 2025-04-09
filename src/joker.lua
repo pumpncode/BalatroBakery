@@ -544,7 +544,9 @@ Bakery_API.Joker {
 }
 
 local parity = {
+    ["A"] = "odd",
     ["Ace"] = "odd",
+    ["1"] = "odd",
     ["2"] = "even",
     ["3"] = "odd",
     ["4"] = "even",
