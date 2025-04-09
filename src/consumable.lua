@@ -24,7 +24,7 @@ SMODS.Consumable {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.multiplier}
+            vars = { card.ability.extra.multiplier }
         }
     end,
     use = function(self, card, area, copier)
@@ -138,11 +138,11 @@ SMODS.Consumable {
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_Bakery_TimeWalk
         return {
-            vars = {self.config.max_highlighted, localize {
+            vars = { self.config.max_highlighted, localize {
                 type = 'name_text',
                 set = 'Enhanced',
                 key = self.config.mod_conv
-            }}
+            } }
         }
     end
 }
@@ -166,13 +166,13 @@ Bakery_API.credit(SMODS.Consumable {
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.e_Bakery_Carbon
         return {
-            vars = {self.config.extra.copies, self.config.extra.hl}
+            vars = { card.ability.extra.copies, card.ability.extra.hl }
         }
     end,
     can_use = function(self, card)
         local count = #Bakery_API.get_highlighted() + #G.jokers.highlighted
-        return count >= 1 and count <= card.ability.extra.hl and #G.jokers.highlighted + #G.jokers.cards <=
-                   G.jokers.config.card_limit
+        return count >= 1 and count <= card.ability.extra.hl and
+            (#Bakery_API.get_highlighted() > 0 or #G.jokers.highlighted + #G.jokers.cards <= G.jokers.config.card_limit)
     end,
     use = function(self, card, area, copier)
         if not self:can_use(card) then
@@ -201,13 +201,17 @@ Bakery_API.credit(SMODS.Consumable {
                     end
                 end
 
-                for i = 1, #G.jokers.highlighted do
-                    local copied = G.jokers.highlighted[i]
-                    local _card = copy_card(copied, nil, nil, nil, copied.edition)
-                    _card:set_edition("e_Bakery_Carbon", true, true)
-                    _card:set_eternal(nil)
-                    _card:add_to_deck()
-                    G.jokers:emplace(_card)
+                for i = 1, card.ability.extra.copies do
+                    for i = 1, #G.jokers.highlighted do
+                        if #G.jokers.highlighted + #G.jokers.cards <= G.jokers.config.card_limit then
+                            local copied = G.jokers.highlighted[i]
+                            local _card = copy_card(copied, nil, nil, nil, copied.edition)
+                            _card:set_edition("e_Bakery_Carbon", true, true)
+                            _card:set_eternal(nil)
+                            _card:add_to_deck()
+                            G.jokers:emplace(_card)
+                        end
+                    end
                 end
 
                 playing_card_joker_effects(new_cards)
