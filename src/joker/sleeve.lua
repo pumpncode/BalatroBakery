@@ -133,6 +133,6 @@ Bakery_API.guard(function()
             card.children.use_button:remove()
             card.children.use_button = nil
         end
-        card:highlight(card.highlighted)
+        card:highlight(highlighted)
     end
 end)
