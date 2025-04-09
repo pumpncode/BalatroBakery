@@ -306,7 +306,7 @@ SMODS.Tag {
         if not tag.triggered and context.type == 'Bakery_set_blind' and context.blind.boss then
             G.E_MANAGER:add_event(Event {
                 func = function()
-                    if context.blind.disabled then
+                    if context.blind.disabled or not context.blind.disable then
                         tag.triggered = false
                         return true
                     end
