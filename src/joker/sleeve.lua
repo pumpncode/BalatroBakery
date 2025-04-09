@@ -102,6 +102,7 @@ j_sleeve = SMODS.Joker {
                     card.ability.extra.occupied = false
                     card.ability.extra.override = nil
                     no_recurse = false
+                    Bakery_API.rehighlight(card)
                     return true
                 end
             })
@@ -117,6 +118,7 @@ j_sleeve = SMODS.Joker {
             draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil,
                 nil, true)
             card.ability.extra.occupied = true
+            card:highlight(highlighted)
         end
     end,
     Bakery_use_button_text = function(self, card)
