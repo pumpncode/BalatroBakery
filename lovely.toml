@@ -191,7 +191,7 @@ pattern = "-- TARGET: setting_blind effects"
 position = "after"
 match_indent = true
 times = 1
-payload = "Bakery_API.on_set_blind(G.GAME.round_resets.blind)"
+payload = "Bakery_API.on_set_blind(G.GAME.blind)"
 
 # Joker Display compat
 [[patches]]
