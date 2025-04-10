@@ -202,3 +202,24 @@ position = "after"
 match_indent = true
 times = 1
 payload = "if Bakery_API.no_update_joker_display then return end"
+
+# Sprint Challenge
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "local disabled = false"
+position = "after"
+match_indent = true
+times = 1
+payload = """
+local Bakery_no_select = (G.GAME.modifiers.Bakery_Sprint_Big and type == 'Big') or (G.GAME.modifiers.Bakery_Sprint_Small and (not type or type == 'Small'))
+if Bakery_no_select then disabled = true end
+"""
+
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = "button = 'select_blind'"
+position = 'at'
+times = 1
+payload = "button = not Bakery_no_select and 'select_blind' or nil"

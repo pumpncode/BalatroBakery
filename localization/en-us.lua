@@ -16,7 +16,9 @@ return {
     misc = {
         v_text = {
             ch_c_Bakery_Balanced = { "{C:mult}Mult{} cannot exceed {C:chips}Chips{}" },
-            ch_c_Bakery_Vagabond = { "{C:money}Money{} cannot exceed {C:money}$#1#" }
+            ch_c_Bakery_Vagabond = { "{C:money}Money{} cannot exceed {C:money}$#1#" },
+            ch_c_Bakery_Sprint_Small = { "{C:attention}Small Blinds{} must be skipped" },
+            ch_c_Bakery_Sprint_Big = { "{C:attention}Big Blinds{} must be skipped" },
         },
         dictionary = {
             k_bakerycharm = "Charm",
