@@ -323,6 +323,7 @@ SMODS.Tag {
     end
 }
 
+local up_cache = {}
 SMODS.Tag {
     key = "UpTag",
     atlas = 'BakeryTags',
@@ -342,7 +343,9 @@ SMODS.Tag {
     end,
     apply = function(self, tag, context)
         tag.ability = tag.ability or {}
-        if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' then
+        up_cache[tag] = up_cache[tag] or {}
+        if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' and not up_cache[tag][context.context.other_card] then
+            up_cache[tag][context.context.other_card] = true
             return {
                 func = function()
                     juice_card(tag)
@@ -353,6 +356,7 @@ SMODS.Tag {
             }
         end
         if not tag.triggered and context.type == 'Bakery_play_hand_late' then
+            up_cache[tag] = nil
             tag.ability.hands = (tag.ability.hands or self.config.hands) - 1
             if tag.ability.hands == 0 then
                 tag.triggered = true
