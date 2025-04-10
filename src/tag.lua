@@ -302,7 +302,6 @@ SMODS.Tag {
         return (G.GAME.round_resets.ante) % G.GAME.win_ante ~= 0
     end,
     apply = function(self, tag, context)
-        tag.ability = tag.ability or {}
         if not tag.triggered and context.type == 'Bakery_set_blind' and context.blind.boss then
             G.E_MANAGER:add_event(Event {
                 func = function()
