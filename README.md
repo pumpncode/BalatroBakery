@@ -12,7 +12,7 @@ Current contents:
 - 3 Decks
 - 3 [Deck Sleeves](https://github.com/larswijn/CardSleeves)
 - 5 Blinds
-- 2 Challenges
+- 3 Challenges
 - 1 Tarot Card
 - 2 Spectral Cards
 - 2 Enhancements
