@@ -669,7 +669,7 @@ Bakery_API.guard(function()
 end)
 -- END_KEEP_LITE
 function Bakery_API.maximus_full_house_compat(parts, val)
-    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 then
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 and #parts.Bakery_s_all_pairs[1] >= 5 then
         val = { SMODS.merge_lists(val, parts.Bakery_s_all_pairs) }
     end
     return val
