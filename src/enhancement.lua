@@ -10,7 +10,7 @@ SMODS.Sound {
     path = "TimeWalk.ogg"
 }
 
-SMODS.Enhancement {
+Bakery_API.credit(SMODS.Enhancement {
     key = "TimeWalk",
     atlas = 'BakeryEnhancements',
     pos = {
@@ -22,6 +22,7 @@ SMODS.Enhancement {
     no_suit = true,
     always_scores = true,
     weight = 0.1,
+    artist = "AmyWeber",
     config = {
         extra = {
             hands = 1
@@ -61,9 +62,9 @@ SMODS.Enhancement {
             }
         end
     end
-}
+})
 
-SMODS.Enhancement {
+Bakery_API.credit(SMODS.Enhancement {
     key = "Curse",
     atlas = 'BakeryEnhancements',
     pos = {
@@ -75,5 +76,6 @@ SMODS.Enhancement {
     no_suit = true,
     never_scores = true,
     weight = 0,
+    artist = "ClausStephan",
     in_pool = function() return false end
-}
+})

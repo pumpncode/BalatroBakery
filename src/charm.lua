@@ -27,8 +27,8 @@ Bakery_API.guard(function()
         key = "BakeryCharm"
     }
 
-    Bakery_API.Charm = SMODS.Center:extend{
-        required_params = {"key"},
+    Bakery_API.Charm = SMODS.Center:extend {
+        required_params = { "key" },
         unlocked = true,
         discovered = false,
         pos = {
@@ -40,7 +40,7 @@ Bakery_API.guard(function()
         consumeable = true,
         set = 'BakeryCharm',
         class_prefix = 'BakeryCharm',
-        pools = {"BakeryCharm"},
+        pools = { "BakeryCharm" },
         set_card_type_badge = function(self, card, badges)
             badges[#badges + 1] = create_badge(localize('k_Bakery_charm'), G.C.DARK_EDITION, G.C.WHITE, 1.2)
         end,
@@ -101,7 +101,7 @@ Bakery_API.guard(function()
         for i = 1, 5 do
             for j = 1, #G.your_collection do
                 local center = G.P_CENTER_POOLS.BakeryCharm[i + (j - 1) * 5 +
-                                   (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
+                (5 * #G.your_collection * (args.cycle_config.current_option - 1))]
                 if not center then
                     break
                 end
@@ -121,21 +121,21 @@ Bakery_API.guard(function()
                 tally = tally + 1
             end
         end
-        return {UIBox_button {
+        return { UIBox_button {
             button = 'your_collection_Bakery_Charms',
             id = 'your_collection_Bakery_Charms',
-            label = {localize('k_Bakery_charms')},
+            label = { localize('k_Bakery_charms') },
             count = {
                 tally = tally,
                 of = #G.P_CENTER_POOLS.BakeryCharm
             },
             minw = 5
-        }}
+        } }
     end
     function G.FUNCS.your_collection_Bakery_Charms()
         G.SETTINGS.paused = true
         G.FUNCS.overlay_menu {
-            definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, {5, 5}, {
+            definition = SMODS.card_collection_UIBox(G.P_CENTER_POOLS.BakeryCharm, { 5, 5 }, {
                 snap_back = true,
                 infotip = localize('k_BakeryCharmInfo'),
                 hide_single_page = true,
@@ -268,14 +268,14 @@ Bakery_API.guard(function()
                 button = 'Bakery_equip_from_shop',
                 hover = true
             },
-            nodes = {{
+            nodes = { {
                 n = G.UIT.T,
                 config = {
                     text = localize('b_Bakery_equip'),
                     colour = G.C.WHITE,
                     scale = 0.4
                 }
-            }}
+            } }
         }
     end
 
@@ -298,10 +298,10 @@ Bakery_API.guard(function()
 
         G.TAROT_INTERRUPT = G.STATE
         G.STATE = (G.STATE == G.STATES.TAROT_PACK and G.STATES.TAROT_PACK) or
-                      (G.STATE == G.STATES.PLANET_PACK and G.STATES.PLANET_PACK) or
-                      (G.STATE == G.STATES.SPECTRAL_PACK and G.STATES.SPECTRAL_PACK) or
-                      (G.STATE == G.STATES.STANDARD_PACK and G.STATES.STANDARD_PACK) or
-                      (G.STATE == G.STATES.BUFFOON_PACK and G.STATES.BUFFOON_PACK) or G.STATES.PLAY_TAROT
+            (G.STATE == G.STATES.PLANET_PACK and G.STATES.PLANET_PACK) or
+            (G.STATE == G.STATES.SPECTRAL_PACK and G.STATES.SPECTRAL_PACK) or
+            (G.STATE == G.STATES.STANDARD_PACK and G.STATES.STANDARD_PACK) or
+            (G.STATE == G.STATES.BUFFOON_PACK and G.STATES.BUFFOON_PACK) or G.STATES.PLAY_TAROT
 
         G.CONTROLLER.locks.use = true
 
@@ -442,7 +442,7 @@ Bakery_API.guard(function()
             if not next(_2) then
                 return {}
             end
-            return {SMODS.merge_lists(_2)}
+            return { SMODS.merge_lists(_2) }
         end
     }
 end)
@@ -470,7 +470,7 @@ function get_flush(hand)
             end
         end
         if count >= 4 then
-            return {hand}
+            return { hand }
         end
     end
     return raw_get_flush(hand)
@@ -486,7 +486,7 @@ Bakery_API.Charm {
     unlocked = false,
     locked_loc_vars = function(self, info_queue, card)
         return {
-            vars = {52}
+            vars = { 52 }
         }
     end,
     check_for_unlock = function(self, args)
@@ -647,7 +647,7 @@ Bakery_API.credit(Bakery_API.Charm {
     unlocked = false,
     locked_loc_vars = function(info_queue, card)
         return {
-            vars = {9, G.P_TAGS.tag_double.discovered and localize("b_Bakery_double_tags") or localize('k_unknown')}
+            vars = { 9, G.P_TAGS.tag_double.discovered and localize("b_Bakery_double_tags") or localize('k_unknown') }
         }
     end,
     check_for_unlock = function(self, args)
@@ -661,15 +661,26 @@ Bakery_API.credit(Bakery_API.Charm {
     end
 })
 
+-- KEEP_LITE
+Bakery_API.guard(function()
+    function Bakery_API.maximus_full_house_compat(parts, val)
+        return val
+    end
+end)
+-- END_KEEP_LITE
+function Bakery_API.maximus_full_house_compat(parts, val)
+    if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 and #parts.Bakery_s_all_pairs[1] >= 5 then
+        val = { SMODS.merge_lists(val, parts.Bakery_s_all_pairs) }
+    end
+    return val
+end
+
 local raw_Full_House_evaluate = SMODS.PokerHands['Full House'].evaluate
 local raw_Full_House_modify_display_text = SMODS.PokerHands['Full House'].modify_display_text
 SMODS.PokerHand:take_ownership("Full House", {
     evaluate = function(parts)
         local val = raw_Full_House_evaluate(parts)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #parts.Bakery_s_3 >= 1 and #parts.Bakery_s_2 >= 2 then
-            val = {SMODS.merge_lists(val, parts.Bakery_s_all_pairs)}
-        end
-        return val
+        return Bakery_API.maximus_full_house_compat(parts, val)
     end,
     modify_display_text = function(cards, scoring_hand)
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Pedigree' and #all_suits(3, scoring_hand) >= 1 and
@@ -775,7 +786,7 @@ Bakery_API.Charm {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.xmult}
+            vars = { card.ability.extra.xmult }
         }
     end,
     calculate = function(self, card, context)
@@ -816,12 +827,12 @@ Bakery_API.credit(Bakery_API.Charm {
     },
     locked_loc_vars = function(info_queue, card)
         return {
-            vars = {26}
+            vars = { 26 }
         }
     end,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.cards}
+            vars = { card.ability.extra.cards }
         }
     end,
     check_for_unlock = function(self, args)
@@ -834,8 +845,8 @@ local raw_Game_update_draw_to_hand = Game.update_draw_to_hand
 function Game:update_draw_to_hand(dt)
     local function condition()
         juicing = (G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Obsession' or G.GAME.Bakery_charm ==
-                      'BakeryCharm_Bakery_Rune') and G.GAME.current_round and G.GAME.current_round.discards_left > 0 and
-                      G.STATE ~= G.STATES.ROUND_EVAL
+                'BakeryCharm_Bakery_Rune') and G.GAME.current_round and G.GAME.current_round.discards_left > 0 and
+            G.STATE ~= G.STATES.ROUND_EVAL
         return juicing
     end
     if not juicing and condition() then
@@ -861,7 +872,7 @@ Bakery_API.Charm {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.money}
+            vars = { card.ability.extra.money }
         }
     end,
     check_for_unlock = function(self, args)
@@ -926,7 +937,7 @@ Bakery_API.Charm {
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mod}
+            vars = { card.ability.extra.mod }
         }
     end
 }
@@ -957,12 +968,12 @@ Bakery_API.Charm {
     },
     locked_loc_vars = function(info_queue, card)
         return {
-            vars = {10}
+            vars = { 10 }
         }
     end,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mod}
+            vars = { card.ability.extra.mod }
         }
     end,
     check_for_unlock = function(self, args)
