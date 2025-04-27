@@ -410,7 +410,7 @@ Bakery_API.guard(function()
     local raw_set_screen_positions = set_screen_positions
     function set_screen_positions()
         raw_set_screen_positions()
-        if G.STAGE == G.STAGES.RUN then
+        if G.STAGE == G.STAGES.RUN and G.Bakery_charm_area then
             G.Bakery_charm_area.T.x = G.TILE_W - G.Bakery_charm_area.T.w - 0.5
             G.Bakery_charm_area.T.y = G.TILE_H - G.deck.T.h - 1.2 * G.Bakery_charm_area.T.h
         end
