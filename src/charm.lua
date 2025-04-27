@@ -361,7 +361,11 @@ Bakery_API.guard(function()
         if G.GAME.Bakery_charm then
             G.P_CENTERS[G.GAME.Bakery_charm]:unequip(G.Bakery_charm_area.cards[1])
             G.GAME.used_jokers[G.GAME.Bakery_charm] = nil
-            G.Bakery_charm_area.cards[1]:start_dissolve()
+            if not G.Bakery_charm_area.cards[1] then
+                sendWarnMessage("No charm was found in G.Bakery_charm_area to destroy.", "Bakery")
+            else
+                G.Bakery_charm_area.cards[1]:start_dissolve()
+            end
         end
         G.GAME.Bakery_charm = self.config.center_key
         G.GAME.used_jokers[self.config.center_key] = true
