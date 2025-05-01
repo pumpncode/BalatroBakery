@@ -1,3 +1,5 @@
+-- See https://github.com/BakersDozenBagels/Balatest/ for more information.
+
 Balatest.TestPlay {
     name = 'leader',
     requires = {},

@@ -1,3 +1,5 @@
+-- See https://github.com/BakersDozenBagels/Balatest/ for more information.
+
 --#region Tarmogoyf
 Balatest.TestPlay {
     name = 'tarmogoyf_null',
