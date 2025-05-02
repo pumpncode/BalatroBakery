@@ -62,7 +62,7 @@ SMODS.Blind {
 
 local raw_SMODS_never_scores = SMODS.never_scores
 function SMODS.never_scores(card)
-    if G.GAME.blind.config.blind.key == "bl_Bakery_He" and G.play.cards[1] then
+    if G.GAME.blind.config.blind.key == "bl_Bakery_He" and not G.GAME.blind.disabled and G.play.cards[1] then
         local max = 1
         local max_rank = G.play.cards[1].base.nominal
         for i = 2, #G.play.cards do
