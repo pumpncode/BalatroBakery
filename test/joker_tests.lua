@@ -161,6 +161,36 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.GAME.dollars, 1)
     end
 }
+Balatest.TestPlay {
+    name = 'don_debt',
+    requires = {},
+    category = 'don',
+
+    jokers = { 'j_Bakery_Don' },
+    dollars = 1,
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(21)
+        Balatest.assert_eq(G.GAME.dollars, -2)
+    end
+}
+Balatest.TestPlay {
+    name = 'don_deep_debt',
+    requires = {},
+    category = 'don',
+
+    jokers = { 'j_Bakery_Don' },
+    dollars = -10,
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(21)
+        Balatest.assert_eq(G.GAME.dollars, -13)
+    end
+}
 --#endregion
 
 --#region Werewolf
@@ -858,10 +888,7 @@ Balatest.TestPlay {
         Balatest.play_hand { '2S' }
         Balatest.play_hand { '2H' }
         Balatest.next_round()
-        Balatest.q(function()
-            level_up_hand(nil, 'High Card', true, 1)
-            return true
-        end)
+        Balatest.q(function() level_up_hand(nil, 'High Card', true, 1) end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -952,10 +979,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 10,
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -971,17 +995,9 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 10,
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
-        Balatest.q(function()
-            return Bakery_API.default_can_use(G.jokers.cards[1])
-        end)
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        Balatest.q(function() return Bakery_API.default_can_use(G.jokers.cards[1]) end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1009,10 +1025,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot' },
     dollars = 0,
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1028,10 +1041,7 @@ Balatest.TestPlay {
     jokers = { 'j_Bakery_CoinSlot', 'j_credit_card' },
     dollars = 0,
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1123,10 +1133,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.play_hand { '2S' }
     end,
     assert = function()
@@ -1140,10 +1147,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
         Balatest.next_round()
         Balatest.play_hand { '2S' }
     end,
@@ -1158,10 +1162,7 @@ Balatest.TestPlay {
 
     jokers = { 'j_Bakery_GetOutOfJailFreeCard' },
     execute = function()
-        Balatest.q(function()
-            G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } }
-            return true
-        end)
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
     end,
     assert = function()
         Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
