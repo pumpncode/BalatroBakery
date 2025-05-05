@@ -413,7 +413,196 @@ Balatest.TestPlay {
 --#endregion
 
 --#region Proxy
---TODO
+Balatest.TestPlay {
+    name = 'proxy_null',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_joker_from_judgement',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    consumeables = { 'c_judgement' },
+    execute = function()
+        Balatest.hook(_G, 'create_card', function(orig, t, a, l, r, k, s, forced_key, ...)
+            return orig(t, a, l, r, k, s, 'j_joker', ...)
+        end)
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(35)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_joker_with_timestamp',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy', 'j_joker' },
+    execute = function()
+        Balatest.q(function()
+            G.jokers.cards[2].ability.Bakery_purchase_index = 1
+        end)
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(63)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_joker_from_pack',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    execute = function()
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_buffoon_normal_1' } end)
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, 'j_joker', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+        Balatest.use(function() return G.pack_cards.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(35)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_joker_from_shop',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    dollars = 2,
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, 'j_joker', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(63)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_skipped',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    dollars = 6,
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, 'j_golden', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.end_round()
+        Balatest.cash_out()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 4)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_unskipped',
+    requires = {},
+    category = 'proxy',
+
+    jokers = { 'j_Bakery_Proxy' },
+    dollars = 6,
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_joker', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.end_round()
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_golden', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(63)
+    end
+}
+Balatest.TestPlay {
+    name = 'proxy_loop',
+    requires = {},
+    category = 'proxy',
+
+    jokers = {},
+    dollars = 6,
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_joker', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.end_round()
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_Bakery_Proxy', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[2] end)
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+        Balatest.exit_shop()
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(91)
+    end
+}
 --#endregion
 
 --#region Sticker Sheet
@@ -898,7 +1087,461 @@ Balatest.TestPlay {
 --#endregion
 
 --#region Card Sleeve
---Todo
+local function wait_for_sleeve() -- I am going to commit a crime
+    local done = false
+    Balatest.q(function()
+        done = false
+        G.E_MANAGER:add_event(Event {
+            func = function()
+                G.E_MANAGER:add_event(Event {
+                    func = function()
+                        G.E_MANAGER:add_event(Event {
+                            func = function()
+                                done = true
+                                return true
+                            end
+                        })
+                        return true
+                    end
+                })
+                return true
+            end
+        })
+    end)
+    Balatest.q(function()
+        return done
+    end)
+end
+
+Balatest.TestPlay {
+    name = 'card_sleeve_can_use_null',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function() end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_can_use_one',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_can_use_two',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S', '3S' }
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_hold',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+        Balatest.assert(G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key] ~= nil)
+        Balatest.assert_eq(#G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_hold_highlight',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.highlight { '3S', '4S', '5S' }
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_unhold',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.key == nil)
+        Balatest.assert_eq(#G.hand.cards, 52)
+        Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_sell',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 52)
+        Balatest.assert_eq(#G.jokers.cards, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_can_use_in_shop',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.end_round()
+        Balatest.cash_out()
+    end,
+    assert = function()
+        Balatest.assert(G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key] ~= nil)
+        Balatest.assert_eq(#G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards, 1)
+        Balatest.assert(not G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_sell_in_shop',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.deck.cards, 52)
+        Balatest.assert_eq(#G.jokers.cards, 0)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_gold',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    deck = { cards = { { r = '2', s = 'S', e = 'm_gold' }, { r = '3', s = 'S', e = 'm_gold' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '3S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_two',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve', 'j_Bakery_CardSleeve' },
+    deck = { cards = { { r = '2', s = 'S', e = 'm_gold' }, { r = '3', s = 'S', e = 'm_gold' }, { r = '4', s = 'S' }, { r = '5', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.highlight { '3S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[2] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_two_retrieve',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve', 'j_Bakery_CardSleeve' },
+    deck = { cards = { { r = '2', s = 'S', e = 'm_gold' }, { r = '3', s = 'S', e = 'm_gold' }, { r = '4', s = 'S' }, { r = '5', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.highlight { '3S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[2] } } end)
+        wait_for_sleeve()
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.hand.cards, 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_chariot',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_chariot' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert(G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1].config.center.key ==
+            'm_steel')
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_chariot_release',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_chariot' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(G.hand.cards[2].config.center.key == 'm_steel')
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_hanged_man',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_hanged_man' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.highlight { '3S' }
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.occupied)
+        Balatest.assert(G.jokers.cards[1].config.center:Bakery_can_use(G.jokers.cards[1]))
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_hanged_man_add',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_hanged_man' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' }, { r = '4', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.highlight { '3S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.occupied)
+        Balatest.assert_eq(#G.hand.cards, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_chariot_in_shop',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    consumeables = { 'c_chariot' },
+    deck = { cards = { { r = '2', s = 'S' }, { r = '3', s = 'S' } } },
+    dollars = 0,
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.end_round()
+        Balatest.assert_chips()
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert(G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1].config.center.key ==
+            'm_steel')
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_in_pack',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    dollars = 10,
+    execute = function()
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_arcana_normal_1' } end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(G.jokers.cards[1].ability.extra.occupied)
+        Balatest.assert_eq(#G.hand.cards, 51)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_in_pack_retrieved',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    dollars = 10,
+    execute = function()
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_arcana_normal_1' } end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert(not G.jokers.cards[1].ability.extra.occupied)
+        Balatest.assert_eq(#G.hand.cards, 52)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_in_pack_sold',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    dollars = 10,
+    execute = function()
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_arcana_normal_1' } end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function() G.FUNCS.sell_card { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.jokers.cards, 0)
+        Balatest.assert_eq(#G.hand.cards, 52)
+    end
+}
+Balatest.TestPlay {
+    name = 'card_sleeve_in_pack_death',
+    requires = {},
+    category = 'card_sleeve',
+
+    jokers = { 'j_Bakery_CardSleeve' },
+    dollars = 10,
+    execute = function()
+        Balatest.hook(_G, 'get_pack', function() return { key = 'p_arcana_normal_1' } end)
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Tarot' and orig(set, a, l, r, k, s, 'c_death', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.use(function() return G.shop_booster.cards[2] end)
+        Balatest.highlight { '2S' }
+        Balatest.q(function() G.FUNCS.Bakery_use_joker { config = { ref_table = G.jokers.cards[1] } } end)
+        wait_for_sleeve()
+        Balatest.q(function()
+            G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key]:add_to_highlighted(
+                G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1], true)
+        end)
+        Balatest.highlight { '3S' }
+        Balatest.use(function() return G.pack_cards.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert(G["Bakery_sleeve_" .. G.jokers.cards[1].ability.extra.key].cards[1].base.id == 3)
+    end
+}
 --#endregion
 
 --#region Bongard Problem
@@ -1309,7 +1952,75 @@ Balatest.TestPlay {
 --#endregion
 
 --#region Tag
---Todo
+Balatest.TestPlay {
+    name = 'tag_null',
+    requires = {},
+    category = 'tag',
+
+    jokers = { 'j_Bakery_Tag' },
+    execute = function()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(7)
+    end
+}
+Balatest.TestPlay {
+    name = 'tag_one',
+    requires = {},
+    category = 'tag',
+
+    jokers = { 'j_Bakery_Tag' },
+    no_auto_start = true,
+    execute = function()
+        Balatest.skip_blind 'tag_Bakery_BlankTag'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(14)
+    end
+}
+Balatest.TestPlay {
+    name = 'tag_two',
+    requires = {},
+    category = 'tag',
+
+    jokers = { 'j_Bakery_Tag' },
+    no_auto_start = true,
+    execute = function()
+        Balatest.skip_blind 'tag_Bakery_BlankTag'
+        Balatest.skip_blind 'tag_Bakery_BlankTag'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(28)
+    end
+}
+Balatest.TestPlay {
+    name = 'tag_gone',
+    requires = {},
+    category = 'tag',
+
+    jokers = { 'j_Bakery_Tag' },
+    no_auto_start = true,
+    execute = function()
+        Balatest.skip_blind 'tag_Bakery_BlankTag'
+        Balatest.skip_blind 'tag_Bakery_BlankTag'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.exit_shop()
+        Balatest.skip_blind 'tag_Bakery_AntiTag'
+        Balatest.start_round()
+        Balatest.play_hand { '2S' }
+    end,
+    assert = function()
+        Balatest.assert_chips(14)
+    end
+}
 --#endregion
 
 --#region Glass Cannon
