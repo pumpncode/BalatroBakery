@@ -43,7 +43,7 @@ SMODS.Tag {
 
             local in_posession = { 0 }
             for k, v in ipairs(G.jokers.cards) do
-                if Bakery_API.retrigger_jokers[v.config.center.rarity] and not in_posession[v.config.center.key] then
+                if Bakery_API.retrigger_jokers[v.config.center.key] and not in_posession[v.config.center.key] then
                     in_posession[1] = in_posession[1] + 1
                     in_posession[v.config.center.key] = true
                 end
@@ -238,6 +238,7 @@ SMODS.Tag {
                     G.GAME.tags[i]:yep('-', G.C.PURPLE, function()
                         return true
                     end)
+                    break
                 end
             end
 
@@ -323,7 +324,6 @@ SMODS.Tag {
     end
 }
 
-local up_cache = {}
 SMODS.Tag {
     key = "UpTag",
     atlas = 'BakeryTags',
@@ -343,20 +343,16 @@ SMODS.Tag {
     end,
     apply = function(self, tag, context)
         tag.ability = tag.ability or {}
-        up_cache[tag] = up_cache[tag] or {}
-        if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' and not up_cache[tag][context.context.other_card] then
-            up_cache[tag][context.context.other_card] = true
+        if not tag.triggered and context.type == 'Bakery_add_repetitions_to_card' then
             return {
                 func = function()
                     juice_card(tag)
                 end,
-                message = 'Again!',
                 repetitions = 1,
                 card = context.context.other_card
             }
         end
         if not tag.triggered and context.type == 'Bakery_play_hand_late' then
-            up_cache[tag] = nil
             tag.ability.hands = (tag.ability.hands or self.config.hands) - 1
             if tag.ability.hands == 0 then
                 tag.triggered = true
@@ -501,7 +497,7 @@ SMODS.Tag {
             end
             return {
                 mult = self.config.min +
-                    math.floor((self.config.max - self.config.min + 1) * pseudorandom('tag_Bakery_StrangeTag'))
+                    math.floor((self.config.max - self.config.min) * pseudorandom('tag_Bakery_StrangeTag'))
             }
         end
     end

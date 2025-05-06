@@ -25,6 +25,7 @@ function CardSleeveCardArea:init(key, major)
     self.ARGS.invisible_area_types = self.ARGS.invisible_area_types or {}
     self.ARGS.invisible_area_types.Bakery_cardsleeve = 1
 end
+
 function CardSleeveCardArea:draw()
     CardSleeveCardArea.super.draw(self)
     for k, v in ipairs(self.ARGS.draw_layers) do
@@ -37,14 +38,17 @@ function CardSleeveCardArea:draw()
         end
     end
 end
+
 function CardSleeveCardArea:can_highlight()
     return true
 end
+
 function CardSleeveCardArea:align_cards()
     self.config.type = 'joker'
     CardSleeveCardArea.super.align_cards(self)
     self.config.type = 'Bakery_cardsleeve'
 end
+
 function CardSleeveCardArea:remove_card(card)
     local ret = CardSleeveCardArea.super.remove_card(self, card)
     if not no_recurse then
@@ -78,18 +82,22 @@ j_sleeve = SMODS.Joker {
     _hand_available = function()
         return
             G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or
-                G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.PLAY_TAROT
+            G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.PLAY_TAROT
     end,
     Bakery_can_use = function(self, card)
         if card.ability.extra.occupied then
             return G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE ==
-                       G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
         else
             return not card.ability.extra.override and #G.hand.highlighted == 1
         end
     end,
     Bakery_remove_card = function(self, card, force)
         if card.ability.extra.occupied and not card.ability.extra.override then
+            if not G["Bakery_sleeve_" .. card.ability.extra.key].cards then
+                sendErrorMessage('Sleeve ' .. card.ability.extra.key .. ' has no cards table', 'Bakery')
+                return
+            end
             no_recurse = true
             draw_card(G["Bakery_sleeve_" .. card.ability.extra.key], self._hand_available() and G.hand or G.deck, nil,
                 nil, nil, G["Bakery_sleeve_" .. card.ability.extra.key].cards[1], nil, nil, true)
@@ -118,7 +126,7 @@ j_sleeve = SMODS.Joker {
             draw_card(G.hand, G["Bakery_sleeve_" .. card.ability.extra.key], nil, nil, nil, G.hand.highlighted[1], nil,
                 nil, true)
             card.ability.extra.occupied = true
-            card:highlight(highlighted)
+            card:highlight(card.highlighted)
         end
     end,
     Bakery_use_button_text = function(self, card)
@@ -133,6 +141,7 @@ function Bakery_API.sleevearea_for_key(k)
         end
     end
 end
+
 next_key = function()
     local key = 1
     while Bakery_API.sleevearea_for_key(key) do
@@ -208,13 +217,13 @@ Bakery_API.guard(function()
     Bakery_API.usable_jokers = setmetatable({}, {
         __newindex = function(t, k, v)
             sendWarnMessage("A mod is trying to set Bakery_API.usable_jokers." .. k ..
-                                ". This is no longer required, and the table will be removed in a future version of Bakery.",
+                ". This is no longer required, and the table will be removed in a future version of Bakery.",
                 "Bakery")
             raw_usable_jokers[k] = v
         end,
         __index = function(t, k)
             sendWarnMessage("A mod is trying to get Bakery_API.usable_jokers." .. k ..
-                                ". This table will be removed in a future version of Bakery.", "Bakery")
+                ". This table will be removed in a future version of Bakery.", "Bakery")
             return raw_usable_jokers[k]
         end
     })
@@ -229,7 +238,7 @@ Bakery_API.guard(function()
                 config = {
                     align = "cr"
                 },
-                nodes = {{
+                nodes = { {
                     n = G.UIT.C,
                     config = {
                         ref_table = card,
@@ -245,7 +254,7 @@ Bakery_API.guard(function()
                         button = 'Bakery_use_joker',
                         func = 'Bakery_can_use_joker'
                     },
-                    nodes = {{
+                    nodes = { {
                         n = G.UIT.B,
                         config = {
                             w = 0.1,
@@ -260,8 +269,8 @@ Bakery_API.guard(function()
                             scale = 0.55,
                             shadow = true
                         }
-                    }}
-                }}
+                    } }
+                } }
             }
         end
 
@@ -280,8 +289,8 @@ Bakery_API.guard(function()
 
     function Bakery_API.default_can_use(card)
         return card.area and card.area.config.type == 'joker' and
-                   not ((G.play and #G.play.cards > 0) or (G.CONTROLLER.locked) or
-                       (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
+            not ((G.play and #G.play.cards > 0) or (G.CONTROLLER.locked) or
+                (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
     end
 
     function G.FUNCS.Bakery_can_use_joker(node)
@@ -294,6 +303,7 @@ Bakery_API.guard(function()
             node.config.button = nil
         end
     end
+
     function G.FUNCS.Bakery_use_joker(node)
         local card = node.config.ref_table
         if card and card.config.center.Bakery_use_joker and
@@ -303,7 +313,7 @@ Bakery_API.guard(function()
     end
 
     function Bakery_API.get_highlighted()
-        local comb = {unpack(G.hand.highlighted)}
+        local comb = { unpack(G.hand.highlighted) }
         for k, v in ipairs(G.jokers.cards) do
             if v.config.center.key == 'j_Bakery_CardSleeve' and v.ability.extra.key then
                 for k, c in ipairs((Bakery_API.sleevearea_for_key(v.ability.extra.key) or {

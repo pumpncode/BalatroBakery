@@ -165,6 +165,7 @@ Bakery_API.Joker {
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
+    artist = "SadCube",
     config = {
         extra = {
             front = 2,

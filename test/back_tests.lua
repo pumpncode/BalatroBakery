@@ -90,4 +90,25 @@ Balatest.TestPlay {
         Balatest.assert_eq(G.GAME.dollars, -3)
     end
 }
---Todo: Credit purchase something
+Balatest.TestPlay {
+    name = 'credit_purchase',
+    requires = {},
+    category = 'backs',
+
+    back = 'Credit',
+    money = 2,
+    execute = function()
+        G.GAME.tarot_rate = 0
+        G.GAME.planet_rate = 0
+        Balatest.hook(_G, 'poll_edition', function() end)
+        Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_joker', ...) or orig(set, a, l, r, k, s, f, ...)
+        end)
+        Balatest.end_round()
+        Balatest.cash_out()
+        Balatest.buy(function() return G.shop_jokers.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(G.GAME.dollars, 0)
+    end
+}
