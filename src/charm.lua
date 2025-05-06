@@ -537,8 +537,14 @@ function evaluate_poker_hand(hand)
     for k, v in pairs(ret) do
         ret2[k] = {}
         for k2, v2 in pairs(v) do
-            if v2 ~= clone then
-                ret2[k][k2] = v2
+            ret2[k][k2] = {}
+            local min = 0
+            for k3, v3 in pairs(v2) do
+                if v3 ~= clone then
+                    ret2[k][k2][k3 - min] = v3
+                else
+                    min = min + 1
+                end
             end
         end
     end
@@ -551,7 +557,7 @@ end
 local raw_five_of_a_kind_modify_display_text = SMODS.PokerHands['Five of a Kind'].modify_display_text
 SMODS.PokerHand:take_ownership("Five of a Kind", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #scoring_hand >= 5 then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and next(get_X_same(5, scoring_hand, true)) then
             return "Bakery_SixOfAKind"
         end
         if raw_five_of_a_kind_modify_display_text then
@@ -563,7 +569,7 @@ SMODS.PokerHand:take_ownership("Five of a Kind", {
 local raw_flush_five_modify_display_text = SMODS.PokerHands['Flush Five'].modify_display_text
 SMODS.PokerHand:take_ownership("Flush Five", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #scoring_hand >= 5 then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and next(get_X_same(5, scoring_hand, true)) then
             return "Bakery_FlushSix"
         end
         if raw_flush_five_modify_display_text then
@@ -575,7 +581,7 @@ SMODS.PokerHand:take_ownership("Flush Five", {
 local raw_two_pair_modify_display_text = SMODS.PokerHands['Two Pair'].modify_display_text
 SMODS.PokerHand:take_ownership("Two Pair", {
     modify_display_text = function(cards, scoring_hand)
-        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #scoring_hand == 5 and
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #get_X_same(2, scoring_hand, true) >= 2 and
             #get_X_same(2, scoring_hand, true) >= 2 then
             return "Bakery_ThreePair"
         end
@@ -630,7 +636,7 @@ local raw_flush_modify_display_text = SMODS.PokerHands['Flush'].modify_display_t
 SMODS.PokerHand:take_ownership("Flush", {
     modify_display_text = function(cards, scoring_hand)
         if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_AnaglyphLens' and #scoring_hand == 5 and
-            #get_X_same(2, scoring_hand, true) >= 2 then
+            #get_X_same(2, scoring_hand, true) >= 2 and next(all_suits(5, scoring_hand)) then
             return "Bakery_FlushThreePair"
         end
         if raw_flush_modify_display_text then
