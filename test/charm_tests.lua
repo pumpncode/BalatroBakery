@@ -736,6 +736,3 @@ Balatest.TestPlay {
     end
 }
 --#endregion
-
-Balatest.run_tests('Bakery', 'charms')
--- Balatest.run_test 'Bakery_anaglyph_lens_flush_mansion'
