@@ -992,3 +992,33 @@ Bakery_API.Charm {
         return #G.jokers.cards >= 10
     end
 }
+
+if next(SMODS.find_mod "RevosVault") then
+    Bakery_API.Charm {
+        key = "PrintError",
+        pos = {
+            x = 0,
+            y = 2
+        },
+        atlas = 'Charms',
+        unlocked = false,
+        locked_loc_vars = function(info_queue, card)
+            return {
+                vars = { 5 }
+            }
+        end,
+        check_for_unlock = function(self, args)
+            if not G.consumeables or #G.consumeables.cards < 5 then return false end
+            local count = 0
+            for _, v in ipairs(G.consumeables.cards) do
+                if v.config.center.set == "EnchancedDocuments" then
+                    count = count + 1
+                    if count >= 5 then
+                        return true
+                    end
+                end
+            end
+            return false
+        end
+    }
+end

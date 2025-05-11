@@ -350,6 +350,11 @@ return {
                 name = "Void",
                 text = { "{C:dark_edition}Negative{} cards appear", "{X:dark_edition,C:white}#1#X{} as often" },
                 unlock = { "Have at least", "{C:attention}#1# Jokers" }
+            },
+            BakeryCharm_Bakery_PrintError = {
+                name = "Print Error",
+                text = { "Printers print twice" },
+                unlock = { "Have at least", "{C:attention}#1# Contracts" }
             }
             -- KEEP_LITE
         },
