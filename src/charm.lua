@@ -1047,6 +1047,9 @@ if next(SMODS.find_mod "MoreFluff") then
             end
             return false
         end,
+        in_pool = function()
+            return SMODS.Mods.MoreFluff.config["Colour Cards"]
+        end,
         equip = function()
             for _, a in pairs(G.I.CARDAREA) do
                 for _, c in pairs(a.cards) do
