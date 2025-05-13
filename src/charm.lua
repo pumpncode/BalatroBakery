@@ -1071,7 +1071,7 @@ if next(SMODS.find_mod "MoreFluff") then
     function CardArea:emplace(card, ...)
         local ret = { raw_CardArea_emplace(self, card, ...) }
         if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
-            self:change_size(0.5)
+            self.config.card_limit = self.config.card_limit + 0.5
         end
         return unpack(ret)
     end
@@ -1080,7 +1080,7 @@ if next(SMODS.find_mod "MoreFluff") then
     function CardArea:remove_card(card, ...)
         local ret = { raw_CardArea_remove_card(self, card, ...) }
         if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
-            self:change_size(-0.5)
+            self.config.card_limit = self.config.card_limit - 0.5
         end
         return unpack(ret)
     end
