@@ -32,7 +32,7 @@ SMODS.Blind {
         y = 1
     },
     boss = {
-        min = 2,
+        min = 3,
         max = 0
     },
     boss_colour = HEX('ff004b'),
