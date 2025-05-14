@@ -22,8 +22,8 @@ Current contents:
 ## Cross-Mod Content
 
 With certain other mods installed, Bakery will add extra items:
-[Revo's Vault](https://github.com/Cdrvo/Revos-Vault---Balatro-Mod) - 1 Charm
-[MoreFluff](https://github.com/notmario/MoreFluff) - 1 Charm
+- [Revo's Vault](https://github.com/Cdrvo/Revos-Vault---Balatro-Mod) - 1 Charm
+- [MoreFluff](https://github.com/notmario/MoreFluff) - 1 Charm
 
 ## Installation
 
