@@ -1022,3 +1022,101 @@ if next(SMODS.find_mod "RevosVault") then
         end
     }
 end
+
+if next(SMODS.find_mod "MoreFluff") then
+    Bakery_API.Charm {
+        key = "Posterization",
+        pos = {
+            x = 1,
+            y = 2
+        },
+        atlas = 'Charms',
+        unlocked = false,
+        locked_loc_vars = function(info_queue, card)
+            return {
+                vars = { 20 }
+            }
+        end,
+        check_for_unlock = function(self, args)
+            if args.type == 'mf_ten_colour_rounds' then
+                for _, v in pairs(G.consumeables.cards) do
+                    if v.ability.val >= 20 then
+                        return true
+                    end
+                end
+            end
+            return false
+        end,
+        in_pool = function()
+            return SMODS.Mods.MoreFluff.config["Colour Cards"]
+        end,
+        equip = function()
+            for _, a in pairs(G.I.CARDAREA) do
+                for _, c in pairs(a.cards) do
+                    if c.config and c.config.center and c.config.center.set == 'Colour' then
+                        a:change_size(0.5)
+                    end
+                end
+            end
+        end,
+        unequip = function()
+            for _, a in pairs(G.I.CARDAREA) do
+                for _, c in pairs(a.cards) do
+                    if c.config and c.config.center and c.config.center.set == 'Colour' then
+                        a:change_size(-0.5)
+                    end
+                end
+            end
+        end
+    }
+
+    local raw_CardArea_emplace = CardArea.emplace
+    function CardArea:emplace(card, ...)
+        local ret = { raw_CardArea_emplace(self, card, ...) }
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
+            self.config.card_limit = self.config.card_limit + 0.5
+        end
+        return unpack(ret)
+    end
+
+    local raw_CardArea_remove_card = CardArea.remove_card
+    function CardArea:remove_card(card, ...)
+        local ret = { raw_CardArea_remove_card(self, card, ...) }
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' and card and card.config.center and card.config.center.set == 'Colour' then
+            self.config.card_limit = self.config.card_limit - 0.5
+        end
+        return unpack(ret)
+    end
+
+    local raw_CardArea_update = CardArea.update
+    function CardArea:update(...)
+        local ret = { raw_CardArea_update(self, card, ...) }
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' then
+            local x = 0
+            for _, v in pairs(self.cards) do
+                if v.config.center.set == 'Colour' then
+                    x = x + 0.5
+                end
+            end
+            self.config.card_count = self.config.card_count - x
+        end
+        return unpack(ret)
+    end
+
+    local raw_CardArea_draw = CardArea.draw
+    function CardArea:draw()
+        if self.children.area_uibox and G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Posterization' then
+            local el = self.children.area_uibox:get_UIE_by_ID 'Bakery_card_limit_text'
+            if el then el.config.ref_value = 'Bakery_visual_card_limit' end
+            local x = 0
+            for _, v in pairs(self.cards) do
+                if v.config.center.set == 'Colour' then
+                    x = x + 0.5
+                end
+            end
+            self.config.card_count = #self.cards - x
+            self.config.Bakery_visual_card_limit = self.config.card_limit - x
+        end
+        return raw_CardArea_draw(self)
+    end
+end

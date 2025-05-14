@@ -19,6 +19,12 @@ Current contents:
 - 1 Edition
 - Miscellaneous modding API features (If this mod does something interesting, it can probably be used as a dependency to do that thing)
 
+## Cross-Mod Content
+
+With certain other mods installed, Bakery will add extra items:
+[Revo's Vault](https://github.com/Cdrvo/Revos-Vault---Balatro-Mod) - 1 Charm
+[MoreFluff](https://github.com/notmario/MoreFluff) - 1 Charm
+
 ## Installation
 
 1. Bakery requires [Steamodded](https://github.com/Steamodded/smods). Follow the instructions to install it if you haven't already.

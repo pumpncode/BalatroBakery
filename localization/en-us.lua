@@ -355,6 +355,11 @@ return {
                 name = "Print Error",
                 text = { "Printers print twice" },
                 unlock = { "Have at least", "{C:attention}#1# Contracts" }
+            },
+            BakeryCharm_Bakery_Posterization = {
+                name = "Posterization",
+                text = { "{C:colourcard}Colour{} cards only", "take {C:attention}half{} a slot" },
+                unlock = { "Have a {C:colourcard}Colour{} card", "with {C:attention}#1#{} triggers" }
             }
             -- KEEP_LITE
         },
