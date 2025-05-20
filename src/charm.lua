@@ -1120,3 +1120,46 @@ if next(SMODS.find_mod "MoreFluff") then
         return raw_CardArea_draw(self)
     end
 end
+
+if next(SMODS.find_mod 'Cryptid') then
+    Bakery_API.Charm {
+        key = 'Marm',
+        pos = {
+            x = 2,
+            y = 2
+        },
+        atlas = 'Charms',
+        unlocked = false,
+        check_for_unlock = function(self, args)
+            if args.type == 'win' then
+                for k, v in pairs(G.GAME.hands) do
+                    if k ~= 'Pair' and v.played ~= 0 then
+                        return false
+                    end
+                end
+                return true
+            end
+            return false
+        end,
+        in_pool = function()
+            return G.P_CENTERS.set_cry_m
+        end,
+    }
+
+    local raw_evaluate_poker_hand = evaluate_poker_hand
+    function evaluate_poker_hand(cards, ...)
+        local ret = raw_evaluate_poker_hand(cards, ...)
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Marm' then
+            local any = false
+            for k, v in pairs(ret) do
+                if #ret[k] > 0 then any = true end
+                ret[k] = {}
+            end
+            if any then
+                ret.Pair = { cards }
+            end
+        end
+        return ret
+    end
+
+end
