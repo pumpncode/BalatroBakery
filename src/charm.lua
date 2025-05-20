@@ -280,7 +280,8 @@ Bakery_API.guard(function()
 
     local to_big = to_big or function(...) return ... end
     G.FUNCS.Bakery_can_equip = function(e)
-        if to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' or
+            to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
             e.config.colour = G.C.UI.BACKGROUND_INACTIVE
             e.config.button = nil
         else
@@ -1162,4 +1163,25 @@ if next(SMODS.find_mod 'Cryptid') then
         return ret
     end
 
+    Bakery_API.Charm {
+        key = 'DuctTape',
+        pos = {
+            x = 3,
+            y = 2
+        },
+        atlas = 'Charms',
+    }
+
+    local raw_get_weight = SMODS.Rarities.Common.get_weight
+    SMODS.Rarity:take_ownership("Common", {
+        get_weight = function(...)
+            return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
+        end
+    })
+    local raw_get_weight = SMODS.Rarities.Common.get_weight
+    SMODS.Rarity:take_ownership("Uncommon", {
+        get_weight = function(...)
+            return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
+        end
+    })
 end

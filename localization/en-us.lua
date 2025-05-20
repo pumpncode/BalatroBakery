@@ -365,6 +365,14 @@ return {
                 name = "Marm",
                 text = { "Every hand is a {C:attention}Pair{},", "Every {C:attention}played card", "counts in scoring" },
                 unlock = { "Win a run with", "only {C:attention}Pair{} hands" }
+            },
+            BakeryCharm_Bakery_DuctTape = {
+                name = "Duct Tape",
+                text = {
+                    "{C:common}Common{} and {C:uncommon}Uncommon",
+                    "{C:attention}Jokers{} don't appear,",
+                    "{C:red}Cannot be removed"
+                }
             }
             -- KEEP_LITE
         },
