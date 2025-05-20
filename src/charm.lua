@@ -1040,7 +1040,7 @@ if next(SMODS.find_mod "MoreFluff") then
         check_for_unlock = function(self, args)
             if args.type == 'mf_ten_colour_rounds' then
                 for _, v in pairs(G.consumeables.cards) do
-                    if v.ability.val >= 20 then
+                    if v.config.center.set == 'Colour' and v.ability.val >= 20 then
                         return true
                     end
                 end
