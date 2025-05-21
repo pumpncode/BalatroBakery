@@ -280,7 +280,8 @@ Bakery_API.guard(function()
 
     local to_big = to_big or function(...) return ... end
     G.FUNCS.Bakery_can_equip = function(e)
-        if to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
+        if G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' or
+            to_big(e.config.ref_table.cost) > to_big(G.GAME.dollars) - to_big(G.GAME.bankrupt_at) then
             e.config.colour = G.C.UI.BACKGROUND_INACTIVE
             e.config.button = nil
         else
@@ -1119,4 +1120,68 @@ if next(SMODS.find_mod "MoreFluff") then
         end
         return raw_CardArea_draw(self)
     end
+end
+
+if next(SMODS.find_mod 'Cryptid') then
+    Bakery_API.Charm {
+        key = 'Marm',
+        pos = {
+            x = 2,
+            y = 2
+        },
+        atlas = 'Charms',
+        unlocked = false,
+        check_for_unlock = function(self, args)
+            if args.type == 'win' then
+                for k, v in pairs(G.GAME.hands) do
+                    if k ~= 'Pair' and v.played ~= 0 then
+                        return false
+                    end
+                end
+                return true
+            end
+            return false
+        end,
+        in_pool = function()
+            return G.P_CENTERS.set_cry_m
+        end,
+    }
+
+    local raw_evaluate_poker_hand = evaluate_poker_hand
+    function evaluate_poker_hand(cards, ...)
+        local ret = raw_evaluate_poker_hand(cards, ...)
+        if G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_Marm' then
+            local any = false
+            for k, v in pairs(ret) do
+                if #ret[k] > 0 then any = true end
+                ret[k] = {}
+            end
+            if any then
+                ret.Pair = { cards }
+            end
+        end
+        return ret
+    end
+
+    Bakery_API.Charm {
+        key = 'DuctTape',
+        pos = {
+            x = 3,
+            y = 2
+        },
+        atlas = 'Charms',
+    }
+
+    local raw_get_weight = SMODS.Rarities.Common.get_weight
+    SMODS.Rarity:take_ownership("Common", {
+        get_weight = function(...)
+            return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
+        end
+    })
+    local raw_get_weight = SMODS.Rarities.Common.get_weight
+    SMODS.Rarity:take_ownership("Uncommon", {
+        get_weight = function(...)
+            return G.GAME and G.GAME.Bakery_charm == 'BakeryCharm_Bakery_DuctTape' and 0 or raw_get_weight(...)
+        end
+    })
 end
