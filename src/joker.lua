@@ -574,7 +574,7 @@ Bakery_API.Joker {
     perishable_compat = true,
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
-            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] ==
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card.base.value] ==
                 "even" then
                 return {
                     remove = true
@@ -596,7 +596,7 @@ Bakery_API.Joker {
     perishable_compat = true,
     calculate = function(self, card, context)
         if context.destroy_card and context.cardarea == G.play then
-            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card:get_original_rank()] ==
+            if not SMODS.has_no_rank(context.destroying_card) and parity[context.destroying_card.base.value] ==
                 "odd" then
                 return {
                     remove = true

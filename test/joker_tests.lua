@@ -590,7 +590,8 @@ Balatest.TestPlay {
         Balatest.start_round()
         Balatest.end_round()
         Balatest.hook(_G, 'create_card', function(orig, set, a, l, r, k, s, f, ...)
-            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_Bakery_Proxy', ...) or orig(set, a, l, r, k, s, f, ...)
+            return set == 'Joker' and orig(set, a, l, r, k, s, f or 'j_Bakery_Proxy', ...) or
+                orig(set, a, l, r, k, s, f, ...)
         end)
         Balatest.cash_out()
         Balatest.buy(function() return G.shop_jokers.cards[2] end)
@@ -948,6 +949,26 @@ Balatest.TestPlay {
         Balatest.assert_eq(#G.deck.cards, 52)
     end
 }
+Balatest.TestPlay {
+    name = 'evil_steven_strength',
+    requires = {},
+    category = 'evil_steven',
+
+    jokers = { 'j_Bakery_EvilSteven' },
+    consumeables = { 'c_strength', 'c_strength' },
+    deck = { cards = { { r = 'A', s = 'S' }, { r = '3', s = 'S' }, { r = '5', s = 'S' }, { r = '6', s = 'S' }, { r = 'J', s = 'S' }, { r = 'Q', s = 'S' } } },
+    execute = function()
+        Balatest.highlight { 'AS', '3S' }
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.highlight { '5S', '6S' }
+        Balatest.use(G.consumeables.cards[2])
+        Balatest.play_hand { '2S', '4S', '6S', '7S', 'JS' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.deck.cards, 3)
+    end
+}
 --#endregion
 
 --#region Awful Todd
@@ -1021,6 +1042,26 @@ Balatest.TestPlay {
     end,
     assert = function()
         Balatest.assert_eq(#G.deck.cards, 52)
+    end
+}
+Balatest.TestPlay {
+    name = 'awful_todd_strength',
+    requires = {},
+    category = 'awful_todd',
+
+    jokers = { 'j_Bakery_AwfulTodd' },
+    consumeables = { 'c_strength', 'c_strength' },
+    deck = { cards = { { r = 'A', s = 'S' }, { r = '3', s = 'S' }, { r = '5', s = 'S' }, { r = '6', s = 'S' }, { r = 'J', s = 'S' }, { r = 'Q', s = 'S' } } },
+    execute = function()
+        Balatest.highlight { 'AS', '3S' }
+        Balatest.use(G.consumeables.cards[1])
+        Balatest.highlight { '5S', '6S' }
+        Balatest.use(G.consumeables.cards[2])
+        Balatest.play_hand { '2S', '4S', '6S', '7S', 'JS' }
+        Balatest.end_round()
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.deck.cards, 5)
     end
 }
 --#endregion
