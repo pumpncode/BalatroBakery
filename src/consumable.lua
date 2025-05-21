@@ -185,7 +185,6 @@ Bakery_API.credit(SMODS.Consumable {
                 for i = 1, #Bakery_API.get_highlighted() do
                     local copied = Bakery_API.get_highlighted()[i]
                     local _first_dissolve = nil
-                    local new_cards = {}
                     for i = 1, card.ability.extra.copies do
                         G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                         local _card = copy_card(copied, nil, nil, G.playing_card)

@@ -233,6 +233,36 @@ Balatest.TestPlay {
         Balatest.assert(not G.jokers.cards[2].ability.eternal)
     end
 }
+Balatest.TestPlay {
+    name = 'scribe_hologram_joker',
+    requires = {},
+    category = 'consumables',
+
+    jokers = { 'j_hologram' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        G.jokers:add_to_highlighted(G.jokers.cards[1], true)
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.x_mult, 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'scribe_hologram_card',
+    requires = {},
+    category = 'consumables',
+
+    jokers = { 'j_hologram' },
+    consumeables = { 'c_Bakery_Scribe' },
+    execute = function()
+        Balatest.highlight { '2S' }
+        Balatest.use(G.consumeables.cards[1])
+    end,
+    assert = function()
+        Balatest.assert_eq(G.jokers.cards[1].ability.x_mult, 1.25)
+    end
+}
 --#endregion Scribe
 
 --#region Time Machine
