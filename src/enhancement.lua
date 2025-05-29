@@ -21,7 +21,7 @@ Bakery_API.credit(SMODS.Enhancement {
     no_rank = true,
     no_suit = true,
     always_scores = true,
-    weight = 0.1,
+    weight = 0.025,
     artist = "AmyWeber",
     config = {
         extra = {
