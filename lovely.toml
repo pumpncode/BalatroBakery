@@ -112,10 +112,10 @@ payload = "Bakery_API.add_charms_to_shop()\n"
 [[patches]]
 [patches.regex]
 target = 'functions/UI_definitions.lua'
-pattern = "local t2 = "
-position = 'after'
+pattern = "local t2 = card\\.ability\\.set == 'Voucher'"
+position = 'at'
 times = 1
-payload = "card.ability.set == 'BakeryCharm' and Bakery_API.equip_button(card) or "
+payload = "local t2 = card.ability.set == 'BakeryCharm' and Bakery_API.equip_button(card) or card.ability.set == 'Voucher'"
 
 # cont.
 [[patches]]
